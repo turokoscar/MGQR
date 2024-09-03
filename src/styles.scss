@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+// Definir variables personalizadas antes de importar Bootstrap
+$primary:      #006650;
+$secondary:    #005286;
+$warning:      #76b82a;
+$info:         #1cb5bf;
+$success:      #608d33;
+$danger:       #c20e1a;
+$font-family-base: 'Roboto', sans-serif;
+
+//Importar Boostrap
+@import "node_modules/bootstrap/scss/bootstrap.scss";
