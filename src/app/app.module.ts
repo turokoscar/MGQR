@@ -20,6 +20,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { ResultadoComponent } from './main/resultado/resultado.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     HeaderComponent,
     FooterComponent,
     IntroComponent,
-    ConsultaComponent
+    ConsultaComponent,
+    ResultadoComponent
   ],
   imports: [
     BrowserModule,
