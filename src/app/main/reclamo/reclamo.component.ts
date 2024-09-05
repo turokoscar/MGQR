@@ -25,7 +25,7 @@ export class ReclamoComponent implements OnInit {
     this.showPrimerForm();
     this.showSegundoForm();
     // Observa cambios en la variable disabled
-    this.onToggleConfidentiality();
+    this.onActivaReactividad();
   }
 
   //4. Estructuro la primera parte del formulario
@@ -64,7 +64,7 @@ export class ReclamoComponent implements OnInit {
     this.showEmailField = event.value === '1';
   }
 
-  onToggleConfidentiality(): void {
+  onActivaReactividad(): void {
     // Deshabilita o habilita los campos según el valor de disabled
     if (this.disabled) {
       this.segundaParteForm.controls['tipo_documento'].disable();
@@ -84,7 +84,7 @@ export class ReclamoComponent implements OnInit {
   // Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
     this.disabled = !this.disabled; // Cambia el estado de confidencialidad
-    this.onToggleConfidentiality();  // Aplica la lógica de activación/desactivación
+    this.onActivaReactividad();  // Aplica la lógica de activación/desactivación
   }
 
   onSubmit():void{
