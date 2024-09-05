@@ -9,6 +9,7 @@ import { HeaderComponent } from './template/header/header.component';
 import { FooterComponent } from './template/footer/footer.component';
 import { IntroComponent } from './main/intro/intro.component';
 import { ConsultaComponent } from './main/consulta/consulta.component';
+import { ResultadoComponent } from './main/resultado/resultado.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -20,8 +21,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { ResultadoComponent } from './main/resultado/resultado.component';
-
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,9 @@ import { ResultadoComponent } from './main/resultado/resultado.component';
     MatSelectModule,
     MatIconModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDividerModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
