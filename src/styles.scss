@@ -14,5 +14,7 @@ $font-family-base: 'Roboto', sans-serif;
 // Reduzco el tamaño del texto
 $font-size-base: 0.875rem; // Por ejemplo, 14px si el tamaño base por defecto es 16px
 // Aplicar la fuente a todo el documento
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
