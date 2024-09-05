@@ -1,4 +1,21 @@
-.form-control-file {
-  margin-top: 8px;
-  width: 100%;
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+}
+
+#file-upload {
+  display: none;
+}
+
+.btn-primary {
+  cursor: pointer;
+  background-color: #006650;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+}
+
+.btn-primary:hover {
+  background-color: #005536;
 }
