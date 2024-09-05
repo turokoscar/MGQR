@@ -1,3 +1,5 @@
+// Importar la fuente Roboto desde Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 // Definir variables personalizadas antes de importar Bootstrap
 $primary:      #006650;
 $secondary:    #005286;
@@ -5,7 +7,12 @@ $warning:      #76b82a;
 $info:         #1cb5bf;
 $success:      #608d33;
 $danger:       #c20e1a;
+// Coloco Roboto como fuente por defecto
 $font-family-base: 'Roboto', sans-serif;
-
+// Reduzco el tamaño del texto
+$font-size-base: 0.875rem; // Por ejemplo, 14px si el tamaño base por defecto es 16px
 //Importar Boostrap
 @import "node_modules/bootstrap/scss/bootstrap.scss";
+// Aplicar la fuente a todo el documento
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

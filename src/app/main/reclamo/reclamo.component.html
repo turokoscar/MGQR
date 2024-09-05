@@ -1,0 +1,65 @@
+<main>
+  <div class="container py-4">
+    <!-- Header -->
+    <app-header></app-header>
+    <!-- Contenido -->
+    <div class="card">
+      <div class="card-header bg-primary">
+        <h4 class="text-white text-center">MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</h4>
+      </div>
+      <div class="card-body">
+        <mat-stepper linear #stepper>
+          <mat-step [stepControl]="firstFormGroup" [editable]="isEditable" label="Paso 1">
+            <form [formGroup]="firstFormGroup">
+              <div class="card">
+                <div class="card-header bg-success">
+                  <h6 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Persona que declara</mat-label>
+                        <mat-select formControlName="tipo_persona" (selectionChange)="onTipoPersonaChange($event)" >
+                          <mat-option  value="1"> Interno (Para trabajadores del BPS)</mat-option>
+                          <mat-option  value="0"> Externo (Para la población en general)</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="showEmailField">
+                    <div class="col-12">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Correo institucional</mat-label>
+                        <input matInput formControlName="email_institucional" placeholder="Tu correo de usuario" type="email" aria-describedby="email-icon">
+                        <mat-icon matSuffix>mail</mat-icon>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" label="Paso 2">
+            <form [formGroup]="secondFormGroup">
+              <mat-form-field>
+                <mat-label>Address</mat-label>
+                <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
+                       required>
+              </mat-form-field>
+              <p>You are now done.</p>
+              <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="stepper.reset()">Reset</button>
+              </div>
+            </form>
+          </mat-step>
+        </mat-stepper>
+      </div>
+    </div>
+    <!-- Footer -->
+    <app-footer></app-footer>
+  </div>
+</main>
+
+
