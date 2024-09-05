@@ -12,6 +12,7 @@ export class ReclamoComponent implements OnInit {
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
   showEmailField = false;
+  disabled = false;
 
   //2. Inicializo el constructor
   constructor(

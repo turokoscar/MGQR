@@ -260,8 +260,12 @@
                       <input class="form-control" type="file" formControlName="evidencia_consulta">
                     </div>
                   </div>
-
-
+                  <br>
+                  <div class="row">
+                    <div class="col">
+                      <mat-checkbox class="example-margin" [(ngModel)]="disabled"><h6>¿ Desea que sus datos sean confidenciales ?</h6></mat-checkbox>
+                    </div>
+                  </div>
                   <br>
                   <div style="display: flex; justify-content: flex-end; gap: 10px;">
                     <button mat-raised-button matStepperPrevious color="primary">
