@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReclamoComponent } from './main/reclamo/reclamo.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './main/home/home.component';
+import { ConsultaComponent } from './main/consulta/consulta.component';
 
 const routes: Routes = [
-  { path: 'reclamo', component: ReclamoComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'reclamo', component: ReclamoComponent },
+  { path: 'consulta', component: ConsultaComponent },
   { path: '',   redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home'  }
 ];

@@ -36,9 +36,13 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <div>
+                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button mat-raised-button color="primary" routerLink="/home">
+                      <i class="bi bi-arrow-left"></i>
+                      Atras
+                    </button>
                     <button mat-raised-button matStepperNext color="primary">
-                      <mat-icon>keyboard_tab</mat-icon>
+                      <i class="bi bi-arrow-right"></i>
                       Continuar
                     </button>
                   </div>
@@ -266,7 +270,7 @@
                   <br>
                   <div style="display: flex; justify-content: flex-end; gap: 10px;">
                     <button mat-raised-button matStepperPrevious color="primary">
-                      <mat-icon>arrow_back</mat-icon>
+                      <i class="bi bi-arrow-left"></i>
                       Retornar
                     </button>
                     <button mat-raised-button (click)="onSubmit()" color="primary">
@@ -275,7 +279,7 @@
                     </button>
                     <button mat-raised-button (click)="stepper.reset()" color="primary">
                       <mat-icon>exit_to_app</mat-icon>
-                      Finalizar
+                      Ir al inicio
                     </button>
                   </div>
                 </div>

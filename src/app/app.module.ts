@@ -8,6 +8,7 @@ import { HomeComponent } from './main/home/home.component';
 import { HeaderComponent } from './template/header/header.component';
 import { FooterComponent } from './template/footer/footer.component';
 import { IntroComponent } from './main/intro/intro.component';
+import { ConsultaComponent } from './main/consulta/consulta.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -18,6 +19,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     HomeComponent,
     HeaderComponent,
     FooterComponent,
-    IntroComponent
+    IntroComponent,
+    ConsultaComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
