@@ -21,7 +21,15 @@ export class ReclamoComponent {
     departamento: [''],
     provincia: [''],
     distrito: [''],
-    direccion: ['']
+    direccion: [''],
+    numero_telefono: [''],
+    numero_celular: [''],
+    correo_electronico: [''],
+    comunidad: [''],
+    cargo: [''],
+    tipo_consulta: [''],
+    contenido_consulta: [''],
+    evidencia_consulta: ['']
   });
   isEditable = false;
   showEmailField = false;

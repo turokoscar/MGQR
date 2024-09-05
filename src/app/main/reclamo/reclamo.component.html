@@ -111,7 +111,40 @@
                   <h6 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h6>
                 </div>
                 <div class="card-body">
-
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Departamento</mat-label>
+                        <mat-select formControlName="departamento">
+                          <mat-option  value="1"> Seleccionar</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Provincia</mat-label>
+                        <mat-select formControlName="provincia">
+                          <mat-option  value="1"> Seleccionar</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Distrito</mat-label>
+                        <mat-select formControlName="distrito">
+                          <mat-option  value="1"> Seleccionar</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Dirección</mat-label>
+                        <textarea matInput formControlName="direccion" placeholder="Ingrese su dirección"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
               </div>
               <br>
@@ -120,7 +153,40 @@
                   <h6 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h6>
                 </div>
                 <div class="card-body">
-
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>N° de teléfono</mat-label>
+                        <input type="tel" matInput formControlName="numero_telefono" placeholder="Nro de teléfono">
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>N° de celular</mat-label>
+                        <input type="tel" matInput formControlName="numero_celular" placeholder="Nro de celular">
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Correo electrónico</mat-label>
+                        <input type="email" matInput formControlName="correo_electronico" placeholder="Correo electrónico">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-8 col-xs-12 col-md-12">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Comunidad/Asociación/Entidad a la que pertenece</mat-label>
+                        <input matInput formControlName="comunidad" placeholder="Ingrese Comunidad/Asociación/Entidad a la que pertenece">
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Cargo</mat-label>
+                        <input matInput formControlName="cargo" placeholder="Ingrese cargo">
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
               </div>
               <br>
@@ -129,7 +195,30 @@
                   <h6 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h6>
                 </div>
                 <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Tipo</mat-label>
+                        <mat-select formControlName="tipo_consulta">
+                          <mat-option  value="1"> Seleccionar</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Detalle aquí su queja, reclamo o consulta.</mat-label>
+                        <textarea #contenidoConsulta matInput formControlName="contenido_consulta" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
+                        <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
 
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
