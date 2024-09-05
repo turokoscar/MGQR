@@ -36,21 +36,101 @@
                       </mat-form-field>
                     </div>
                   </div>
+                  <div>
+                    <button mat-button matStepperNext color="primary">
+                      <mat-icon>keyboard_tab</mat-icon>
+                      Continuar
+                    </button>
+                  </div>
                 </div>
               </div>
             </form>
           </mat-step>
           <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" label="Paso 2">
             <form [formGroup]="secondFormGroup">
-              <mat-form-field>
-                <mat-label>Address</mat-label>
-                <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                       required>
-              </mat-form-field>
-              <p>You are now done.</p>
-              <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button (click)="stepper.reset()">Reset</button>
+              <div class="card">
+                <div class="card-header bg-success">
+                  <h6 class="text-white"><i class="bi bi-person"></i> Datos de la persona</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Tipo de documento</mat-label>
+                        <mat-select formControlName="tipo_documento">
+                          <mat-option  value="1"> DNI</mat-option>
+                          <mat-option  value="0"> C.E.</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>N° de documento</mat-label>
+                        <input matInput formControlName="numero_documento" placeholder="Nro de documento">
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Género</mat-label>
+                        <mat-select formControlName="genero">
+                          <mat-option  value="1"> Masculino</mat-option>
+                          <mat-option  value="0"> Femenino</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Nombres</mat-label>
+                        <input matInput formControlName="nombre" placeholder="Nombres">
+                      </mat-form-field>
+                    </div>
+                    <div class="col">
+                      <div class="col">
+                        <mat-form-field appearance="fill" class="w-100">
+                          <mat-label>Apellido paterno</mat-label>
+                          <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="col">
+                        <mat-form-field appearance="fill" class="w-100">
+                          <mat-label>Apellido materno</mat-label>
+                          <input matInput formControlName="apellido_materno" placeholder="Apellido materno">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="card">
+                <div class="card-header bg-success">
+                  <h6 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h6>
+                </div>
+                <div class="card-body">
+
+                </div>
+              </div>
+              <br>
+              <div class="card">
+                <div class="card-header bg-success">
+                  <h6 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h6>
+                </div>
+                <div class="card-body">
+
+                </div>
+              </div>
+              <br>
+              <div class="card">
+                <div class="card-header bg-success">
+                  <h6 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h6>
+                </div>
+                <div class="card-body">
+
+                </div>
               </div>
             </form>
           </mat-step>

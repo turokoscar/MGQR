@@ -8,10 +8,20 @@ import { Validators, FormBuilder } from '@angular/forms';
 })
 export class ReclamoComponent {
   firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+    tipo_persona: ['', Validators.required],
+    email_institucional: ['']
   });
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    tipo_documento: ['', Validators.required],
+    numero_documento: [''],
+    genero: [''],
+    nombre: [''],
+    apellido_paterno: [''],
+    apellido_materno: [''],
+    departamento: [''],
+    provincia: [''],
+    distrito: [''],
+    direccion: ['']
   });
   isEditable = false;
   showEmailField = false;
