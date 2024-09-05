@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReclamoComponent } from './main/reclamo/reclamo.component';
@@ -34,6 +34,11 @@ import {MatIconModule} from '@angular/material/icon';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000, // Puedes configurar opciones globales aquí
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     MatSlideToggleModule,
     MatStepperModule,
     MatInputModule,

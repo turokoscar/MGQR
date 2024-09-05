@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-reclamo',
@@ -14,7 +15,8 @@ export class ReclamoComponent implements OnInit {
 
   //2. Inicializo el constructor
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _notificacion: NotificationService
   ){}
 
   //3. Inicializo el componente
@@ -60,6 +62,7 @@ export class ReclamoComponent implements OnInit {
   }
 
   onSubmit():void{
-
+    this._notificacion.showSuccess('Mensaje de información', 'Su Ficha MGQR se registró exitosamente., así mismo se envío la confirmación al correo : info@gmail.com');
+    console.log("Su Ficha fue generada correctamente");
   }
 }
