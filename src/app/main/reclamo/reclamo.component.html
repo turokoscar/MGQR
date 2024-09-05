@@ -242,7 +242,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Tipo</mat-label>
                         <mat-select formControlName="tipo_consulta">
-                          <mat-option  value="1"> Seleccionar</mat-option>
+                          <mat-option  value="1"> Queja</mat-option>
+                          <mat-option  value="2"> Reclamo</mat-option>
+                          <mat-option  value="3"> Consulta</mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['tipo_consulta'].hasError('required')">
                           Tipo de consulta es <strong>obligatorio</strong>
