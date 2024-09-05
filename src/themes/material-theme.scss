@@ -1,0 +1,121 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+//1. Escojo los colores que llevará mi Theme
+$my-primary-color: (
+    50 : #e0f1e9,
+    100 : #b3ddc8,
+    200 : #80c7a4,
+    300 : #4db080,
+    400 : #269f64,
+    500 : #008e49,
+    600 : #008642,
+    700 : #007b39,
+    800 : #007131,
+    900 : #005f21,
+    A100 : #90ffac,
+    A200 : #5dff86,
+    A400 : #2aff60,
+    A700 : #10ff4d,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$my-accent-color: (
+    50 : #f1f6e4,
+    100 : #dce8bb,
+    200 : #c5d98e,
+    300 : #aeca61,
+    400 : #9cbe3f,
+    500 : #8bb31d,
+    600 : #83ac1a,
+    700 : #78a315,
+    800 : #6e9a11,
+    900 : #5b8b0a,
+    A100 : #e2ffb9,
+    A200 : #ceff86,
+    A400 : #b9ff53,
+    A700 : #aeff3a,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$my-warn-color: (
+    50 : #faf1e4,
+    100 : #f4dbbb,
+    200 : #ecc48d,
+    300 : #e4ac5f,
+    400 : #df9a3d,
+    500 : #d9881b,
+    600 : #d58018,
+    700 : #cf7514,
+    800 : #ca6b10,
+    900 : #c05808,
+    A100 : #fff2eb,
+    A200 : #ffd3b8,
+    A400 : #ecc48d,
+    A700 : #c05808,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+//2. Defino la paleta de colores
+$theme-agpres-primary: mat.define-palette($my-primary-color);
+$theme-agpres-accent: mat.define-palette($my-accent-color, A200, A100, A400);
+$theme-agpres-warn: mat.define-palette($my-warn-color);
+
+//3. Tema propio
+$agpres-theme: mat.define-light-theme((
+  color: (
+    primary: $theme-agpres-primary,
+    accent: $theme-agpres-accent,
+    warn: $theme-agpres-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+//4. Aplicar tema a angular
+@include mat.all-component-themes($agpres-theme);
