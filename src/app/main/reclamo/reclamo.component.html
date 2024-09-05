@@ -37,7 +37,7 @@
                     </div>
                   </div>
                   <div>
-                    <button mat-button matStepperNext color="primary">
+                    <button mat-raised-button matStepperNext color="primary">
                       <mat-icon>keyboard_tab</mat-icon>
                       Continuar
                     </button>
@@ -260,16 +260,16 @@
 
                     </div>
                   </div>
-                  <div>
-                    <button mat-button matStepperPrevious color="accent">
+                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button mat-raised-button matStepperPrevious color="primary">
                       <mat-icon>arrow_back</mat-icon>
                       Retornar
                     </button>
-                    <button mat-button (click)="onSubmit()" color="primary">
+                    <button mat-raised-button (click)="onSubmit()" color="primary">
                       <mat-icon>send</mat-icon>
                       Enviar
                     </button>
-                    <button mat-button (click)="stepper.reset()" color="primary">
+                    <button mat-raised-button (click)="stepper.reset()" color="primary">
                       <mat-icon>exit_to_app</mat-icon>
                       Finalizar
                     </button>

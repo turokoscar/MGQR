@@ -2,27 +2,62 @@
 @include mat.core();
 
 //1. Escojo los colores que llevará mi Theme
+// Definir el color primario
 $my-primary-color: (
-    50 : #e0f1e9,
-    100 : #b3ddc8,
-    200 : #80c7a4,
-    300 : #4db080,
-    400 : #269f64,
-    500 : #008e49,
-    600 : #008642,
-    700 : #007b39,
-    800 : #007131,
-    900 : #005f21,
-    A100 : #90ffac,
-    A200 : #5dff86,
-    A400 : #2aff60,
-    A700 : #10ff4d,
+  50: #e0f4f0,
+  100: #b3e2d8,
+  200: #80cfbf,
+  300: #4dbca6,
+  400: #26ab91,
+  500: #006650,  // Este es el color principal
+  600: #005e49,
+  700: #00543f,
+  800: #004b35,
+  900: #003b24,
+  A100: #7dffe3,
+  A200: #4affd1,
+  A400: #17ffc0,
+  A700: #00ffb5,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,  // Contraste para el color primario
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
+);
+
+// Definir el color secundario (usado como accent)
+$my-accent-color: (
+    50 : #ecf1e7,
+    100 : #cfddc2,
+    200 : #b0c699,
+    300 : #90af70,
+    400 : #789e52,
+    500 : #608d33,
+    600 : #58852e,
+    700 : #4e7a27,
+    800 : #447020,
+    900 : #335d14,
+    A100 : #bfff96,
+    A200 : #a0ff63,
+    A400 : #81ff30,
+    A700 : #71ff17,
     contrast: (
         50 : #000000,
         100 : #000000,
         200 : #000000,
         300 : #000000,
-        400 : #ffffff,
+        400 : #000000,
         500 : #ffffff,
         600 : #ffffff,
         700 : #ffffff,
@@ -35,75 +70,80 @@ $my-primary-color: (
     )
 );
 
-$my-accent-color: (
-    50 : #f1f6e4,
-    100 : #dce8bb,
-    200 : #c5d98e,
-    300 : #aeca61,
-    400 : #9cbe3f,
-    500 : #8bb31d,
-    600 : #83ac1a,
-    700 : #78a315,
-    800 : #6e9a11,
-    900 : #5b8b0a,
-    A100 : #e2ffb9,
-    A200 : #ceff86,
-    A400 : #b9ff53,
-    A700 : #aeff3a,
+/* For use in src/lib/core/theming/_palette.scss */
+$my-accent-color-secondary: (
+    50 : #e0eaf0,
+    100 : #b3cbdb,
+    200 : #80a9c3,
+    300 : #4d86aa,
+    400 : #266c98,
+    500 : #005286,
+    600 : #004b7e,
+    700 : #004173,
+    800 : #003869,
+    900 : #002856,
+    A100 : #88b4ff,
+    A200 : #5594ff,
+    A400 : #2274ff,
+    A700 : #0864ff,
     contrast: (
         50 : #000000,
         100 : #000000,
         200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
         800 : #ffffff,
         900 : #ffffff,
         A100 : #000000,
         A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
+        A400 : #ffffff,
+        A700 : #ffffff,
     )
 );
 
+
+
+
+// Definir el color de advertencia (warn)
 $my-warn-color: (
-    50 : #faf1e4,
-    100 : #f4dbbb,
-    200 : #ecc48d,
-    300 : #e4ac5f,
-    400 : #df9a3d,
-    500 : #d9881b,
-    600 : #d58018,
-    700 : #cf7514,
-    800 : #ca6b10,
-    900 : #c05808,
-    A100 : #fff2eb,
-    A200 : #ffd3b8,
-    A400 : #ecc48d,
-    A700 : #c05808,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
-    )
+  50: #f9f0e1,
+  100: #f1ddba,
+  200: #e9c792,
+  300: #e1b069,
+  400: #daa248,
+  500: #c20e1a,  // Color de advertencia (danger)
+  600: #b50d17,
+  700: #a50c14,
+  800: #940b12,
+  900: #76090c,
+  A100: #ffcdbf,
+  A200: #ff9d7f,
+  A400: #ff6d3f,
+  A700: #ff541e,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000
+  )
 );
 
 //2. Defino la paleta de colores
 $theme-agpres-primary: mat.define-palette($my-primary-color);
-$theme-agpres-accent: mat.define-palette($my-accent-color, A200, A100, A400);
+$theme-agpres-accent: mat.define-palette($my-accent-color-secondary, A200, A100, A400);
 $theme-agpres-warn: mat.define-palette($my-warn-color);
 
 //3. Tema propio
