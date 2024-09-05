@@ -1,7 +1,7 @@
 <main>
   <div class="container py-4">
     <!-- Header -->
-    <app-header></app-header>
+
     <!-- Contenido -->
     <div class="card">
       <div class="card-header bg-primary">
@@ -9,8 +9,8 @@
       </div>
       <div class="card-body">
         <mat-stepper linear #stepper>
-          <mat-step [stepControl]="firstFormGroup" [editable]="isEditable" label="Paso 1">
-            <form [formGroup]="firstFormGroup">
+          <mat-step [stepControl]="primeraParteForm" label="Paso 1">
+            <form [formGroup]="primeraParteForm">
               <div class="card">
                 <div class="card-header bg-success">
                   <h6 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h6>
@@ -46,8 +46,8 @@
               </div>
             </form>
           </mat-step>
-          <mat-step [stepControl]="secondFormGroup" [editable]="isEditable" label="Paso 2">
-            <form [formGroup]="secondFormGroup">
+          <mat-step [stepControl]="segundaParteForm"  label="Paso 2">
+            <form [formGroup]="segundaParteForm">
               <div class="card">
                 <div class="card-header bg-success">
                   <h6 class="text-white"><i class="bi bi-person"></i> Datos de la persona</h6>
@@ -61,12 +61,18 @@
                           <mat-option  value="1"> DNI</mat-option>
                           <mat-option  value="0"> C.E.</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['tipo_documento'].hasError('required')">
+                          Tipo de documento es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>N° de documento</mat-label>
                         <input matInput formControlName="numero_documento" placeholder="Nro de documento">
+                        <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('required')">
+                          Nro de documento es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
@@ -76,6 +82,9 @@
                           <mat-option  value="1"> Masculino</mat-option>
                           <mat-option  value="0"> Femenino</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['genero'].hasError('required')">
+                          Género es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -84,23 +93,28 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Nombres</mat-label>
                         <input matInput formControlName="nombre" placeholder="Nombres">
+                        <mat-error *ngIf="segundaParteForm.controls['nombre'].hasError('required')">
+                          Nombre es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
-                      <div class="col">
-                        <mat-form-field appearance="fill" class="w-100">
-                          <mat-label>Apellido paterno</mat-label>
-                          <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno">
-                        </mat-form-field>
-                      </div>
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Apellido paterno</mat-label>
+                        <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno">
+                        <mat-error *ngIf="segundaParteForm.controls['apellido_paterno'].hasError('required')">
+                          Apellido paterno es <strong>obligatorio</strong>
+                        </mat-error>
+                      </mat-form-field>
                     </div>
                     <div class="col">
-                      <div class="col">
-                        <mat-form-field appearance="fill" class="w-100">
-                          <mat-label>Apellido materno</mat-label>
-                          <input matInput formControlName="apellido_materno" placeholder="Apellido materno">
-                        </mat-form-field>
-                      </div>
+                      <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Apellido materno</mat-label>
+                        <input matInput formControlName="apellido_materno" placeholder="Apellido materno">
+                        <mat-error *ngIf="segundaParteForm.controls['apellido_materno'].hasError('required')">
+                          Apellido materno es <strong>obligatorio</strong>
+                        </mat-error>
+                      </mat-form-field>
                     </div>
                   </div>
                 </div>
@@ -118,6 +132,9 @@
                         <mat-select formControlName="departamento">
                           <mat-option  value="1"> Seleccionar</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['departamento'].hasError('required')">
+                          Departamento es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
@@ -126,6 +143,9 @@
                         <mat-select formControlName="provincia">
                           <mat-option  value="1"> Seleccionar</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['provincia'].hasError('required')">
+                          Provincia es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
@@ -134,6 +154,9 @@
                         <mat-select formControlName="distrito">
                           <mat-option  value="1"> Seleccionar</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['distrito'].hasError('required')">
+                          Distrito es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -142,6 +165,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Dirección</mat-label>
                         <textarea matInput formControlName="direccion" placeholder="Ingrese su dirección"></textarea>
+                        <mat-error *ngIf="segundaParteForm.controls['direccion'].hasError('required')">
+                          Dirección es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -170,6 +196,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Correo electrónico</mat-label>
                         <input type="email" matInput formControlName="correo_electronico" placeholder="Correo electrónico">
+                        <mat-error *ngIf="segundaParteForm.controls['correo_electronico'].hasError('required')">
+                          Correo electrónico es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -178,12 +207,18 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Comunidad/Asociación/Entidad a la que pertenece</mat-label>
                         <input matInput formControlName="comunidad" placeholder="Ingrese Comunidad/Asociación/Entidad a la que pertenece">
+                        <mat-error *ngIf="segundaParteForm.controls['comunidad'].hasError('required')">
+                          Comunidad/Asociación/Entidad es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Cargo</mat-label>
                         <input matInput formControlName="cargo" placeholder="Ingrese cargo">
+                        <mat-error *ngIf="segundaParteForm.controls['cargo'].hasError('required')">
+                          Cargo es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -202,6 +237,9 @@
                         <mat-select formControlName="tipo_consulta">
                           <mat-option  value="1"> Seleccionar</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="segundaParteForm.controls['tipo_consulta'].hasError('required')">
+                          Tipo de consulta es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -211,6 +249,9 @@
                         <mat-label>Detalle aquí su queja, reclamo o consulta.</mat-label>
                         <textarea #contenidoConsulta matInput formControlName="contenido_consulta" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
                         <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
+                        <mat-error *ngIf="segundaParteForm.controls['contenido_consulta'].hasError('required')">
+                          Este campo es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                   </div>
@@ -219,8 +260,24 @@
 
                     </div>
                   </div>
+                  <div>
+                    <button mat-button matStepperPrevious color="accent">
+                      <mat-icon>arrow_back</mat-icon>
+                      Retornar
+                    </button>
+                    <button mat-button (click)="onSubmit()" color="primary">
+                      <mat-icon>send</mat-icon>
+                      Enviar
+                    </button>
+                    <button mat-button (click)="stepper.reset()" color="primary">
+                      <mat-icon>exit_to_app</mat-icon>
+                      Finalizar
+                    </button>
+                  </div>
                 </div>
               </div>
+
+
             </form>
           </mat-step>
         </mat-stepper>

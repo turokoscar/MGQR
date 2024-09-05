@@ -1,42 +1,65 @@
-import { Component } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-reclamo',
   templateUrl: './reclamo.component.html',
   styleUrls: ['./reclamo.component.scss']
 })
-export class ReclamoComponent {
-  firstFormGroup = this._formBuilder.group({
-    tipo_persona: ['', Validators.required],
-    email_institucional: ['']
-  });
-  secondFormGroup = this._formBuilder.group({
-    tipo_documento: ['', Validators.required],
-    numero_documento: [''],
-    genero: [''],
-    nombre: [''],
-    apellido_paterno: [''],
-    apellido_materno: [''],
-    departamento: [''],
-    provincia: [''],
-    distrito: [''],
-    direccion: [''],
-    numero_telefono: [''],
-    numero_celular: [''],
-    correo_electronico: [''],
-    comunidad: [''],
-    cargo: [''],
-    tipo_consulta: [''],
-    contenido_consulta: [''],
-    evidencia_consulta: ['']
-  });
-  isEditable = false;
+export class ReclamoComponent implements OnInit {
+  //1. Declaro las variables a utilizar
+  primeraParteForm!: FormGroup;
+  segundaParteForm!: FormGroup;
   showEmailField = false;
 
-  constructor(private _formBuilder: FormBuilder) {}
+  //2. Inicializo el constructor
+  constructor(
+    private fb: FormBuilder
+  ){}
+
+  //3. Inicializo el componente
+  ngOnInit(): void {
+    this.showPrimerForm();
+    this.showSegundoForm();
+  }
+
+  //4. Estructuro la primera parte del formulario
+  private showPrimerForm():void{
+    this.primeraParteForm = this.fb.group({
+      tipo_persona: ['', Validators.required],
+      email_institucional: ['']
+    })
+  }
+
+  //5. Estructuro la segunda parte del formulario
+  private showSegundoForm():void{
+    this.segundaParteForm = this.fb.group({
+      tipo_documento: ['', Validators.required],
+      numero_documento: ['', [Validators.required]],
+      genero: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.maxLength(100)]],
+      apellido_paterno: ['', [Validators.required, Validators.maxLength(100)]],
+      apellido_materno: ['', [Validators.required, Validators.maxLength(100)]],
+      departamento: ['', Validators.required],
+      provincia: ['', Validators.required],
+      distrito: ['', Validators.required],
+      direccion: ['', [Validators.required, Validators.maxLength(255)]],
+      numero_telefono: [''],
+      numero_celular: [''],
+      correo_electronico: ['', [Validators.required, Validators.email]],
+      comunidad: ['', [Validators.required, Validators.maxLength(255)]],
+      cargo: ['', Validators.required],
+      tipo_consulta: ['', Validators.required],
+      contenido_consulta: ['', [Validators.required, Validators.maxLength(500)]],
+      evidencia_consulta: ['']
+    })
+  }
 
   onTipoPersonaChange(event: any) {
     this.showEmailField = event.value === '1';
+  }
+
+  onSubmit():void{
+
   }
 }
