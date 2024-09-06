@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { Distrito } from 'src/app/models/distrito';
 import { Provincia } from 'src/app/models/provincia';
 import { Region } from 'src/app/models/region';
@@ -31,6 +33,7 @@ export class ReclamoComponent implements OnInit {
   //2. Inicializo el constructor
   constructor(
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private _notificacion: NotificationService,
     private _tipoDocumento: TipoDocumentoService,
     private _tipoReclamo: TipoReclamoService,
@@ -151,21 +154,12 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
-
-
-
-
-
-
-
-
+  //11. Genero un evento onchange para mostrar u ocultar el input de email
   onTipoPersonaChange(event: any) {
     this.showEmailField = event.value === '1';
   }
-
-  onActivaReactividad(): void {
-    // Deshabilita o habilita los campos según el valor de disabled
+  //12. Deshabilita o habilita los campos según el valor del input Checkbox
+  private onActivaReactividad(): void {
     if (this.disabled) {
       this.segundaParteForm.controls['tipo_documento'].disable();
       this.segundaParteForm.controls['numero_documento'].disable();
@@ -180,15 +174,22 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.controls['apellido_materno'].enable();
     }
   }
-
-  // Método que se ejecuta cuando cambia el checkbox de confidencialidad
+  //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
-    this.disabled = !this.disabled; // Cambia el estado de confidencialidad
-    this.onActivaReactividad();  // Aplica la lógica de activación/desactivación
+    this.disabled = !this.disabled;
+    this.onActivaReactividad();
   }
-
+  //14. Proceso el formulario
   onSubmit():void{
-    this._notificacion.showSuccess('Mensaje de información', 'Su Ficha MGQR se registró exitosamente., así mismo se envío la confirmación al correo : info@gmail.com');
-    console.log("Su Ficha fue generada correctamente");
+    this.openDialog();
+  }
+  //15. Mostramos un cuadro de dialogo
+  openDialog(): void {
+    this.dialog.open(DialogComponent, {
+      data: {
+        title: 'Mensaje de información',
+        message: 'Su Ficha MGQR se registró exitosamente, así mismo se envió la confirmación al correo: info@gmail.com'
+      }
+    });
   }
 }

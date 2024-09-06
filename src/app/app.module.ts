@@ -25,6 +25,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import {MatListModule} from '@angular/material/list';
     FooterComponent,
     IntroComponent,
     ConsultaComponent,
-    ResultadoComponent
+    ResultadoComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import {MatListModule} from '@angular/material/list';
     MatCheckboxModule,
     MatTooltipModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
