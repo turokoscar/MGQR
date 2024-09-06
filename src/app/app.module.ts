@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+
 import { AppComponent } from './app.component';
 import { ReclamoComponent } from './main/reclamo/reclamo.component';
 import { HomeComponent } from './main/home/home.component';
@@ -41,6 +43,7 @@ import {MatListModule} from '@angular/material/list';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     ToastrModule.forRoot({
       timeOut: 3000, // Puedes configurar opciones globales aquí
       positionClass: 'toast-bottom-right',

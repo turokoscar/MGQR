@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Distrito } from 'src/app/models/distrito';
+import { Provincia } from 'src/app/models/provincia';
+import { Region } from 'src/app/models/region';
+import { TipoDocumento } from 'src/app/models/tipo-documento';
+import { TipoReclamo } from 'src/app/models/tipo-reclamo';
 import { NotificationService } from 'src/app/services/notification.service';
+import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
+import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { UbigeoService } from 'src/app/services/ubigeo.service';
 
 @Component({
   selector: 'app-reclamo',
@@ -11,23 +19,50 @@ export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
+  tipoDocumentos: TipoDocumento[] = [];
+  tipoReclamos: TipoReclamo[] = [];
+  regiones: Region[] = [];
+  provincias: Provincia[] = [];
+  distritos: Distrito[] = [];
   showEmailField = false;
   disabled = false;
+  errorMessage: string = "";
 
   //2. Inicializo el constructor
   constructor(
     private fb: FormBuilder,
-    private _notificacion: NotificationService
+    private _notificacion: NotificationService,
+    private _tipoDocumento: TipoDocumentoService,
+    private _tipoReclamo: TipoReclamoService,
+    private _ubigeo: UbigeoService
   ){}
-
   //3. Inicializo el componente
   ngOnInit(): void {
     this.showPrimerForm();
     this.showSegundoForm();
+    this.showTipoDocumentos();
+    this.showTipoReclamos();
+    this.showRegiones();
     // Observa cambios en la variable disabled
     this.onActivaReactividad();
+    this.segundaParteForm.get('departamento')?.valueChanges.subscribe(region => {
+      if (region) {
+        this.showProvincias(region);
+        this.segundaParteForm.get('provincia')?.enable();
+      } else {
+        this.segundaParteForm.get('provincia')?.disable();
+        this.segundaParteForm.get('distrito')?.disable();
+      }
+    });
+    this.segundaParteForm.get('provincia')?.valueChanges.subscribe(provincia => {
+      if (provincia) {
+        this.showDistritos(provincia);
+        this.segundaParteForm.get('distrito')?.enable();
+      } else {
+        this.segundaParteForm.get('distrito')?.disable();
+      }
+    });
   }
-
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
     this.primeraParteForm = this.fb.group({
@@ -35,7 +70,6 @@ export class ReclamoComponent implements OnInit {
       email_institucional: ['']
     })
   }
-
   //5. Estructuro la segunda parte del formulario
   private showSegundoForm():void{
     this.segundaParteForm = this.fb.group({
@@ -46,8 +80,8 @@ export class ReclamoComponent implements OnInit {
       apellido_paterno: [{ value: '', disabled: false }, Validators.required],
       apellido_materno: [{ value: '', disabled: false }, Validators.required],
       departamento: ['', Validators.required],
-      provincia: ['', Validators.required],
-      distrito: ['', Validators.required],
+      provincia: [ { value: '', disabled: true} , Validators.required],
+      distrito: [ { value: '', disabled: true} , Validators.required],
       direccion: ['', Validators.required],
       numero_telefono: [''],
       numero_celular: [''],
@@ -59,6 +93,72 @@ export class ReclamoComponent implements OnInit {
       evidencia_consulta: ['']
     });
   }
+  //6. Obtengo la lista de documentos
+  private showTipoDocumentos(): void{
+    this._tipoDocumento.show().subscribe({
+      next: (data) => {
+        this.tipoDocumentos = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  //7. Obtengo los tipos de reclamos
+  private showTipoReclamos(): void{
+    this._tipoReclamo.show().subscribe({
+      next: (data) => {
+        this.tipoReclamos = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  //8. Obtengo la lista de regiones
+  showRegiones(){
+    const filtro = 0;
+    this._ubigeo.showRegiones(filtro).subscribe({
+      next: (data) => {
+        this.regiones = Array.isArray(data) ? data : [data];
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+      }
+    });
+  }
+  //9. Muestro las provincias de una region
+  showProvincias(region: string){
+    this._ubigeo.showProvincias(region).subscribe({
+      next: (data) => {
+        this.provincias = Array.isArray(data) ? data: [data];
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+      }
+    });
+  }
+  //10. Muestro los distritos de una provincia
+  showDistritos(provincia: string){
+    this._ubigeo.showDistritos(provincia).subscribe({
+      next: (data) => {
+        this.distritos = Array.isArray(data) ? data: [data];
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+      }
+    });
+  }
+
+
+
+
+
+
+
+
 
   onTipoPersonaChange(event: any) {
     this.showEmailField = event.value === '1';

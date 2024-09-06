@@ -65,8 +65,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Tipo de documento</mat-label>
                         <mat-select formControlName="tipo_documento">
-                          <mat-option  value="1"> DNI</mat-option>
-                          <mat-option  value="0"> C.E.</mat-option>
+                          <mat-option *ngFor="let item of tipoDocumentos" [value]="item.id">
+                            {{item.descripcion}}
+                          </mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['tipo_documento'].hasError('required')">
                           Tipo de documento es <strong>obligatorio</strong>
@@ -138,7 +139,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Departamento</mat-label>
                         <mat-select formControlName="departamento">
-                          <mat-option  value="1"> Seleccionar</mat-option>
+                          <mat-option *ngFor="let item of regiones" [value]="item.codigo">
+                            {{ item.nombre }}
+                          </mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['departamento'].hasError('required')">
                           Departamento es <strong>obligatorio</strong>
@@ -149,7 +152,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Provincia</mat-label>
                         <mat-select formControlName="provincia">
-                          <mat-option  value="1"> Seleccionar</mat-option>
+                          <mat-option *ngFor="let item of provincias" [value]="item.codigo">
+                            {{ item.nombre }}
+                          </mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['provincia'].hasError('required')">
                           Provincia es <strong>obligatorio</strong>
@@ -160,7 +165,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Distrito</mat-label>
                         <mat-select formControlName="distrito">
-                          <mat-option  value="1"> Seleccionar</mat-option>
+                          <mat-option *ngFor="let item of distritos" [value]="item.codigo">
+                            {{ item.nombre }}
+                          </mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['distrito'].hasError('required')">
                           Distrito es <strong>obligatorio</strong>
@@ -243,9 +250,9 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Tipo</mat-label>
                         <mat-select formControlName="tipo_consulta">
-                          <mat-option  value="1"> Queja</mat-option>
-                          <mat-option  value="2"> Reclamo</mat-option>
-                          <mat-option  value="3"> Consulta</mat-option>
+                          <mat-option *ngFor="let item of tipoReclamos" [value]="item.id">
+                            {{item.descripcion}}
+                          </mat-option>
                         </mat-select>
                         <mat-error *ngIf="segundaParteForm.controls['tipo_consulta'].hasError('required')">
                           Tipo de consulta es <strong>obligatorio</strong>
@@ -257,7 +264,7 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Detalle aquí su queja, reclamo o consulta.</mat-label>
-                        <textarea #contenidoConsulta matInput formControlName="contenido_consulta" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
+                        <textarea #contenidoConsulta matInput formControlName="contenido_consulta" rows="10" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
                         <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
                         <mat-error *ngIf="segundaParteForm.controls['contenido_consulta'].hasError('required')">
                           Este campo es <strong>obligatorio</strong>

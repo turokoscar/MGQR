@@ -1,0 +1,26 @@
+{
+  "tipo_reclamo":[
+    {
+      "id": 1,
+      "descripcion": "Queja"
+    },
+    {
+      "id": 2,
+      "descripcion": "Reclamo"
+    },
+    {
+      "id": 3,
+      "descripcion": "Consulta"
+    }
+  ],
+  "tipo_documento":[
+    {
+      "id": 1,
+      "descripcion": "DNI"
+    },
+    {
+      "id": 2,
+      "descripcion": "Carnet de extranjería"
+    }
+  ]
+}
