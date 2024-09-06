@@ -283,7 +283,7 @@
                       <i class="bi bi-arrow-left"></i>
                       Retornar
                     </button>
-                    <button mat-raised-button (click)="onSubmit()" color="primary">
+                    <button mat-raised-button [disabled]="!isFormValid()" (click)="onSubmit()" color="primary">
                       <mat-icon>send</mat-icon>
                       Enviar
                     </button>

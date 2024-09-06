@@ -87,7 +87,7 @@ export class ReclamoComponent implements OnInit {
       distrito: [ { value: '', disabled: true} , Validators.required],
       direccion: ['', Validators.required],
       numero_telefono: [''],
-      numero_celular: [''],
+      numero_celular: ['', [Validators.required, Validators.maxLength(9)]],
       correo_electronico: ['', Validators.required],
       comunidad: ['', Validators.required],
       cargo: ['', Validators.required],
@@ -181,6 +181,11 @@ export class ReclamoComponent implements OnInit {
   }
   //14. Proceso el formulario
   onSubmit():void{
+    const formData = {
+      form1: this.primeraParteForm.value,
+      form2: this.segundaParteForm.value
+    };
+    localStorage.setItem('formData', JSON.stringify(formData));
     this.openDialog();
   }
   //15. Mostramos un cuadro de dialogo
@@ -191,5 +196,9 @@ export class ReclamoComponent implements OnInit {
         message: 'Su Ficha MGQR se registró exitosamente, así mismo se envió la confirmación al correo: info@gmail.com'
       }
     });
+  }
+  //16. Establesco un valor por default para el boton guardar del formulario
+  isFormValid(): boolean {
+    return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
 }
