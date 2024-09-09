@@ -27,6 +27,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { AuthComponent } from './modules/auth/auth.component';
+import { AdminComponent } from './modules/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { DialogComponent } from './components/dialog/dialog.component';
     IntroComponent,
     ConsultaComponent,
     ResultadoComponent,
-    DialogComponent
+    DialogComponent,
+    AuthComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
