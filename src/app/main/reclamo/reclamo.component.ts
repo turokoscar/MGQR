@@ -255,9 +255,10 @@ export class ReclamoComponent implements OnInit {
      console.log(formData);
 
      this._expediente.guardar(param).subscribe({
-      next: (data) => {
+      next: (data:ExpedienteResponse) => {
+        console.log(data);
         if(data.id!=0){
-          this.openDialog(data.codigo);
+          this.openDialog(data.expediente);
           this.router.navigate(['../home']);
         }
        

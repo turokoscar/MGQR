@@ -1,6 +1,6 @@
 export interface ExpedienteResponse {
     id?: number,
-    codigo?: string,
+    expediente?: string,
     correo?: string
   }
   
