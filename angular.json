@@ -33,12 +33,16 @@
               "node_modules/bootstrap/scss/bootstrap.scss",
               "src/styles.scss",
               "src/themes/material-theme.scss",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+              "src/themes/sb-admin-2/sb-admin-2.scss",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/@popperjs/core/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/themes/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.js",
+              "src/themes/sb-admin-2/sb-admin-2.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js"
             ]
           },
           "configurations": {
@@ -95,7 +99,7 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-              
+
             }
           },
           "defaultConfiguration": "production"
