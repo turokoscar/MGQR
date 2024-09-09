@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
+
+
 import { Distrito } from 'src/app/models/distrito';
 import { Provincia } from 'src/app/models/provincia';
 import { Region } from 'src/app/models/region';
@@ -14,9 +18,9 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 import { TipoAtencionService } from 'src/app/services/tipo-atencion.service';
-
-
 import { UbigeoService } from 'src/app/services/ubigeo.service';
+import { ExpedienteService } from 'src/app/services/expediente.service';
+import { ExpedienteResponse } from 'src/app/models/expediente-response';
 
 @Component({
   selector: 'app-reclamo',
@@ -36,6 +40,7 @@ export class ReclamoComponent implements OnInit {
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
 
+  
   showEmailField = false;
   disabled = false;
   errorMessage: string = "";
@@ -48,7 +53,9 @@ export class ReclamoComponent implements OnInit {
     private _tipoDocumento: TipoDocumentoService,
     private _tipoAtencion: TipoAtencionService,
     private _tipoReclamo: TipoReclamoService,
-    private _ubigeo: UbigeoService
+    private _ubigeo: UbigeoService,
+    private _expediente: ExpedienteService,
+    private router: Router
   ){}
   //3. Inicializo el componente
   ngOnInit(): void {
@@ -105,7 +112,8 @@ export class ReclamoComponent implements OnInit {
       cargo: ['', Validators.required],
       tipo_consulta: ['', Validators.required],
       contenido_consulta: ['', Validators.required],
-      evidencia_consulta: ['']
+      evidencia_consulta: [''],
+      es_confidencial:['0']
     });
   }
 
@@ -217,11 +225,52 @@ export class ReclamoComponent implements OnInit {
       form2: this.segundaParteForm.value
     };
     localStorage.setItem('formData', JSON.stringify(formData));
-    //this.openDialog();
+   
+    let param = {
+      //("perTipDoc": ""+ 1,
+      "tipo_canal": "1",
+      "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
+      "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
+      "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
+      "tipo_documento_id": ""+this.segundaParteForm.value.tipo_documento,
+      "numero_documento": ""+this.segundaParteForm.value.numero_documento,
+      "genero": ""+this.segundaParteForm.value.genero,
+      "nombre": ""+this.segundaParteForm.value.nombre,
+      "apellido_paterno": ""+this.segundaParteForm.value.apellido_paterno,
+      "apellido_materno": ""+this.segundaParteForm.value.apellido_materno,
+      "ubigeo_id": ""+this.segundaParteForm.value.distrito,
+      "direccion": ""+this.segundaParteForm.value.direccion,
+      "telefono": ""+this.segundaParteForm.value.numero_telefono,
+      "celular": ""+this.segundaParteForm.value.numero_celular,
+      "email": ""+this.segundaParteForm.value.correo_electronico,
+      "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
+      "comunidad": ""+this.segundaParteForm.value.comunidad,
+      "cargo": ""+this.segundaParteForm.value.cargo,
+      "usuario_id": "1"
+      
+      
+      //  "perReferencia": ""+this.segundaParteForm.value.evidencia_consulta
+     }
+     
+     console.log(formData);
+
+     this._expediente.guardar(param).subscribe({
+      next: (data) => {
+        if(data.id==0){
+          this.openDialog();
+          this.router.navigate(['../home']);
+        }
+         
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+      }
+    });
+  
+}
+    
 
 
-
-  }
   //15. Mostramos un cuadro de dialogo
   openDialog(): void {
     this.dialog.open(DialogComponent, {
