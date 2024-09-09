@@ -5,12 +5,16 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './main/home/home.component';
 import { ConsultaComponent } from './main/consulta/consulta.component';
 import { ResultadoComponent } from './main/resultado/resultado.component';
+import { AuthComponent } from './modules/auth/auth.component';
+import { AdminComponent } from './modules/admin/admin.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'reclamo', component: ReclamoComponent },
   { path: 'consulta', component: ConsultaComponent },
   { path: 'resultado/:numeroExpediente/:codigoVerificacion', component: ResultadoComponent },
+  { path: 'login', component: AuthComponent },
+  { path: 'admin', component: AdminComponent },
   { path: '',   redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home'  }
 ];
