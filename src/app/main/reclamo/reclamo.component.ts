@@ -235,7 +235,7 @@ export class ReclamoComponent implements OnInit {
       "tipo_documento_id": ""+this.segundaParteForm.value.tipo_documento,
       "numero_documento": ""+this.segundaParteForm.value.numero_documento,
       "genero": ""+this.segundaParteForm.value.genero,
-      "nombre": ""+this.segundaParteForm.value.nombre,
+      "nombres": ""+this.segundaParteForm.value.nombre,
       "apellido_paterno": ""+this.segundaParteForm.value.apellido_paterno,
       "apellido_materno": ""+this.segundaParteForm.value.apellido_materno,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
@@ -256,11 +256,11 @@ export class ReclamoComponent implements OnInit {
 
      this._expediente.guardar(param).subscribe({
       next: (data) => {
-        if(data.id==0){
-          this.openDialog();
+        if(data.id!=0){
+          this.openDialog(data.codigo);
           this.router.navigate(['../home']);
         }
-         
+       
       },
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
@@ -272,11 +272,11 @@ export class ReclamoComponent implements OnInit {
 
 
   //15. Mostramos un cuadro de dialogo
-  openDialog(): void {
+  openDialog(codigo_expediente:any): void {
     this.dialog.open(DialogComponent, {
       data: {
         title: 'Mensaje de información',
-        message: 'Se registro exitosamente, así mismo se envió la confirmación a su correo personal'
+        message: 'Se registro exitosamente con el Nro de expediente: <h1>'+codigo_expediente+'</h1>, así mismo se envió la confirmación a su correo personal'
       }
     });
   }
