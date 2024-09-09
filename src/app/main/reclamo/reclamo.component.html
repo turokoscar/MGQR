@@ -10,7 +10,7 @@
       <div class="card-body">
         <mat-stepper linear #stepper>
           <mat-step [stepControl]="primeraParteForm" label="Paso 1">
-            <form [formGroup]="primeraParteForm">
+            <form [formGroup]="primeraParteForm" >
               <div class="card">
                 <div class="card-header bg-success">
                   <h6 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h6>
@@ -21,9 +21,14 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Persona que declara</mat-label>
                         <mat-select formControlName="tipo_persona" (selectionChange)="onTipoPersonaChange($event)" >
-                          <mat-option  value="1"> Interno (Para trabajadores del BPS)</mat-option>
-                          <mat-option  value="0"> Externo (Para la población en general)</mat-option>
+                          <!-- <mat-option  value="1"> Interno (Para trabajadores del BPS)</mat-option>
+                          <mat-option  value="0"> Externo (Para la población en general)</mat-option> -->
+                          <mat-option *ngFor="let item of tipoAtencion" [value]="item.id">
+                            {{ item.descripcion }}
+                          </mat-option>
                         </mat-select>
+                        
+                        
                       </mat-form-field>
                     </div>
                   </div>
@@ -139,7 +144,7 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Departamento</mat-label>
                         <mat-select formControlName="departamento">
-                          <mat-option *ngFor="let item of regiones" [value]="item.codigo">
+                          <mat-option *ngFor="let item of regiones" [value]="item.id">
                             {{ item.nombre }}
                           </mat-option>
                         </mat-select>
@@ -152,7 +157,7 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Provincia</mat-label>
                         <mat-select formControlName="provincia">
-                          <mat-option *ngFor="let item of provincias" [value]="item.codigo">
+                          <mat-option *ngFor="let item of provincias" [value]="item.id">
                             {{ item.nombre }}
                           </mat-option>
                         </mat-select>
@@ -165,7 +170,7 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Distrito</mat-label>
                         <mat-select formControlName="distrito">
-                          <mat-option *ngFor="let item of distritos" [value]="item.codigo">
+                          <mat-option *ngFor="let item of distritos" [value]="item.id">
                             {{ item.nombre }}
                           </mat-option>
                         </mat-select>

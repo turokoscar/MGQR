@@ -11,10 +11,10 @@ import { Region } from '../models/region';
 })
 export class UbigeoService {
   //1. Obtengo la ruta del Api
-  private apiUrl = environment.apiUbigeo;
-  private apiRegion = this.apiUrl+'/Departamento';
-  private apiProvincia = this.apiUrl+'/Provincia';
-  private apiDistrito = this.apiUrl+'/Distrito'
+  private apiUrl = environment.apiUrl;
+  private apiRegion = this.apiUrl+'/General/GetRegion';
+  private apiProvincia = this.apiUrl+'/General/GetProvincia';
+  private apiDistrito = this.apiUrl+'/General/GetDistrito'
   //2. Inicializo el constructor
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todas las regiones del país

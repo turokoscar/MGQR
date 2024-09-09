@@ -5,11 +5,17 @@ import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 import { Distrito } from 'src/app/models/distrito';
 import { Provincia } from 'src/app/models/provincia';
 import { Region } from 'src/app/models/region';
+import { TipoAtencion } from 'src/app/models/tipo-atencion';
 import { TipoDocumento } from 'src/app/models/tipo-documento';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
+
+
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { TipoAtencionService } from 'src/app/services/tipo-atencion.service';
+
+
 import { UbigeoService } from 'src/app/services/ubigeo.service';
 
 @Component({
@@ -21,11 +27,15 @@ export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
+
+  
+  tipoAtencion: TipoAtencion[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoReclamos: TipoReclamo[] = [];
   regiones: Region[] = [];
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
+
   showEmailField = false;
   disabled = false;
   errorMessage: string = "";
@@ -36,6 +46,7 @@ export class ReclamoComponent implements OnInit {
     private dialog: MatDialog,
     private _notificacion: NotificationService,
     private _tipoDocumento: TipoDocumentoService,
+    private _tipoAtencion: TipoAtencionService,
     private _tipoReclamo: TipoReclamoService,
     private _ubigeo: UbigeoService
   ){}
@@ -43,6 +54,7 @@ export class ReclamoComponent implements OnInit {
   ngOnInit(): void {
     this.showPrimerForm();
     this.showSegundoForm();
+    this.showTipoAtencion();
     this.showTipoDocumentos();
     this.showTipoReclamos();
     this.showRegiones();
@@ -96,6 +108,22 @@ export class ReclamoComponent implements OnInit {
       evidencia_consulta: ['']
     });
   }
+
+
+
+  //6. Obtengo la lista de tipo de Atencion
+  private showTipoAtencion(): void{
+    this._tipoAtencion.show().subscribe({
+      next: (data) => {
+        this.tipoAtencion = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+
   //6. Obtengo la lista de documentos
   private showTipoDocumentos(): void{
     this._tipoDocumento.show().subscribe({
@@ -108,6 +136,7 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
+
   //7. Obtengo los tipos de reclamos
   private showTipoReclamos(): void{
     this._tipoReclamo.show().subscribe({
@@ -120,6 +149,7 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
+
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -132,6 +162,7 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
+
   //9. Muestro las provincias de una region
   showProvincias(region: string){
     this._ubigeo.showProvincias(region).subscribe({
@@ -156,7 +187,7 @@ export class ReclamoComponent implements OnInit {
   }
   //11. Genero un evento onchange para mostrar u ocultar el input de email
   onTipoPersonaChange(event: any) {
-    this.showEmailField = event.value === '1';
+    this.showEmailField = event.value == '1';
   }
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
@@ -186,14 +217,17 @@ export class ReclamoComponent implements OnInit {
       form2: this.segundaParteForm.value
     };
     localStorage.setItem('formData', JSON.stringify(formData));
-    this.openDialog();
+    //this.openDialog();
+
+
+
   }
   //15. Mostramos un cuadro de dialogo
   openDialog(): void {
     this.dialog.open(DialogComponent, {
       data: {
         title: 'Mensaje de información',
-        message: 'Su Ficha MGQR se registró exitosamente, así mismo se envió la confirmación al correo: info@gmail.com'
+        message: 'Se registro exitosamente, así mismo se envió la confirmación a su correo personal'
       }
     });
   }
