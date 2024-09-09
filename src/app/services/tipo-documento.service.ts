@@ -9,7 +9,7 @@ import { TipoDocumento } from '../models/tipo-documento';
 })
 export class TipoDocumentoService {
   //1. Obtengo la ruta del api
-  private apiUrl = environment.apiUrl+'/tipo_documento';
+  private apiUrl = environment.apiUrl+'/General/GetTipoDocumento';
   //2. Defino el constructor
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
