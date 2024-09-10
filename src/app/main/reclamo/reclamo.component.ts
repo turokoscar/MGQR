@@ -83,6 +83,9 @@ export class ReclamoComponent implements OnInit {
     this.segundaParteForm.get('es_confidencial')?.valueChanges.subscribe(value => {
       this.activaConfidencialidad();
     });
+    this.primeraParteForm.get('email_institucional')?.valueChanges.subscribe(value => {
+      this.segundaParteForm.get('correo_electronico')?.setValue(value, { emitEvent: false });
+    });
   }
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
@@ -203,8 +206,17 @@ export class ReclamoComponent implements OnInit {
   }
   //11. Genero un evento onchange para mostrar u ocultar el input de email
   onTipoPersonaChange(event: any) {
-    this.showEmailField = event.value == '1';
+    const emailControl = this.primeraParteForm.get('email_institucional');
+    if (event.value == '1') {
+      this.showEmailField = true;
+      emailControl?.setValidators([Validators.required, Validators.email]);
+    } else {
+      this.showEmailField = false;
+      emailControl?.clearValidators();
+    }
+    emailControl?.updateValueAndValidity();
   }
+
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
     if (this.disabled) {
