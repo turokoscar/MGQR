@@ -1,7 +1,6 @@
 <main>
   <div class="container py-4">
     <!-- Header -->
-
     <!-- Contenido -->
     <div class="card">
       <div class="card-header bg-primary">
@@ -21,14 +20,10 @@
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Persona que declara</mat-label>
                         <mat-select formControlName="tipo_persona" (selectionChange)="onTipoPersonaChange($event)" >
-                          <!-- <mat-option  value="1"> Interno (Para trabajadores del BPS)</mat-option>
-                          <mat-option  value="0"> Externo (Para la población en general)</mat-option> -->
                           <mat-option *ngFor="let item of tipoAtencion" [value]="item.id">
                             {{ item.descripcion }}
                           </mat-option>
                         </mat-select>
-                        
-                        
                       </mat-form-field>
                     </div>
                   </div>
@@ -60,8 +55,8 @@
               <div class="card">
                 <div class="card-header bg-success d-flex justify-content-between align-items-center">
                   <h6 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h6>
-                  <mat-checkbox class="example-margin" formControlName="es_confidencial" [(ngModel)]="disabled" (change)="activaConfidencialidad()">
-                    <span class="text-white">¿ Desea que sus datos sean confidenciales ?</span>
+                  <mat-checkbox class="example-margin" formControlName="es_confidencial" (change)="activaConfidencialidad()">
+                    <span class="text-white">¿Desea que sus datos sean confidenciales?</span>
                   </mat-checkbox>
                 </div>
                 <div class="card-body">
@@ -82,9 +77,13 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>N° de documento</mat-label>
-                        <input matInput formControlName="numero_documento" placeholder="Nro de documento">
+                        <input type="number" matInput #numeroDocumento formControlName="numero_documento" placeholder="Nro de documento" [maxlength]="15">
+                        <mat-hint align="end">{{numeroDocumento.value.length}} / 15</mat-hint>
                         <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('required')">
                           Nro de documento es <strong>obligatorio</strong>
+                        </mat-error>
+                        <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('maxlength')">
+                          Nro de documento no puede contener mas de 15 dígitos.
                         </mat-error>
                       </mat-form-field>
                     </div>
@@ -106,7 +105,7 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Nombres</mat-label>
-                        <input matInput formControlName="nombre" placeholder="Nombres">
+                        <input matInput formControlName="nombre" placeholder="Nombres" maxlength="100">
                         <mat-error *ngIf="segundaParteForm.controls['nombre'].hasError('required')">
                           Nombre es <strong>obligatorio</strong>
                         </mat-error>
@@ -115,7 +114,7 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Apellido paterno</mat-label>
-                        <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno">
+                        <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno" maxlength="100">
                         <mat-error *ngIf="segundaParteForm.controls['apellido_paterno'].hasError('required')">
                           Apellido paterno es <strong>obligatorio</strong>
                         </mat-error>
@@ -203,19 +202,23 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>N° de teléfono</mat-label>
-                        <input type="tel" matInput formControlName="numero_telefono" placeholder="Nro de teléfono">
+                        <input type="number" matInput formControlName="numero_telefono" placeholder="Nro de teléfono" maxlength="15">
                       </mat-form-field>
                     </div>
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>N° de celular</mat-label>
-                        <input type="tel" matInput formControlName="numero_celular" placeholder="Nro de celular">
+                        <input type="number" matInput #celular formControlName="numero_celular" placeholder="Nro de celular" maxlength="9">
+                        <mat-hint align="end">{{celular.value.length}} / 9</mat-hint>
+                        <mat-error *ngIf="segundaParteForm.controls['numero_celular'].hasError('required')">
+                          Número de celular es <strong>obligatorio</strong>
+                        </mat-error>
                       </mat-form-field>
                     </div>
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Correo electrónico</mat-label>
-                        <input type="email" matInput formControlName="correo_electronico" placeholder="Correo electrónico">
+                        <input type="email" matInput formControlName="correo_electronico" placeholder="Correo electrónico" maxlength="100">
                         <mat-error *ngIf="segundaParteForm.controls['correo_electronico'].hasError('required')">
                           Correo electrónico es <strong>obligatorio</strong>
                         </mat-error>
@@ -235,7 +238,7 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Cargo</mat-label>
-                        <input matInput formControlName="cargo" placeholder="Ingrese cargo">
+                        <input matInput formControlName="cargo" placeholder="Ingrese cargo" maxlength="100">
                         <mat-error *ngIf="segundaParteForm.controls['cargo'].hasError('required')">
                           Cargo es <strong>obligatorio</strong>
                         </mat-error>
