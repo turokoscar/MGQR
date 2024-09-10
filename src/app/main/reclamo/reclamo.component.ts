@@ -34,7 +34,7 @@ export class ReclamoComponent implements OnInit {
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
 
-  
+
   tipoAtencion: TipoAtencion[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoReclamos: TipoReclamo[] = [];
@@ -42,7 +42,7 @@ export class ReclamoComponent implements OnInit {
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
 
-  
+
   showEmailField = false;
   disabled = false;
   errorMessage: string = "";
@@ -115,18 +115,22 @@ export class ReclamoComponent implements OnInit {
       provincia: [ { value: '', disabled: true} , Validators.required],
       distrito: [ { value: '', disabled: true} , Validators.required],
       direccion: ['', Validators.required],
-      numero_telefono: [''],
-      numero_celular: ['', [Validators.required, Validators.maxLength(9)]],
-      correo_electronico: ['', Validators.required],
+      numero_telefono: ['',
+        [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+      ],
+      numero_celular: ['',
+        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.maxLength(9)]
+      ],
+      correo_electronico: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       comunidad: ['', Validators.required],
       cargo: ['', Validators.required],
       tipo_consulta: ['', Validators.required],
       contenido_consulta: ['', Validators.required],
       evidencia_consulta: [''],
       es_confidencial:['0'],
-  
 
-      
+
+
     });
   }
 
@@ -238,7 +242,7 @@ export class ReclamoComponent implements OnInit {
       form2: this.segundaParteForm.value
     };
     localStorage.setItem('formData', JSON.stringify(formData));
-   
+
     let param = {
       //("perTipDoc": ""+ 1,
       "tipo_canal": "1",
@@ -260,11 +264,11 @@ export class ReclamoComponent implements OnInit {
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1"
-      
-      
+
+
       //  "perReferencia": ""+this.segundaParteForm.value.evidencia_consulta
      }
-     
+
      console.log(formData);
 
      this._expediente.guardar(param).subscribe({
@@ -274,15 +278,15 @@ export class ReclamoComponent implements OnInit {
           this.openDialog(data.expediente);
           this.router.navigate(['../home']);
         }
-       
+
       },
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
       }
     });
-  
+
 }
-    
+
 
 
   //15. Mostramos un cuadro de dialogo
