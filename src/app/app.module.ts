@@ -26,6 +26,12 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 import { DialogComponent } from './components/dialog/dialog.component';
 import { AuthComponent } from './modules/auth/auth.component';
 import { AdminComponent } from './modules/admin/admin.component';
@@ -33,6 +39,14 @@ import { HeaderAdminComponent } from './components/template/header-admin/header-
 import { FooterAdminComponent } from './components/template/footer-admin/footer-admin.component';
 import { SidebarAdminComponent } from './components/template/sidebar-admin/sidebar-admin.component';
 import { TopbarAdminComponent } from './components/template/topbar-admin/topbar-admin.component';
+import { ReclamoRecepcionMainComponent } from './modules/reclamo-recepcion/reclamo-recepcion-main/reclamo-recepcion-main.component';
+import { ReclamoRecepcionManagementComponent } from './modules/reclamo-recepcion/reclamo-recepcion-management/reclamo-recepcion-management.component';
+import { TitleComponent } from './components/title/title.component';
+import { DescriptionComponent } from './components/description/description.component';
+import { ReclamoRecepcionPendienteComponent } from './modules/reclamo-recepcion/reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component';
+import { ReclamoRecepcionAtendidoComponent } from './modules/reclamo-recepcion/reclamo-recepcion-atendido/reclamo-recepcion-atendido.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+
 
 @NgModule({
   declarations: [
@@ -50,7 +64,14 @@ import { TopbarAdminComponent } from './components/template/topbar-admin/topbar-
     HeaderAdminComponent,
     FooterAdminComponent,
     SidebarAdminComponent,
-    TopbarAdminComponent
+    TopbarAdminComponent,
+    ReclamoRecepcionMainComponent,
+    ReclamoRecepcionManagementComponent,
+    TitleComponent,
+    DescriptionComponent,
+    ReclamoRecepcionPendienteComponent,
+    ReclamoRecepcionAtendidoComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +96,12 @@ import { TopbarAdminComponent } from './components/template/topbar-admin/topbar-
     MatTooltipModule,
     MatDividerModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

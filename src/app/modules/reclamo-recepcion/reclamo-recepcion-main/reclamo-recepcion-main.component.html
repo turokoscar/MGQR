@@ -1,0 +1,36 @@
+<div id="wrapper">
+  <!-- Sidebar -->
+  <app-sidebar-admin></app-sidebar-admin>
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <!-- Topbar -->
+      <app-topbar-admin></app-topbar-admin>
+      <!-- Contenido -->
+      <div class="container-fluid">
+        <app-title titulo="Recepción de quejas, reclamos y consultas"></app-title>
+        <app-description texto="Bienvenido al módulo para la recepción de quejas, reclamos y consultas."></app-description>
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 bg-secondary">
+            <h6 class="m-0 font-weight-bold text-white">Quejas, consultas y reclamos</h6>
+          </div>
+          <div class="card-body">
+            <mat-tab-group>
+              <mat-tab label="Por recepcionar">
+                <br>
+                <app-reclamo-recepcion-pendiente></app-reclamo-recepcion-pendiente>
+              </mat-tab>
+              <mat-tab label="Recepcionados">
+                <br>
+                <app-reclamo-recepcion-atendido></app-reclamo-recepcion-atendido>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Footer -->
+    <app-footer-admin></app-footer-admin>
+  </div>
+</div>

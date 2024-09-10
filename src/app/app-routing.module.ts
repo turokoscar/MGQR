@@ -7,6 +7,8 @@ import { ConsultaComponent } from './main/consulta/consulta.component';
 import { ResultadoComponent } from './main/resultado/resultado.component';
 import { AuthComponent } from './modules/auth/auth.component';
 import { AdminComponent } from './modules/admin/admin.component';
+import { ReclamoRecepcionMainComponent } from './modules/reclamo-recepcion/reclamo-recepcion-main/reclamo-recepcion-main.component';
+import { ReclamoRecepcionManagementComponent } from './modules/reclamo-recepcion/reclamo-recepcion-management/reclamo-recepcion-management.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -15,6 +17,8 @@ const routes: Routes = [
   { path: 'resultado/:numeroExpediente/:codigoVerificacion', component: ResultadoComponent },
   { path: 'login', component: AuthComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'recepcion', component: ReclamoRecepcionMainComponent },
+  { path: 'recepcion/:id', component: ReclamoRecepcionManagementComponent },
   { path: '',   redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home'  }
 ];
