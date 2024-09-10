@@ -116,7 +116,7 @@ export class ReclamoComponent implements OnInit {
       distrito: [ { value: '', disabled: true} , Validators.required],
       direccion: ['', Validators.required],
       numero_telefono: ['',
-        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+        [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
       ],
       numero_celular: ['',
         [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.maxLength(9)]
