@@ -22,6 +22,8 @@ import { UbigeoService } from 'src/app/services/ubigeo.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { ExpedienteResponse } from 'src/app/models/expediente-response';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-reclamo',
   templateUrl: './reclamo.component.html',
@@ -45,8 +47,16 @@ export class ReclamoComponent implements OnInit {
   disabled = false;
   errorMessage: string = "";
 
+ /******carga de imagen inicio */
+ ArchivoSeleccionados: string = 'Sin imagen seleccionada';
+ nombreArchivoSeleccionado: string = '';
+//  urlPrevisualizacion: string | ArrayBuffer | null = '';
+
+
+
   //2. Inicializo el constructor
   constructor(
+    private toastr: ToastrService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private _notificacion: NotificationService,
@@ -113,7 +123,10 @@ export class ReclamoComponent implements OnInit {
       tipo_consulta: ['', Validators.required],
       contenido_consulta: ['', Validators.required],
       evidencia_consulta: [''],
-      es_confidencial:['0']
+      es_confidencial:['0'],
+  
+
+      
     });
   }
 
@@ -285,4 +298,49 @@ export class ReclamoComponent implements OnInit {
   isFormValid(): boolean {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
+
+//12. Carga de imagen Inicio
+  archivoSeleccionado(event: any) {
+    const file = event.target.files[0];
+    const nombreArchivo = file.name;
+    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+    if (extension === 'pdf' ) {
+      if (file) {
+        const nuevoNombre = this.generarNombreArchivo(extension);
+        // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
+        const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
+        this.nombreArchivoSeleccionado = nuevoNombre;
+        // const reader = new FileReader();
+        // reader.onload = e => this.urlPrevisualizacion = reader.result as string;
+        // reader.readAsDataURL(nuevoArchivo);
+        // // Setear el valor del campo foto en el formulario
+        // this.segundaParteForm.controls['evidencia_consulta'].setValue(nuevoArchivo);
+      }
+    } else {
+      // this.ArchivoSeleccionados = 'seleccione un archivo JPG válido.'; // Valor predeterminado
+      // this._notificacion.showWarning("Warning: ", "Por favor, seleccione un archivo JPG válido.");
+      this.toastr.error('Warning',"Por favor, seleccione un archivo JPG válido.");
+    }
+  }
+  //13. Genero un nombre para el archivo a cargar
+  private generarNombreArchivo(extension: string): string {
+    // Usar la fecha y hora actuales para crear una cadena única
+    const timestamp = new Date().getTime();
+    // Generar una cadena aleatoria
+    const random = Math.random().toString(36).substring(2, 8);
+    // Combinar ambos con la extensión para formar el nuevo nombre
+    console.log(`${timestamp}-${random}.${extension}`);
+    return `${timestamp}-${random}.${extension}`;
+  }
+  //14. Limpiamos input file
+  quitarImagen() {
+    this.nombreArchivoSeleccionado = '';
+    //this.urlPrevisualizacion = null;
+    this.segundaParteForm.controls['evidencia_consulta'].setValue('');
+    this.ArchivoSeleccionados = 'Sin archivo seleccionada'; // Valor predeterminado
+  }
+
+
+
+
 }

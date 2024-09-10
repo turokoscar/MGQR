@@ -279,7 +279,28 @@
                   </div>
                   <div class="row">
                     <div class="col">
-                      <input class="form-control" type="file" formControlName="evidencia_consulta">
+                      <div align="left">
+                        <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: 5MB en total, solo se aceptan formatos pdf, jpg, docx, xls, xlsx,csv.</mat-label>
+                      </div>
+                      <input class="form-control" type="file" accept=".docx,.csv,.xls,.xlsx,.pdf,.jpg,.jpeg,image/jpeg" formControlName="evidencia_consulta"  (change)="archivoSeleccionado($event)" #inputArchivo >
+                      <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].invalid">
+                        Por favor, seleccione un archivo de imagen válido.
+                      </mat-error>
+                     
+                        <!-- <mat-form-field>
+                          <mat-label>Fotografía</mat-label>
+                          <input matInput formControlName="evidencia_consulta" text="" type="text" [value]="nombreArchivoSeleccionado" >
+                          <input class="form-control" type="file"  accept=".jpg,.jpeg,image/jpeg" (change)="archivoSeleccionado($event)" #inputArchivo>
+                        </mat-form-field>
+                        <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('fileType')">
+                          Por favor, seleccione un archivo de imagen válido.
+                        </mat-error>
+                        <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('required')">
+                          El campo Fotografía es <strong>obligatorio</strong> adjunte Imagen.
+                        </mat-error>
+                      -->
+
+
                     </div>
                   </div>
                   <br>
