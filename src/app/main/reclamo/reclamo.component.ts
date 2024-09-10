@@ -315,9 +315,12 @@ export class ReclamoComponent implements OnInit {
   //15. Mostramos un cuadro de dialogo
   openDialog(codigo_expediente:any): void {
     this.dialog.open(DialogComponent, {
+      width: '300px',
+      maxWidth: '90vw',
+      height: 'auto',
       data: {
         title: 'Mensaje de información',
-        message: 'Se registro exitosamente con el Nro de expediente: <h1>'+codigo_expediente+'</h1>, así mismo se envió la confirmación a su correo personal'
+        message: `Se registró exitosamente con el Nro de expediente: <strong>${codigo_expediente}</strong>, así mismo se envió la confirmación a su correo personal`
       }
     });
   }
@@ -326,7 +329,7 @@ export class ReclamoComponent implements OnInit {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
 
-//12. Carga de imagen Inicio
+  //12. Carga de imagen Inicio
   archivoSeleccionado(event: any) {
     const file = event.target.files[0];
     const nombreArchivo = file.name;
