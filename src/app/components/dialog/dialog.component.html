@@ -1,7 +1,5 @@
 <h1 mat-dialog-title class="bg-success text-white">{{ data.title }}</h1>
-<div mat-dialog-content>
-  <p>{{ data.message }}</p>
-</div>
+<div mat-dialog-content [innerHTML]="safeMessage"></div>
 <div mat-dialog-actions>
   <button mat-raised-button color="primary" (click)="closeDialog()">
     <i class="bi bi-box-arrow-right"></i>

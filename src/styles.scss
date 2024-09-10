@@ -16,5 +16,6 @@ $font-size-base: 0.875rem; // Por ejemplo, 14px si el tamaño base por defecto e
 // Aplicar la fuente a todo el documento
 html, body {
   height: 100%;
+  font-size: 12px;
+  margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
