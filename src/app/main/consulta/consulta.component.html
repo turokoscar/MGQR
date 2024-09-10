@@ -5,7 +5,7 @@
       <div class="card-header bg-primary">
         <h4 class="text-white text-center">MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</h4>
       </div>
-      <div class="card-body">
+      <div class="card-body" *ngIf="!resultadoDiv">
         <form [formGroup]="formConsulta" (ngSubmit)="onSubmit()">
           <div class="card">
             <div class="card-header bg-success">
@@ -36,7 +36,6 @@
                   </mat-form-field>
                 </div>
               </div>
-
               <div style="display: flex; justify-content: flex-end; gap: 10px;">
                 <button mat-raised-button color="primary" routerLink="/home">
                   <i class="bi bi-arrow-left"></i>
@@ -47,10 +46,68 @@
                   Consultar
                 </button>
               </div>
+
+
             </div>
           </div>
         </form>
       </div>
+
+
+
+      <div class="container py-4"  *ngIf="resultadoDiv">
+        <!-- Contenido -->
+      
+          
+          <div class="card-body">
+            <!-- Resultado de la consulta -->
+            <div class="card">
+              <div class="card-header bg-success">
+                <h6 class="text-white"><i class="bi bi-credit-card-2-front"></i> Estado del expediente</h6>
+              </div>
+              <div class="card-body">
+    
+                <mat-list>
+                  <mat-list-item><strong>Número de expediente:</strong> {{resultadoFinal.expediente}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Fecha de registro:</strong> {{resultadoFinal.fecha}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Nombre del área destino:</strong> {{resultadoFinal.area_destino}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Descripción de la queja, reclamo o consulta:</strong>
+                  </mat-list-item>
+                  <mat-list-item style="white-space: normal!important;">
+                    {{resultadoFinal.contenido_consulta}}
+                  </mat-list-item>
+                    
+                 
+                
+                  
+                  <!--<mat-list-item><strong>Nombre del área actual:</strong> Especialista en gestión de riesgos sociales</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Respuesta:</strong> -</mat-list-item>
+                  -->
+                </mat-list>
+                <hr>
+                <mat-list>
+                  <mat-list-item><strong>Días transcurridos:</strong> {{resultadoFinal.dias_transcurridos}}</mat-list-item>
+                  <mat-divider></mat-divider>
+                  <mat-list-item><strong>Estado:</strong> {{resultadoFinal.estado}}</mat-list-item>
+                </mat-list>
+    
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                  <button mat-raised-button color="primary" (click)="consultarOtraVez()">
+                    <i class="bi bi-arrow-left"></i>
+                    Consultar otro expediente
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+       
+       
+      </div>
+
     </div>
     <!-- Footer -->
     <app-footer></app-footer>
