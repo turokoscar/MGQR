@@ -1,38 +1,51 @@
-<main class="bg-image">
-  <div class="container py-4">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow-lg">
-          <div class="card-body">
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-              <h1 class="h3 mb-3 fw-normal text-center">Iniciar sesión</h1>
-              <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Correo electrónico</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="name@example.com">
-                <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
-                  Email es <strong>obligatorio</strong>
-                </mat-error>
-                <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
-                  Ingrese un correo electrónico válido
-                </mat-error>
-              </mat-form-field>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-xl-10 col-lg-12 col-md-9">
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+          <div class="row">
+              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+              <div class="col-lg-6">
+                  <div class="p-5">
+                      <div class="text-center">
+                          <h1 class="h4 text-gray-900 mb-4">Bienvenido al Panel de Administración</h1>
+                      </div>
+                      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <mat-form-field appearance="outline" class="w-100 mb-3">
+                          <mat-label>Correo electrónico</mat-label>
+                          <input matInput type="email" formControlName="email" placeholder="name@example.com">
+                          <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+                            Email es <strong>obligatorio</strong>
+                          </mat-error>
+                          <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+                            Ingrese un correo electrónico válido
+                          </mat-error>
+                        </mat-form-field>
 
-              <mat-form-field appearance="outline" class="w-100 mb-3">
-                <mat-label>Contraseña</mat-label>
-                <input matInput type="password" formControlName="password" placeholder="Password">
-                <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
-                  Contraseña es <strong>obligatorio</strong>
-                </mat-error>
-                <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
-                  El campo Contraseña debe contener <strong>8</strong> caracteres como mínimo.
-                </mat-error>
-              </mat-form-field>
-              <mat-checkbox formControlName="rememberMe">Recuérdame</mat-checkbox>
-              <button mat-raised-button color="primary" class="w-100 py-2" type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
-            </form>
+                        <mat-form-field appearance="outline" class="w-100 mb-3">
+                          <mat-label>Contraseña</mat-label>
+                          <input matInput type="password" formControlName="password" placeholder="Password">
+                          <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+                            Contraseña es <strong>obligatorio</strong>
+                          </mat-error>
+                          <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+                            El campo Contraseña debe contener <strong>8</strong> caracteres como mínimo.
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-checkbox formControlName="rememberMe">Recuérdame</mat-checkbox>
+                        <button mat-raised-button color="primary" class="w-100 py-2" type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
+                      </form>
+                      <hr>
+                      <div class="text-center">
+                          <a class="small" href="#">Olvidó su contraseña?</a>
+                      </div>
+                  </div>
+              </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</main>
+</div>
+
+
