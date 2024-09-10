@@ -44,7 +44,7 @@ export class ReclamoComponent implements OnInit {
 
 
   showEmailField = false;
-  disabled = false;
+  disabled: boolean = false;
   errorMessage: string = "";
 
  /******carga de imagen inicio */
@@ -94,6 +94,12 @@ export class ReclamoComponent implements OnInit {
         this.segundaParteForm.get('distrito')?.disable();
       }
     });
+    this.segundaParteForm.get('es_confidencial')?.valueChanges.subscribe(value => {
+      this.activaConfidencialidad();
+    });
+    this.primeraParteForm.get('email_institucional')?.valueChanges.subscribe(value => {
+      this.segundaParteForm.get('correo_electronico')?.setValue(value, { emitEvent: false });
+    });
   }
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
@@ -106,11 +112,19 @@ export class ReclamoComponent implements OnInit {
   private showSegundoForm():void{
     this.segundaParteForm = this.fb.group({
       tipo_documento: [{ value: '', disabled: false }, Validators.required],
-      numero_documento: [{ value: '', disabled: false }, Validators.required],
+      numero_documento: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+      ],
       genero: ['', Validators.required],
-      nombre: [{ value: '', disabled: false }, Validators.required],
-      apellido_paterno: [{ value: '', disabled: false }, Validators.required],
-      apellido_materno: [{ value: '', disabled: false }, Validators.required],
+      nombre: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
+      apellido_paterno: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
+      apellido_materno: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
       departamento: ['', Validators.required],
       provincia: [ { value: '', disabled: true} , Validators.required],
       distrito: [ { value: '', disabled: true} , Validators.required],
@@ -123,14 +137,15 @@ export class ReclamoComponent implements OnInit {
       ],
       correo_electronico: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       comunidad: ['', Validators.required],
-      cargo: ['', Validators.required],
+      cargo: ['',
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
       tipo_consulta: ['', Validators.required],
-      contenido_consulta: ['', Validators.required],
+      contenido_consulta: ['',
+        [Validators.required, Validators.maxLength(500)]
+      ],
       evidencia_consulta: [''],
-      es_confidencial:['0'],
-
-
-
+      es_confidencial: [false]
     });
   }
 
@@ -212,7 +227,15 @@ export class ReclamoComponent implements OnInit {
   }
   //11. Genero un evento onchange para mostrar u ocultar el input de email
   onTipoPersonaChange(event: any) {
-    this.showEmailField = event.value == '1';
+    const emailControl = this.primeraParteForm.get('email_institucional');
+    if (event.value == '1') {
+      this.showEmailField = true;
+      emailControl?.setValidators([Validators.required, Validators.email]);
+    } else {
+      this.showEmailField = false;
+      emailControl?.clearValidators();
+    }
+    emailControl?.updateValueAndValidity();
   }
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
@@ -232,7 +255,7 @@ export class ReclamoComponent implements OnInit {
   }
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
-    this.disabled = !this.disabled;
+    this.disabled = this.segundaParteForm.get('es_confidencial')?.value || false;
     this.onActivaReactividad();
   }
   //14. Proceso el formulario
