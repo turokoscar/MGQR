@@ -29,6 +29,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { AuthComponent } from './modules/auth/auth.component';
 import { AdminComponent } from './modules/admin/admin.component';
+import { HeaderAdminComponent } from './components/template/header-admin/header-admin.component';
+import { FooterAdminComponent } from './components/template/footer-admin/footer-admin.component';
+import { SidebarAdminComponent } from './components/template/sidebar-admin/sidebar-admin.component';
+import { TopbarAdminComponent } from './components/template/topbar-admin/topbar-admin.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import { AdminComponent } from './modules/admin/admin.component';
     ResultadoComponent,
     DialogComponent,
     AuthComponent,
-    AdminComponent
+    AdminComponent,
+    HeaderAdminComponent,
+    FooterAdminComponent,
+    SidebarAdminComponent,
+    TopbarAdminComponent
   ],
   imports: [
     BrowserModule,
