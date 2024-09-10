@@ -287,17 +287,30 @@ export class ReclamoComponent implements OnInit {
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1"
-
-
-      //  "perReferencia": ""+this.segundaParteForm.value.evidencia_consulta
      }
 
-     console.log(formData);
+    //  const formDataFile = this.segundaParteForm.value;
+     const formDataFile = new FormData();
+     const file: File = this.segundaParteForm.value.evidencia_consulta;
+     var nombre=this.segundaParteForm.value.evidencia_consulta.name;
+     if (file) {
+       const fileName = this.segundaParteForm.value.evidencia_consulta.name;
+       if (fileName != undefined) {
+        formDataFile.append('sub_carpeta', 'SIDIGAN'); // Agrega el valor apropiado
+        formDataFile.append('nombre', fileName.substring(0, fileName.lastIndexOf('.')));
+        formDataFile.append('size', this.segundaParteForm.value.evidencia_consulta.size.toString());
+        formDataFile.append('extension', 'jpg');
+        formDataFile.append('file', this.segundaParteForm.value.evidencia_consulta);
+       }
+     }
 
+
+     console.log(formData,formDataFile);
      this._expediente.guardar(param).subscribe({
       next: (data:ExpedienteResponse) => {
         console.log(data);
         if(data.id!=0){
+          this.quitarImagen();
           this.openDialog(data.expediente);
           this.router.navigate(['../home']);
         }
