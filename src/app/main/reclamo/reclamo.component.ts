@@ -31,18 +31,14 @@ export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
-
-  
   tipoAtencion: TipoAtencion[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoReclamos: TipoReclamo[] = [];
   regiones: Region[] = [];
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
-
-  
   showEmailField = false;
-  disabled = false;
+  disabled: boolean = false;
   errorMessage: string = "";
 
   //2. Inicializo el constructor
@@ -84,6 +80,9 @@ export class ReclamoComponent implements OnInit {
         this.segundaParteForm.get('distrito')?.disable();
       }
     });
+    this.segundaParteForm.get('es_confidencial')?.valueChanges.subscribe(value => {
+      this.activaConfidencialidad();
+    });
   }
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
@@ -96,29 +95,42 @@ export class ReclamoComponent implements OnInit {
   private showSegundoForm():void{
     this.segundaParteForm = this.fb.group({
       tipo_documento: [{ value: '', disabled: false }, Validators.required],
-      numero_documento: [{ value: '', disabled: false }, Validators.required],
+      numero_documento: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+      ],
       genero: ['', Validators.required],
-      nombre: [{ value: '', disabled: false }, Validators.required],
-      apellido_paterno: [{ value: '', disabled: false }, Validators.required],
-      apellido_materno: [{ value: '', disabled: false }, Validators.required],
+      nombre: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
+      apellido_paterno: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
+      apellido_materno: [{ value: '', disabled: false },
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
       departamento: ['', Validators.required],
       provincia: [ { value: '', disabled: true} , Validators.required],
       distrito: [ { value: '', disabled: true} , Validators.required],
       direccion: ['', Validators.required],
-      numero_telefono: [''],
-      numero_celular: ['', [Validators.required, Validators.maxLength(9)]],
-      correo_electronico: ['', Validators.required],
+      numero_telefono: ['',
+        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+      ],
+      numero_celular: ['',
+        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.minLength(9), Validators.maxLength(9)]
+      ],
+      correo_electronico: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       comunidad: ['', Validators.required],
-      cargo: ['', Validators.required],
+      cargo: ['',
+        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+      ],
       tipo_consulta: ['', Validators.required],
-      contenido_consulta: ['', Validators.required],
+      contenido_consulta: ['',
+        [Validators.required, Validators.maxLength(500)]
+      ],
       evidencia_consulta: [''],
-      es_confidencial:['0']
+      es_confidencial: [false]
     });
   }
-
-
-
   //6. Obtengo la lista de tipo de Atencion
   private showTipoAtencion(): void{
     this._tipoAtencion.show().subscribe({
@@ -131,7 +143,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //6. Obtengo la lista de documentos
   private showTipoDocumentos(): void{
     this._tipoDocumento.show().subscribe({
@@ -144,7 +155,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //7. Obtengo los tipos de reclamos
   private showTipoReclamos(): void{
     this._tipoReclamo.show().subscribe({
@@ -157,7 +167,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -170,7 +179,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //9. Muestro las provincias de una region
   showProvincias(region: string){
     this._ubigeo.showProvincias(region).subscribe({
@@ -215,7 +223,7 @@ export class ReclamoComponent implements OnInit {
   }
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
-    this.disabled = !this.disabled;
+    this.disabled = this.segundaParteForm.get('es_confidencial')?.value || false;
     this.onActivaReactividad();
   }
   //14. Proceso el formulario
@@ -225,7 +233,7 @@ export class ReclamoComponent implements OnInit {
       form2: this.segundaParteForm.value
     };
     localStorage.setItem('formData', JSON.stringify(formData));
-   
+
     let param = {
       //("perTipDoc": ""+ 1,
       "tipo_canal": "1",
@@ -247,11 +255,11 @@ export class ReclamoComponent implements OnInit {
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1"
-      
-      
+
+
       //  "perReferencia": ""+this.segundaParteForm.value.evidencia_consulta
      }
-     
+
      console.log(formData);
 
      this._expediente.guardar(param).subscribe({
@@ -261,17 +269,13 @@ export class ReclamoComponent implements OnInit {
           this.openDialog(data.expediente);
           this.router.navigate(['../home']);
         }
-       
+
       },
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
       }
     });
-  
-}
-    
-
-
+  }
   //15. Mostramos un cuadro de dialogo
   openDialog(codigo_expediente:any): void {
     this.dialog.open(DialogComponent, {

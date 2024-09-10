@@ -13,20 +13,110 @@
       </a>
   </li>
   <hr class="sidebar-divider">
-  <div class="sidebar-heading">
-    Opciones
-  </div>
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
         aria-expanded="true" aria-controls="collapseTwo">
         <i class="bi bi-inboxes"></i>
-        <span>Quejas y reclamos</span>
+        <span>Quejas, reclamo consulta</span>
     </a>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" routerLink="/recepcion">Recepcionar</a>
-            <a class="collapse-item" href="cards.html">Asignar</a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-plus-circle"></i>
+              Registrar</a>
+            <a class="collapse-item" routerLink="/recepcion">
+              <i class="bi bi-file-earmark-text"></i>
+              Admitir</a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-calendar-plus"></i>
+              Atender</a>
+        </div>
+    </div>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+        aria-expanded="true" aria-controls="collapseTwo">
+        <i class="bi bi-graph-down"></i>
+        <span>Reportes</span>
+    </a>
+    <div id="collapseReport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Acciones:</h6>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-graph-down"></i>
+              Resumen</a>
+        </div>
+    </div>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGestion"
+        aria-expanded="true" aria-controls="collapseTwo">
+        <i class="bi bi-person-gear"></i>
+        <span>Gestion</span>
+    </a>
+    <div id="collapseGestion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Acciones:</h6>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-duffle"></i>
+              Areas
+            </a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-person-vcard"></i>
+              Cargos
+            </a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-newspaper"></i>
+              Personal
+            </a>
+        </div>
+    </div>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfig"
+        aria-expanded="true" aria-controls="collapseConfig">
+        <i class="bi bi-gear"></i>
+        <span>Configuración</span>
+    </a>
+    <div id="collapseConfig" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Acciones:</h6>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-folder2"></i>
+              Módulos
+            </a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-gear"></i>
+              Procesos
+            </a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-list-ul"></i>
+              Roles
+            </a>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-people-fill"></i>
+              Usuarios
+            </a>
+        </div>
+    </div>
+  </li>
+  <hr class="sidebar-divider">
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitario"
+        aria-expanded="true" aria-controls="collapseUtilitario">
+        <i class="bi bi-tools"></i>
+        <span>Utilitarios</span>
+    </a>
+    <div id="collapseUtilitario" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Acciones:</h6>
+            <a class="collapse-item" href="#">
+              <i class="bi bi-question-circle-fill"></i>
+              Soporte</a>
         </div>
     </div>
   </li>
@@ -34,5 +124,4 @@
   <div class="text-center d-none d-md-inline">
       <button class="rounded-circle border-0" id="sidebarToggle"></button>
   </div>
-
 </ul>
