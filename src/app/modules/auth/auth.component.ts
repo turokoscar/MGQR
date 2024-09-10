@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Renderer2, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,7 +9,7 @@ import { NotificationService } from 'src/app/services/notification.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   //1. Declaro las variables a utilizar
   loginForm!: FormGroup;
   //2. Inicializo el constructor
@@ -17,11 +17,13 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private _authService: AuthService,
-    private _notificacion: NotificationService
+    private _notificacion: NotificationService,
+    private renderer: Renderer2
   ) {}
   //3. Inicializo el componente
   ngOnInit(): void {
-      this.showForm();
+    this.renderer.addClass(document.body, 'bg-gradient-primary');
+    this.showForm();
   }
   //4. Defino el formulario
   showForm():void{
@@ -42,9 +44,8 @@ export class AuthComponent implements OnInit {
       }
     }
   }
-
-    // Método de conveniencia para acceder fácilmente a los controles del formulario en el template
-    get formControls() {
-      return this.loginForm.controls;
-    }
+  //6. Eliminamos el fondo en el resto de componentes
+  ngOnDestroy(): void {
+    this.renderer.removeClass(document.body, 'bg-gradient-primary');
+  }
 }
