@@ -391,7 +391,7 @@ export class ReclamoComponent implements OnInit {
     this.dialog.open(DialogComponent, {
       data: {
         title: 'Mensaje de información',
-        message: 'Se registro exitosamente con el Nro de expediente:<strong><h4>'+codigo_expediente+'</h4></strong>,así mismo se notifico via correo su codigo de verificacion para que pueda realizar seguimiento a su expediente'
+        message: 'Se completo con exitosamente el registro y se notifico via correo su codigo de N° de expediente y codigo de verificacion'
       }
     });
   }
