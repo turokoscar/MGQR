@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-
+import { LowerCasePipe } from '@angular/common';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 
 
@@ -27,7 +27,8 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-reclamo',
   templateUrl: './reclamo.component.html',
-  styleUrls: ['./reclamo.component.scss']
+  styleUrls: ['./reclamo.component.scss'],
+  providers: [LowerCasePipe]
 })
 export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
@@ -48,11 +49,24 @@ export class ReclamoComponent implements OnInit {
   errorMessage: string = "";
 
  /******carga de imagen inicio */
- ArchivoSeleccionados: string = 'Sin imagen seleccionada';
- nombreArchivoSeleccionado: string = '';
-//  urlPrevisualizacion: string | ArrayBuffer | null = '';
+  ArchivoSeleccionados: string = 'Sin imagen seleccionada';
+  nombreArchivoSeleccionado: string = '';
+  ListFiles: any[] = [];
+  formDataFiles = new FormData();
+ //  urlPrevisualizacion: string | ArrayBuffer | null = '';
 
 
+  expediente_id: any=0;
+  numero_expediente: any="";
+
+  result_expediente:string="";
+  result_dias:string="";
+  result_contenido_consulta:string="";
+  result_area_destino:string="";
+  result_fecha:string="";
+  result_estado:string="";
+
+  es_confidencial:boolean=false;
 
   //2. Inicializo el constructor
   constructor(
@@ -65,7 +79,8 @@ export class ReclamoComponent implements OnInit {
     private _tipoReclamo: TipoReclamoService,
     private _ubigeo: UbigeoService,
     private _expediente: ExpedienteService,
-    private router: Router
+    private router: Router,
+    private lowerCasePipe: LowerCasePipe
   ){}
   //3. Inicializo el componente
   ngOnInit(): void {
@@ -111,19 +126,19 @@ export class ReclamoComponent implements OnInit {
   //5. Estructuro la segunda parte del formulario
   private showSegundoForm():void{
     this.segundaParteForm = this.fb.group({
-      tipo_documento: [{ value: '', disabled: false }, Validators.required],
+      tipo_documento: [{ value: '', disabled: false }],
       numero_documento: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+        [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
       ],
       genero: ['', Validators.required],
       nombre: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       apellido_paterno: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       apellido_materno: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       departamento: ['', Validators.required],
       provincia: [ { value: '', disabled: true} , Validators.required],
@@ -240,18 +255,25 @@ export class ReclamoComponent implements OnInit {
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
     if (this.disabled) {
+      this.es_confidencial=true;
       this.segundaParteForm.controls['tipo_documento'].disable();
       this.segundaParteForm.controls['numero_documento'].disable();
       this.segundaParteForm.controls['nombre'].disable();
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
+   
     } else {
+      this.es_confidencial=false;
       this.segundaParteForm.controls['tipo_documento'].enable();
       this.segundaParteForm.controls['numero_documento'].enable();
       this.segundaParteForm.controls['nombre'].enable();
       this.segundaParteForm.controls['apellido_paterno'].enable();
       this.segundaParteForm.controls['apellido_materno'].enable();
+
+   
     }
+
+    
   }
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
@@ -265,19 +287,33 @@ export class ReclamoComponent implements OnInit {
       form2: this.segundaParteForm.value
     };
     localStorage.setItem('formData', JSON.stringify(formData));
+    //Valida si selecciono el archivo
+    const file: File = this.segundaParteForm.value.evidencia_consulta;
+    if(!file){
+      this.nombreArchivoSeleccionado="";
+    }  
+
+    
+
+
+
+
+
+
 
     let param = {
       //("perTipDoc": ""+ 1,
+
+      "tipo_documento_id": ""+(this.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+      "numero_documento": ""+(this.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
+      "nombres": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
+      "apellido_paterno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
+      "apellido_materno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_materno,
       "tipo_canal": "1",
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
       "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
-      "tipo_documento_id": ""+this.segundaParteForm.value.tipo_documento,
-      "numero_documento": ""+this.segundaParteForm.value.numero_documento,
       "genero": ""+this.segundaParteForm.value.genero,
-      "nombres": ""+this.segundaParteForm.value.nombre,
-      "apellido_paterno": ""+this.segundaParteForm.value.apellido_paterno,
-      "apellido_materno": ""+this.segundaParteForm.value.apellido_materno,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
       "direccion": ""+this.segundaParteForm.value.direccion,
       "telefono": ""+this.segundaParteForm.value.numero_telefono,
@@ -286,41 +322,76 @@ export class ReclamoComponent implements OnInit {
       "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
-      "usuario_id": "1"
-
-
-      //  "perReferencia": ""+this.segundaParteForm.value.evidencia_consulta
+      "usuario_id": "1",
+      "evidencia":this.nombreArchivoSeleccionado
      }
 
-     console.log(formData);
-
+     //Primero guardo la data data del expediente
      this._expediente.guardar(param).subscribe({
-      next: (data:ExpedienteResponse) => {
-        console.log(data);
-        if(data.id!=0){
-          this.openDialog(data.expediente);
-          this.router.navigate(['../home']);
-        }
+        next: (data:ExpedienteResponse) => {
+          console.log(data);
+          if(data.id!=0){
+            this.expediente_id=data.id;
+            this.numero_expediente=data.expediente;
 
-      },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
-      }
-    });
+            let xlistFiles :File[] = [];
+            // this.toastr.show("Cantidad",this.ListFiles.length.toString());
+
+              
+            console.log("guarddddd: "+this.ListFiles.length.toString());
+            if (this.ListFiles.length > 0)
+              {
+                this.ListFiles.forEach(element => {
+                  xlistFiles.push(element.file);
+                });
+                let files: File[] = xlistFiles;
+                let formData = new FormData();
+                for (let i = 0; i < files.length; i++) {
+                  let file: File = files[i];
+                   formData.append("files", file);
+                }
+                
+                  console.log("forData:"+formData);
+
+                this._expediente.upload(formData).subscribe(response => {
+                  console.log('File uploaded successfully', response);
+                }, error => {
+                  console.error('Error uploading file', error);
+                });
+                }
+                  
+              
+                
+
+
+            this.quitarImagen();
+            this.openDialog(data.expediente);
+            this.router.navigate(['../home']);
+          }
+
+        },
+        error: (e) => {
+          this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+        }
+      });
+
+
+
 
 }
+
+
+
+
 
 
 
   //15. Mostramos un cuadro de dialogo
   openDialog(codigo_expediente:any): void {
     this.dialog.open(DialogComponent, {
-      width: '300px',
-      maxWidth: '90vw',
-      height: 'auto',
       data: {
         title: 'Mensaje de información',
-        message: `Se registró exitosamente con el Nro de expediente: <strong>${codigo_expediente}</strong>, así mismo se envió la confirmación a su correo personal`
+        message: 'Se registro exitosamente con el Nro de expediente:<strong><h4>'+codigo_expediente+'</h4></strong>,así mismo se notifico via correo su codigo de verificacion para que pueda realizar seguimiento a su expediente'
       }
     });
   }
@@ -329,12 +400,78 @@ export class ReclamoComponent implements OnInit {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
 
-  //12. Carga de imagen Inicio
+
+
+
+
+
   archivoSeleccionado(event: any) {
     const file = event.target.files[0];
     const nombreArchivo = file.name;
     const extension = nombreArchivo.split('.').pop()?.toLowerCase();
-    if (extension === 'pdf' ) {
+
+      if (file) {
+        const nuevoNombre = this.generarNombreArchivo(extension);
+        // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
+        const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
+        this.nombreArchivoSeleccionado = nuevoNombre;
+        
+       // let ext = this.segundaParteForm.controls['evidencia_consulta'].value.name.split(".");
+       // let extension = nombreArchivo.split('.').pop()?.toLowerCase();
+        //let extencion = ext[ext.length - 1];
+        let m_extencion = this.lowerCasePipe.transform(extension);
+        
+        //let tipoArchivo = this.ValidacionTipoArchivo(m_extencion);
+
+         //Validacion de tamaño de archivo
+        let tamañoArchivo = 10000 ;
+        if (tamañoArchivo> 10000)
+        {
+          this.quitarImagen()
+          return;
+        }
+        if (this.segundaParteForm.value.evidencia_consulta== "")
+          {
+            this.toastr.warning('Seleccione un archivo','');
+            return;
+          }
+      
+            //validación de  duplicidad de archivos 
+            this.ListFiles.forEach(element => {
+              console.log("element.nomArchivo :::::" + element.file);
+              if (this.lowerCasePipe.transform(element.nomArchivo.toString()) ==  this.lowerCasePipe.transform(this.segundaParteForm.controls['evidencia_consulta'].value.name))
+              {
+                this.toastr.warning('El ARCHIVO que estas cargando ya existe en la bandeja de lista de archivos.','');
+                this.segundaParteForm.controls['evidencia_consulta'].value.setValue('');
+                return;
+              }
+            });
+          
+      
+          this.ListFiles.push({
+            id: this.ListFiles.length,
+            //descrip: "xxx",//this.formGroupParent.controls.descrip.value,
+            //nomArchivo: this.segundaParteForm.controls['evidencia_consulta'].value.name,
+            //tamArchivo: ((this.segundaParteForm.controls['evidencia_consulta'].value.size / 1024) / 1024).toFixed(2) + "MB",
+            //fecha: new Date(),
+            extension: extension,
+            file: File = this.segundaParteForm.controls['evidencia_consulta'].value
+          });
+          //this.segundaParteForm.controls['evidencia_consulta'].value;
+
+      }
+
+
+   
+       console.log(".....-....",this.ListFiles);
+  }
+
+//12. Carga de imagen Inicio
+  archivoSeleccionadovv1(event: any) {
+    const file = event.target.files[0];
+    const nombreArchivo = file.name;
+    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+    // if (extension === 'pdf' ) {
       if (file) {
         const nuevoNombre = this.generarNombreArchivo(extension);
         // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
@@ -346,11 +483,11 @@ export class ReclamoComponent implements OnInit {
         // // Setear el valor del campo foto en el formulario
         // this.segundaParteForm.controls['evidencia_consulta'].setValue(nuevoArchivo);
       }
-    } else {
-      // this.ArchivoSeleccionados = 'seleccione un archivo JPG válido.'; // Valor predeterminado
-      // this._notificacion.showWarning("Warning: ", "Por favor, seleccione un archivo JPG válido.");
-      this.toastr.error('Warning',"Por favor, seleccione un archivo JPG válido.");
-    }
+    // } else {
+    //   // this.ArchivoSeleccionados = 'seleccione un archivo JPG válido.'; // Valor predeterminado
+    //   // this._notificacion.showWarning("Warning: ", "Por favor, seleccione un archivo JPG válido.");
+    //   this.toastr.error('Warning',"Por favor, seleccione un archivo JPG válido.");
+    // }
   }
   //13. Genero un nombre para el archivo a cargar
   private generarNombreArchivo(extension: string): string {
@@ -371,6 +508,22 @@ export class ReclamoComponent implements OnInit {
   }
 
 
+  getFile(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files: FileList | null = target.files;
+    if (files!.length > 0 && files != null) {
+      Array.prototype.forEach.call(files, (file: File) => {
+        this.formDataFiles.append("files", file);
+        console.log("Lista de Archivo"+this.formDataFiles);
+      });
 
+      // this._expediente.upload(formData).subscribe(response => {
+      //   console.log('File uploaded successfully', response);
+      // }, error => {
+      //   console.error('Error uploading file', error);
+      // });
+    }
+
+  }
 
 }

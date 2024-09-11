@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { ExpedienteResponse } from '../models/expediente-response';
+import { ExpedienteConsultaResponse } from '../models/expediente-consulta-response';
 import { Expediente } from '../models/expediente';
 
 @Injectable({
@@ -10,26 +11,59 @@ import { Expediente } from '../models/expediente';
 })
 export class ExpedienteService {
   //1. Obtengo la ruta del api
-  private apiUrl = environment.apiUrl+'/Expediente/Guardar';
+  private apiUrl = environment.apiUrl;
+  // private apiUrl = environment.apiUrl+'/Expediente/Guardar';
   private fakeApi = environment.fakeApi+'/expedientes';
+
+ //Obtengo el peso maximo del expediente
+  pesoMaxKB: number = environment.file_max_length_kb;
   //2. Defino el constructor
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
   show(estado: number): Observable<Expediente[]>{
-    //Aca colocamos la logica para obtener los expedientes de acuerdo a su estado (Por ahora obviamos esto)
+  //4. Aca colocamos la logica para obtener los expedientes de acuerdo a su estado (Por ahora obviamos esto)
     return this.http.get<Expediente[]>(this.fakeApi);
   }
-//   show(): Observable<TipoReclamo[]>{
-//     return this.http.get<TipoReclamo[]>(this.apiUrl);
-//   }
-
-//   registrarExpediente(param:any): Observable<ExpedienteResponse[]>
-//   {
-//       return this.http.post(`${this.base}persona`, param);
-//   }
+  //4. Metodo para obtener todos los registros
   guardar(parametro: any): Observable<ExpedienteResponse> {
-    return this.http.post(this.apiUrl,parametro);
+    return this.http.post(this.apiUrl+'/Expediente/Guardar',parametro);
+  }
+  
+  //5. Metodo para poder cargar archivos
+  upload(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders({
+      'accept': '/'
+    });
+    return this.http.post(this.apiUrl+'/General/upload', formData, { headers });
   }
 
+ 
+    consultar(parametro: any): Observable<ExpedienteConsultaResponse> {
+      return this.http.post(this.apiUrl+'/Expediente/Consultar',parametro);
+    }
+  // uploadFile(formData: FormData): Observable<any> {
+  //   const headers = new HttpHeaders({
+  //     'accept': '/'
+  //   });
+  //   return this.http.post(this.apiUrl+'/General/upload', formData, { headers });
+
+
+  // }
+
+
+  // upload(formData: FormData): Observable<any> {
+  //   return this.http.post<FormData>(`${this.apiUrl}/General/upload`, formData);
+  // }
+
+
+  //  uploadFile(file: Blob): Observable<any> {
+  //   const form = new FormData();
+  //   form.append('file', file);
+  //   return this.http.post(this.apiUrl+'/General/upload', form, {
+  //     headers: {
+  //       'Content-type': 'multipart/form-data'
+  //     }
+  //   });
+  // }
 
 }
