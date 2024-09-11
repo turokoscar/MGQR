@@ -1,3 +1,4 @@
+<app-loading-app [isLoading]="loading"></app-loading-app>
 <main>
   <div class="container py-4">
     <!-- Header -->
@@ -289,7 +290,7 @@
                       <!-- <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].invalid">
                         Por favor, seleccione un archivo de imagen válido.
                       </mat-error> -->
-                     
+
                         <!-- <mat-form-field>
                           <mat-label>Fotografía</mat-label>
                           <input matInput formControlName="evidencia_consulta" text="" type="text" [value]="nombreArchivoSeleccionado" >
@@ -312,7 +313,7 @@
                       <i class="bi bi-arrow-left"></i>
                       Retornar
                     </button>
-                    <button mat-raised-button [disabled]="!isFormValid()" (click)="onSubmit()" color="primary">
+                    <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary">
                       <mat-icon>send</mat-icon>
                       Enviar
                     </button>

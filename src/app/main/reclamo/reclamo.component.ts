@@ -23,6 +23,7 @@ import { ExpedienteService } from 'src/app/services/expediente.service';
 import { ExpedienteResponse } from 'src/app/models/expediente-response';
 
 import { ToastrService } from 'ngx-toastr';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-reclamo',
@@ -32,18 +33,15 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
+  loading: boolean = false;
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
-
-
   tipoAtencion: TipoAtencion[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoReclamos: TipoReclamo[] = [];
   regiones: Region[] = [];
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
-
-
   showEmailField = false;
   disabled: boolean = false;
   errorMessage: string = "";
@@ -80,7 +78,8 @@ export class ReclamoComponent implements OnInit {
     private _ubigeo: UbigeoService,
     private _expediente: ExpedienteService,
     private router: Router,
-    private lowerCasePipe: LowerCasePipe
+    private lowerCasePipe: LowerCasePipe,
+    private alertService: AlertService
   ){}
   //3. Inicializo el componente
   ngOnInit(): void {
@@ -163,9 +162,6 @@ export class ReclamoComponent implements OnInit {
       es_confidencial: [false]
     });
   }
-
-
-
   //6. Obtengo la lista de tipo de Atencion
   private showTipoAtencion(): void{
     this._tipoAtencion.show().subscribe({
@@ -178,7 +174,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //6. Obtengo la lista de documentos
   private showTipoDocumentos(): void{
     this._tipoDocumento.show().subscribe({
@@ -191,7 +186,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //7. Obtengo los tipos de reclamos
   private showTipoReclamos(): void{
     this._tipoReclamo.show().subscribe({
@@ -204,7 +198,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -217,7 +210,6 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
-
   //9. Muestro las provincias de una region
   showProvincias(region: string){
     this._ubigeo.showProvincias(region).subscribe({
@@ -261,7 +253,7 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.controls['nombre'].disable();
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
-   
+
     } else {
       this.es_confidencial=false;
       this.segundaParteForm.controls['tipo_documento'].enable();
@@ -270,10 +262,10 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.controls['apellido_paterno'].enable();
       this.segundaParteForm.controls['apellido_materno'].enable();
 
-   
+
     }
 
-    
+
   }
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
@@ -282,6 +274,7 @@ export class ReclamoComponent implements OnInit {
   }
   //14. Proceso el formulario
   onSubmit():void{
+    this.loading = true;
     const formData = {
       form1: this.primeraParteForm.value,
       form2: this.segundaParteForm.value
@@ -291,16 +284,7 @@ export class ReclamoComponent implements OnInit {
     const file: File = this.segundaParteForm.value.evidencia_consulta;
     if(!file){
       this.nombreArchivoSeleccionado="";
-    }  
-
-    
-
-
-
-
-
-
-
+    }
     let param = {
       //("perTipDoc": ""+ 1,
 
@@ -337,7 +321,7 @@ export class ReclamoComponent implements OnInit {
             let xlistFiles :File[] = [];
             // this.toastr.show("Cantidad",this.ListFiles.length.toString());
 
-              
+
             console.log("guarddddd: "+this.ListFiles.length.toString());
             if (this.ListFiles.length > 0)
               {
@@ -350,7 +334,7 @@ export class ReclamoComponent implements OnInit {
                   let file: File = files[i];
                    formData.append("files", file);
                 }
-                
+
                   console.log("forData:"+formData);
 
                 this._expediente.upload(formData).subscribe(response => {
@@ -359,52 +343,31 @@ export class ReclamoComponent implements OnInit {
                   console.error('Error uploading file', error);
                 });
                 }
-                  
-              
-                
+
+
+
 
 
             this.quitarImagen();
             this.openDialog(data.expediente);
             this.router.navigate(['../home']);
           }
-
+          this.loading = false;
         },
         error: (e) => {
+          this.loading = false;
           this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
         }
       });
-
-
-
-
-}
-
-
-
-
-
-
-
+  }
   //15. Mostramos un cuadro de dialogo
-  openDialog(codigo_expediente:any): void {
-    this.dialog.open(DialogComponent, {
-      data: {
-        title: 'Mensaje de información',
-        message: 'Se registro exitosamente con el Nro de expediente:<strong><h4>'+codigo_expediente+'</h4></strong>,así mismo se notifico via correo su codigo de verificacion para que pueda realizar seguimiento a su expediente'
-      }
-    });
+  openDialog(codigo_expediente: any): void {
+    this.alertService.showInfoAlert(codigo_expediente);
   }
   //16. Establesco un valor por default para el boton guardar del formulario
   isFormValid(): boolean {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
-
-
-
-
-
-
   archivoSeleccionado(event: any) {
     const file = event.target.files[0];
     const nombreArchivo = file.name;
@@ -415,12 +378,12 @@ export class ReclamoComponent implements OnInit {
         // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
         const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
         this.nombreArchivoSeleccionado = nuevoNombre;
-        
+
        // let ext = this.segundaParteForm.controls['evidencia_consulta'].value.name.split(".");
        // let extension = nombreArchivo.split('.').pop()?.toLowerCase();
         //let extencion = ext[ext.length - 1];
         let m_extencion = this.lowerCasePipe.transform(extension);
-        
+
         //let tipoArchivo = this.ValidacionTipoArchivo(m_extencion);
 
          //Validacion de tamaño de archivo
@@ -435,8 +398,8 @@ export class ReclamoComponent implements OnInit {
             this.toastr.warning('Seleccione un archivo','');
             return;
           }
-      
-            //validación de  duplicidad de archivos 
+
+            //validación de  duplicidad de archivos
             this.ListFiles.forEach(element => {
               console.log("element.nomArchivo :::::" + element.file);
               if (this.lowerCasePipe.transform(element.nomArchivo.toString()) ==  this.lowerCasePipe.transform(this.segundaParteForm.controls['evidencia_consulta'].value.name))
@@ -446,8 +409,8 @@ export class ReclamoComponent implements OnInit {
                 return;
               }
             });
-          
-      
+
+
           this.ListFiles.push({
             id: this.ListFiles.length,
             //descrip: "xxx",//this.formGroupParent.controls.descrip.value,
@@ -462,11 +425,10 @@ export class ReclamoComponent implements OnInit {
       }
 
 
-   
+
        console.log(".....-....",this.ListFiles);
   }
-
-//12. Carga de imagen Inicio
+  //12. Carga de imagen Inicio
   archivoSeleccionadovv1(event: any) {
     const file = event.target.files[0];
     const nombreArchivo = file.name;
@@ -506,8 +468,6 @@ export class ReclamoComponent implements OnInit {
     this.segundaParteForm.controls['evidencia_consulta'].setValue('');
     this.ArchivoSeleccionados = 'Sin archivo seleccionada'; // Valor predeterminado
   }
-
-
   getFile(event: Event) {
     const target = event.target as HTMLInputElement;
     const files: FileList | null = target.files;
@@ -525,5 +485,4 @@ export class ReclamoComponent implements OnInit {
     }
 
   }
-
 }
