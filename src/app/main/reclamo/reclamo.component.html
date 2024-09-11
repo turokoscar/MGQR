@@ -5,7 +5,7 @@
     <!-- Contenido -->
     <div class="card">
       <div class="card-header bg-primary">
-        <h4 class="text-white text-center">MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</h4>
+        <h4 class="text-white text-center"><b>MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</b></h4>
       </div>
       <div class="card-body">
         <mat-stepper linear #stepper>
@@ -13,7 +13,7 @@
             <form [formGroup]="primeraParteForm" >
               <div class="card">
                 <div class="card-header bg-success">
-                  <h6 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h6>
+                  <h5 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
@@ -55,8 +55,8 @@
             <form [formGroup]="segundaParteForm">
               <div class="card">
                 <div class="card-header bg-success d-flex justify-content-between align-items-center">
-                  <h6 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h6>
-                  <mat-checkbox class="example-margin" formControlName="es_confidencial" (change)="activaConfidencialidad()">
+                  <h5 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h5>
+                  <mat-checkbox class="example-margin" formControlName="es_confidencial" (change)="activaConfidencialidad()" >
                     <span class="text-white">¿Desea que sus datos sean confidenciales?</span>
                   </mat-checkbox>
                 </div>
@@ -136,7 +136,7 @@
               <br>
               <div class="card">
                 <div class="card-header bg-success">
-                  <h6 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h6>
+                  <h5 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
@@ -196,7 +196,7 @@
               <br>
               <div class="card">
                 <div class="card-header bg-success">
-                  <h6 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h6>
+                  <h5 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
@@ -251,7 +251,7 @@
               <br>
               <div class="card">
                 <div class="card-header bg-success">
-                  <h6 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h6>
+                  <h5 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h5>
                 </div>
                 <div class="card-body">
                   <div class="row">
