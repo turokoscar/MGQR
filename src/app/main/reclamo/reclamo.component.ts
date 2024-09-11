@@ -66,6 +66,8 @@ export class ReclamoComponent implements OnInit {
   result_fecha:string="";
   result_estado:string="";
 
+  es_confidencial:boolean=false;
+
   //2. Inicializo el constructor
   constructor(
     private toastr: ToastrService,
@@ -124,19 +126,19 @@ export class ReclamoComponent implements OnInit {
   //5. Estructuro la segunda parte del formulario
   private showSegundoForm():void{
     this.segundaParteForm = this.fb.group({
-      tipo_documento: [{ value: '', disabled: false }, Validators.required],
+      tipo_documento: [{ value: '', disabled: false }],
       numero_documento: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
+        [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
       ],
       genero: ['', Validators.required],
       nombre: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       apellido_paterno: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       apellido_materno: [{ value: '', disabled: false },
-        [Validators.required, Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
+        [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       departamento: ['', Validators.required],
       provincia: [ { value: '', disabled: true} , Validators.required],
@@ -253,18 +255,25 @@ export class ReclamoComponent implements OnInit {
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
     if (this.disabled) {
+      this.es_confidencial=true;
       this.segundaParteForm.controls['tipo_documento'].disable();
       this.segundaParteForm.controls['numero_documento'].disable();
       this.segundaParteForm.controls['nombre'].disable();
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
+   
     } else {
+      this.es_confidencial=false;
       this.segundaParteForm.controls['tipo_documento'].enable();
       this.segundaParteForm.controls['numero_documento'].enable();
       this.segundaParteForm.controls['nombre'].enable();
       this.segundaParteForm.controls['apellido_paterno'].enable();
       this.segundaParteForm.controls['apellido_materno'].enable();
+
+   
     }
+
+    
   }
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
@@ -283,18 +292,28 @@ export class ReclamoComponent implements OnInit {
     if(!file){
       this.nombreArchivoSeleccionado="";
     }  
+
+    
+
+
+
+
+
+
+
     let param = {
       //("perTipDoc": ""+ 1,
+
+      "tipo_documento_id": ""+(this.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+      "numero_documento": ""+(this.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
+      "nombres": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
+      "apellido_paterno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
+      "apellido_materno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_materno,
       "tipo_canal": "1",
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
       "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
-      "tipo_documento_id": ""+this.segundaParteForm.value.tipo_documento,
-      "numero_documento": ""+this.segundaParteForm.value.numero_documento,
       "genero": ""+this.segundaParteForm.value.genero,
-      "nombres": ""+this.segundaParteForm.value.nombre,
-      "apellido_paterno": ""+this.segundaParteForm.value.apellido_paterno,
-      "apellido_materno": ""+this.segundaParteForm.value.apellido_materno,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
       "direccion": ""+this.segundaParteForm.value.direccion,
       "telefono": ""+this.segundaParteForm.value.numero_telefono,
@@ -372,7 +391,7 @@ export class ReclamoComponent implements OnInit {
     this.dialog.open(DialogComponent, {
       data: {
         title: 'Mensaje de información',
-        message: 'Se registro exitosamente con el Nro de expediente:<br><p style="text-align:center"><b><h2>'+codigo_expediente+'</h2></b></p><br>, así mismo se notifico a su correo regsistrddo'
+        message: 'Se registro exitosamente con el Nro de expediente:<strong><h4>'+codigo_expediente+'</h4></strong>,así mismo se notifico via correo su codigo de verificacion para que pueda realizar seguimiento a su expediente'
       }
     });
   }
