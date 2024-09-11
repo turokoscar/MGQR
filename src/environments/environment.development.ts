@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:46329',
+  apiUrl: 'http://38.242.135.95:8989',
   fakeApi: 'http://localhost:3000',
 
   app_name_full: 'Sistema de Mecanismo de gestion de quejas y reclamos',

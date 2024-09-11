@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import { AppComponent } from './app.component';
 import { ReclamoComponent } from './main/reclamo/reclamo.component';
@@ -31,6 +32,7 @@ import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { DialogComponent } from './components/dialog/dialog.component';
 import { AuthComponent } from './modules/auth/auth.component';
@@ -46,6 +48,7 @@ import { DescriptionComponent } from './components/description/description.compo
 import { ReclamoRecepcionPendienteComponent } from './modules/reclamo-recepcion/reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component';
 import { ReclamoRecepcionAtendidoComponent } from './modules/reclamo-recepcion/reclamo-recepcion-atendido/reclamo-recepcion-atendido.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { LoadingAppComponent } from './components/loading-app/loading-app.component';
 
 
 @NgModule({
@@ -71,7 +74,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     DescriptionComponent,
     ReclamoRecepcionPendienteComponent,
     ReclamoRecepcionAtendidoComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    LoadingAppComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +105,9 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    SweetAlert2Module.forRoot(),
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
