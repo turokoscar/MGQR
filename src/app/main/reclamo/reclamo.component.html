@@ -219,7 +219,12 @@
                     <div class="col">
                       <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Correo electrónico</mat-label>
-                        <input type="email" matInput formControlName="correo_electronico" placeholder="Correo electrónico" maxlength="100">
+                        <input type="email" matInput
+                        formControlName="correo_electronico"
+                        placeholder="Correo electrónico"
+                         maxlength="100"
+                         [attr.readonly]="isReadOnly ? true : null"
+                         >
                         <mat-error *ngIf="segundaParteForm.controls['correo_electronico'].hasError('required')">
                           Correo electrónico es <strong>obligatorio</strong>
                         </mat-error>
