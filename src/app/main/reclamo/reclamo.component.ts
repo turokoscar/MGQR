@@ -34,6 +34,7 @@ import { AlertService } from 'src/app/services/alert.service';
 export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
   loading: boolean = false;
+  isReadOnly: boolean = false;
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
   tipoAtencion: TipoAtencion[] = [];
@@ -113,6 +114,7 @@ export class ReclamoComponent implements OnInit {
     });
     this.primeraParteForm.get('email_institucional')?.valueChanges.subscribe(value => {
       this.segundaParteForm.get('correo_electronico')?.setValue(value, { emitEvent: false });
+      this.isReadOnly = !!value;
     });
   }
   //4. Estructuro la primera parte del formulario
