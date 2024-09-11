@@ -56,7 +56,11 @@
               <div class="card">
                 <div class="card-header bg-success d-flex justify-content-between align-items-center">
                   <h6 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h6>
-                  <mat-checkbox class="example-margin" formControlName="es_confidencial" (change)="activaConfidencialidad()">
+                  <mat-checkbox
+                  class="example-margin"
+                  formControlName="es_confidencial"
+                  (change)="activaConfidencialidad()"
+                  [disabled]="isCheckboxDisabled">
                     <span class="text-white">¿Desea que sus datos sean confidenciales?</span>
                   </mat-checkbox>
                 </div>

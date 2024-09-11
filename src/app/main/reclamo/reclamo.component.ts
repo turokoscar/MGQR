@@ -35,6 +35,7 @@ export class ReclamoComponent implements OnInit {
   //1. Declaro las variables a utilizar
   loading: boolean = false;
   isReadOnly: boolean = false;
+  isCheckboxDisabled = false;
   primeraParteForm!: FormGroup;
   segundaParteForm!: FormGroup;
   tipoAtencion: TipoAtencion[] = [];
@@ -240,9 +241,11 @@ export class ReclamoComponent implements OnInit {
     if (event.value == '1') {
       this.showEmailField = true;
       emailControl?.setValidators([Validators.required, Validators.email]);
+      this.isCheckboxDisabled = true;
     } else {
       this.showEmailField = false;
       emailControl?.clearValidators();
+      this.isCheckboxDisabled = false;
     }
     emailControl?.updateValueAndValidity();
   }
