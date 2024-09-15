@@ -8,26 +8,44 @@
       <app-topbar-admin></app-topbar-admin>
       <!-- Contenido -->
       <div class="container-fluid">
+        <!--
         <app-title titulo="Recepción de quejas, reclamos y consultas"></app-title>
         <app-description texto="Bienvenido al módulo para la recepción de quejas, reclamos y consultas."></app-description>
+        -->
         <div class="card shadow mb-4">
-          <div class="card-header py-3 bg-secondary">
-            <h6 class="m-0 font-weight-bold text-white">Quejas, consultas y reclamos</h6>
+          <div class="card-header py-3 bg-success">
+            <h5 class="m-0 font-weight-bold text-white">Módulo para admitir los reclamos, quejas o sugerencias</h5>
           </div>
           <div class="card-body">
-            <mat-tab-group>
-              <mat-tab label="Por recepcionar">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                  <i class="bi bi-file-earmark-text text-primary"></i>
+                  Por admitir</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-atendido" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                  <i class="bi bi-file-earmark-text text-warning"></i>
+                  Admitidos</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-denegado" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                  <i class="bi bi-x-circle-fill text-danger"></i>
+                  Denegados</button>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-por-atender" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <br>
                 <app-reclamo-recepcion-pendiente></app-reclamo-recepcion-pendiente>
-              </mat-tab>
-              <mat-tab label="Recepcionados">
+              </div>
+              <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
                 <app-reclamo-recepcion-atendido></app-reclamo-recepcion-atendido>
-              </mat-tab>
-            </mat-tab-group>
+              </div>
+              <div class="tab-pane fade" id="nav-denegado" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                <br>
+                <app-reclamo-recepcion-denegado></app-reclamo-recepcion-denegado>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
     <!-- Footer -->

@@ -1,7 +1,7 @@
 export interface Expediente {
   id?: number,
   tipo_canal?: number,
-  tipo_expediente: number,
+  tipo_expediente?: string,
   codigo_expediente?: number,
   tipo_reclamo?: string,
   fecha?: Date,

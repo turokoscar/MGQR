@@ -8,7 +8,11 @@ import { ResultadoComponent } from './main/resultado/resultado.component';
 import { AuthComponent } from './modules/auth/auth.component';
 import { AdminComponent } from './modules/admin/admin.component';
 import { ReclamoRecepcionMainComponent } from './modules/reclamo-recepcion/reclamo-recepcion-main/reclamo-recepcion-main.component';
-import { ReclamoRecepcionManagementComponent } from './modules/reclamo-recepcion/reclamo-recepcion-management/reclamo-recepcion-management.component';
+import { RecepcionComponent } from './modules/reclamo/recepcion/recepcion.component';
+import { DenegacionComponent } from './modules/reclamo/denegacion/denegacion.component';
+import { AtencionComponent } from './modules/reclamo/atencion/atencion.component';
+import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignacion.component';
+import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -17,8 +21,13 @@ const routes: Routes = [
   { path: 'resultado/:numeroExpediente/:codigoVerificacion', component: ResultadoComponent },
   { path: 'login', component: AuthComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'reclamo/create', component: ReclamoManagementComponent },
+  { path: 'reclamo/:id', component: ReclamoManagementComponent },
   { path: 'recepcion', component: ReclamoRecepcionMainComponent },
-  { path: 'recepcion/:id', component: ReclamoRecepcionManagementComponent },
+  { path: 'recepcion/:id', component: RecepcionComponent },
+  { path: 'denegacion/:id', component: DenegacionComponent },
+  { path: 'atencion/:id', component: AtencionComponent },
+  { path: 'reasignacion/:id', component: ReasignacionComponent },
   { path: '',   redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home'  }
 ];

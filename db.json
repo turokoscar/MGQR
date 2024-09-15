@@ -23,11 +23,21 @@
       "descripcion": "Carnet de extranjería"
     }
   ],
+  "tipo_procedencia_reclamo":[
+    {
+      "id": 1,
+      "descripcion": "Interno"
+    },
+    {
+      "id": 2,
+      "descripcion": "Externo"
+    }
+  ],
   "expedientes": [
     {
       "id": 1,
       "tipo_canal": 2,
-      "tipo_expediente": 1,
+      "tipo_expediente": "Interno",
       "codigo_expediente": 12345,
       "tipo_reclamo": "Queja",
       "fecha": "2024-08-01",
@@ -55,8 +65,8 @@
     },
     {
       "id": 2,
-      "tipo_canal": 1,
-      "tipo_expediente": 2,
+      "tipo_canal": 2,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 54321,
       "tipo_reclamo": "Reclamo",
       "fecha": "2024-08-02",
@@ -85,7 +95,7 @@
     {
       "id": 3,
       "tipo_canal": 3,
-      "tipo_expediente": 1,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 67890,
       "tipo_reclamo": "Consulta",
       "fecha": "2024-08-03",
@@ -114,7 +124,7 @@
     {
       "id": 4,
       "tipo_canal": 1,
-      "tipo_expediente": 2,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 98765,
       "tipo_reclamo": "Reclamo",
       "fecha": "2024-08-04",
@@ -143,7 +153,7 @@
     {
       "id": 5,
       "tipo_canal": 2,
-      "tipo_expediente": 3,
+      "tipo_expediente": "Interno",
       "codigo_expediente": 65432,
       "tipo_reclamo": "Queja",
       "fecha": "2024-08-05",
@@ -172,7 +182,7 @@
     {
       "id": 6,
       "tipo_canal": 2,
-      "tipo_expediente": 1,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 12345,
       "tipo_reclamo": "Queja",
       "fecha": "2024-08-01",
@@ -201,7 +211,7 @@
     {
       "id": 7,
       "tipo_canal": 1,
-      "tipo_expediente": 2,
+      "tipo_expediente": "Interno",
       "codigo_expediente": 54321,
       "tipo_reclamo": "Reclamo",
       "fecha": "2024-08-02",
@@ -230,7 +240,7 @@
     {
       "id": 8,
       "tipo_canal": 3,
-      "tipo_expediente": 1,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 67890,
       "tipo_reclamo": "Consulta",
       "fecha": "2024-08-03",
@@ -259,7 +269,7 @@
     {
       "id": 9,
       "tipo_canal": 1,
-      "tipo_expediente": 2,
+      "tipo_expediente": "Interno",
       "codigo_expediente": 98765,
       "tipo_reclamo": "Reclamo",
       "fecha": "2024-08-04",
@@ -288,7 +298,7 @@
     {
       "id": 10,
       "tipo_canal": 2,
-      "tipo_expediente": 3,
+      "tipo_expediente": "Externo",
       "codigo_expediente": 65432,
       "tipo_reclamo": "Queja",
       "fecha": "2024-08-05",

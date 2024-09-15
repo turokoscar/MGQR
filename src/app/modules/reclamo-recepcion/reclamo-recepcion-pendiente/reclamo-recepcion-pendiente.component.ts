@@ -8,6 +8,10 @@ import { Expediente } from 'src/app/models/expediente';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { TipoReclamo } from 'src/app/models/tipo-reclamo';
+import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
+import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 
 @Component({
   selector: 'app-reclamo-recepcion-pendiente',
@@ -17,9 +21,11 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class ReclamoRecepcionPendienteComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'fecha', 'tipo', 'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
+  tipoReclamos: TipoReclamo[] = [];
+  tipoProcedencia: TipoProcedenciaReclamo[] = [];
   id!: number;
   numeroSeleccion!: number;
   textoFiltro:string = '';
@@ -27,18 +33,29 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  // Definir el tipo de clave para los filtros
+  filterValues: { codigoExpediente: string; tipoReclamo: string; procedencia: string } = {
+    codigoExpediente: '',
+    tipoReclamo: '',
+    procedencia: ''
+  };
+
   //2. Inicializamos las variables en el constructor
   constructor(
     private _apiService: ExpedienteService,
     private _notificacion: NotificationService,
     private _login: AuthService,
     private router: Router,
-    private aRoute: ActivatedRoute
+    private aRoute: ActivatedRoute,
+    private _tipoReclamo: TipoReclamoService,
+    private _tipoProcedencia: TipoProcedenciaReclamoService
   ){}
 
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showData();
+    this.showTipoReclamo();
+    this.showTipoProcedencia();
   }
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
@@ -86,6 +103,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = this.createFilter();
         this.loading = false;
       },
       error: (e) => {
@@ -95,19 +113,85 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
+
   //10. Función para filtrar información de la lista de datos
-  filterData(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if(this.dataSource.paginator){
+  filterData(event: Event, filterType: keyof typeof this.filterValues) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.filterValues[filterType] = filterValue;
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+    if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-  //11. Eliminamos un registro
+  // Función para crear el filtro personalizado
+  createFilter(): (data: Expediente, filter: string) => boolean {
+    return (data: Expediente, filter: string): boolean => {
+      const searchTerms = JSON.parse(filter);
+      return (
+        (searchTerms.codigoExpediente === '' || (data.codigo_expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
+        (searchTerms.tipoReclamo === '' || (data.tipo_reclamo?.toLowerCase() || '').includes(searchTerms.tipoReclamo)) &&
+        (searchTerms.procedencia === '' || (data.tipo_expediente?.toLowerCase() || '').includes(searchTerms.procedencia))
+      );
+    };
+  }
+  // Para cambiar el filtro de reclamo o procedencia
+  changeFilter(filterType: keyof typeof this.filterValues, value: string) {
+    this.filterValues[filterType] = value.trim().toLowerCase();
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  // Método para resetear los filtros
+  resetFilters() {
+    // Restablecer los valores de los filtros
+    this.filterValues = {
+      codigoExpediente: '',
+      tipoReclamo: '',
+      procedencia: ''
+    };
+
+    // Actualizar el filtro de la dataSource
+    this.dataSource.filter = JSON.stringify(this.filterValues);
+
+    // Si hay paginación, volver a la primera página
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+
+  //11. Obtengo la lista de Tipos de eventos
+  showTipoReclamo():void{
+    this._tipoReclamo.show().subscribe({
+      next: (data) => {
+        this.tipoReclamos = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  //12. Obtengo los tipos de Procedencia de los reclamos
+  showTipoProcedencia():void{
+    this._tipoProcedencia.show().subscribe({
+      next: (data) => {
+        this.tipoProcedencia = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+
+  //12. Eliminamos un registro
   delete():void{
 
   }
-  //12. Editamos un registro
+  //13. Editamos un registro
   edit(): void{
 
   }
