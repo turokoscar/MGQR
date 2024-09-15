@@ -1,348 +1,342 @@
 <app-loading-app [isLoading]="loading"></app-loading-app>
-<main>
-  <div class="container py-4">
-    <!-- Header -->
-    <!-- Contenido -->
-    <div class="card">
-      <div class="card-header bg-primary">
-        <h4 class="text-white text-center"><b>MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</b></h4>
-      </div>
-      <div class="card-body">
-        <mat-stepper linear #stepper>
-          <mat-step [stepControl]="primeraParteForm" label="Paso 1">
-            <form [formGroup]="primeraParteForm" >
-              <div class="card">
-                <div class="card-header bg-success">
-                  <h5 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h5>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Persona que declara</mat-label>
-                        <mat-select formControlName="tipo_persona" (selectionChange)="onTipoPersonaChange($event)" >
-                          <mat-option *ngFor="let item of tipoAtencion" [value]="item.id">
-                            {{ item.descripcion }}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row" *ngIf="showEmailField">
-                    <div class="col-12">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Correo institucional</mat-label>
-                        <input matInput formControlName="email_institucional" placeholder="Tu correo de usuario" type="email" aria-describedby="email-icon">
-                        <mat-icon matSuffix>mail</mat-icon>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button mat-raised-button color="primary" routerLink="/home">
-                      <i class="bi bi-arrow-left"></i>
-                      Atras
-                    </button>
-                    <button mat-raised-button matStepperNext color="primary">
-                      <i class="bi bi-arrow-right"></i>
-                      Continuar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </mat-step>
-          <mat-step [stepControl]="segundaParteForm"  label="Paso 2">
-            <form [formGroup]="segundaParteForm">
-              <div class="card">
-                <div class="card-header bg-success d-flex justify-content-between align-items-center">
-                  <h6 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h6>
-                  <mat-checkbox
-                  class="example-margin"
-                  formControlName="es_confidencial"
-                  (change)="activaConfidencialidad()"
-                  [disabled]="isCheckboxDisabled">
-                    <span class="text-white">¿Desea que sus datos sean confidenciales?</span>
-                  </mat-checkbox>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Tipo de documento</mat-label>
-                        <mat-select formControlName="tipo_documento">
-                          <mat-option *ngFor="let item of tipoDocumentos" [value]="item.id">
-                            {{item.descripcion}}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['tipo_documento'].hasError('required')">
-                          Tipo de documento es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>N° de documento</mat-label>
-                        <input type="number" matInput #numeroDocumento formControlName="numero_documento" placeholder="Nro de documento" [maxlength]="15">
-                        <mat-hint align="end">{{numeroDocumento.value.length}} / 15</mat-hint>
-                        <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('required')">
-                          Nro de documento es <strong>obligatorio</strong>
-                        </mat-error>
-                        <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('maxlength')">
-                          Nro de documento no puede contener mas de 15 dígitos.
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Género</mat-label>
-                        <mat-select formControlName="genero">
-                          <mat-option  value="1"> Masculino</mat-option>
-                          <mat-option  value="0"> Femenino</mat-option>
-                          <mat-option  value="99"> Prefiero no decirlo</mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['genero'].hasError('required')">
-                          Género es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Nombres</mat-label>
-                        <input matInput formControlName="nombre" placeholder="Nombres" maxlength="100">
-                        <mat-error *ngIf="segundaParteForm.controls['nombre'].hasError('required')">
-                          Nombre es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Apellido paterno</mat-label>
-                        <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno" maxlength="100">
-                        <mat-error *ngIf="segundaParteForm.controls['apellido_paterno'].hasError('required')">
-                          Apellido paterno es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Apellido materno</mat-label>
-                        <input matInput formControlName="apellido_materno" placeholder="Apellido materno">
-                        <mat-error *ngIf="segundaParteForm.controls['apellido_materno'].hasError('required')">
-                          Apellido materno es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <br>
-              <div class="card">
-                <div class="card-header bg-success">
-                  <h5 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h5>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Departamento</mat-label>
-                        <mat-select formControlName="departamento">
-                          <mat-option *ngFor="let item of regiones" [value]="item.id">
-                            {{ item.nombre }}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['departamento'].hasError('required')">
-                          Departamento es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Provincia</mat-label>
-                        <mat-select formControlName="provincia">
-                          <mat-option *ngFor="let item of provincias" [value]="item.id">
-                            {{ item.nombre }}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['provincia'].hasError('required')">
-                          Provincia es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Distrito</mat-label>
-                        <mat-select formControlName="distrito">
-                          <mat-option *ngFor="let item of distritos" [value]="item.id">
-                            {{ item.nombre }}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['distrito'].hasError('required')">
-                          Distrito es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Dirección</mat-label>
-                        <textarea matInput formControlName="direccion" placeholder="Ingrese su dirección"></textarea>
-                        <mat-error *ngIf="segundaParteForm.controls['direccion'].hasError('required')">
-                          Dirección es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <br>
-              <div class="card">
-                <div class="card-header bg-success">
-                  <h5 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h5>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>N° de teléfono</mat-label>
-                        <input type="number" matInput formControlName="numero_telefono" placeholder="Nro de teléfono" maxlength="15">
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>N° de celular</mat-label>
-                        <input type="number" matInput #celular formControlName="numero_celular" placeholder="Nro de celular" maxlength="9">
-                        <mat-hint align="end">{{celular.value.length}} / 9</mat-hint>
-                        <mat-error *ngIf="segundaParteForm.controls['numero_celular'].hasError('required')">
-                          Número de celular es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Correo electrónico</mat-label>
-                        <input type="email" matInput
-                        formControlName="correo_electronico"
-                        placeholder="Correo electrónico"
-                         maxlength="100"
-                         [attr.readonly]="isReadOnly ? true : null"
-                         >
-                        <mat-error *ngIf="segundaParteForm.controls['correo_electronico'].hasError('required')">
-                          Correo electrónico es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-8 col-xs-12 col-md-12">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Comunidad/Asociación/Entidad a la que pertenece</mat-label>
-                        <input matInput formControlName="comunidad" placeholder="Ingrese Comunidad/Asociación/Entidad a la que pertenece">
-                        <mat-error *ngIf="segundaParteForm.controls['comunidad'].hasError('required')">
-                          Comunidad/Asociación/Entidad es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Cargo</mat-label>
-                        <input matInput formControlName="cargo" placeholder="Ingrese cargo" maxlength="100">
-                        <mat-error *ngIf="segundaParteForm.controls['cargo'].hasError('required')">
-                          Cargo es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <br>
-              <div class="card">
-                <div class="card-header bg-success">
-                  <h5 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h5>
-                </div>
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Tipo</mat-label>
-                        <mat-select formControlName="tipo_consulta">
-                          <mat-option *ngFor="let item of tipoReclamos" [value]="item.id">
-                            {{item.descripcion}}
-                          </mat-option>
-                        </mat-select>
-                        <mat-error *ngIf="segundaParteForm.controls['tipo_consulta'].hasError('required')">
-                          Tipo de consulta es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Detalle aquí su queja, reclamo o consulta.</mat-label>
-                        <textarea #contenidoConsulta matInput formControlName="contenido_consulta" rows="10" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
-                        <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
-                        <mat-error *ngIf="segundaParteForm.controls['contenido_consulta'].hasError('required')">
-                          Este campo es <strong>obligatorio</strong>
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <div align="left">
-                        <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: 5MB en total, solo se aceptan formatos pdf, jpg, docx, xls, xlsx,csv.</mat-label>
-                      </div>
-                      <input class="form-control" type="file" accept=".docx,.csv,.xls,.xlsx,.pdf,.jpg,.jpeg,image/jpeg"  formControlName="evidencia_consulta"  (change)="archivoSeleccionado($event)" >
-                      <!-- <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].invalid">
-                        Por favor, seleccione un archivo de imagen válido.
-                      </mat-error> -->
-
-                        <!-- <mat-form-field>
-                          <mat-label>Fotografía</mat-label>
-                          <input matInput formControlName="evidencia_consulta" text="" type="text" [value]="nombreArchivoSeleccionado" >
-                          <input class="form-control" type="file"  accept=".jpg,.jpeg,image/jpeg" (change)="archivoSeleccionado($event)" #inputArchivo>
-                        </mat-form-field>
-                        <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('fileType')">
-                          Por favor, seleccione un archivo de imagen válido.
-                        </mat-error>
-                        <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('required')">
-                          El campo Fotografía es <strong>obligatorio</strong> adjunte Imagen.
-                        </mat-error>
-                      -->
-
-
-                    </div>
-                  </div>
-                  <br>
-                  <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button mat-raised-button matStepperPrevious color="primary">
-                      <i class="bi bi-arrow-left"></i>
-                      Retornar
-                    </button>
-                    <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary">
-                      <mat-icon>send</mat-icon>
-                      Enviar
-                    </button>
-                    <button mat-raised-button (click)="stepper.reset()" color="primary">
-                      <mat-icon>exit_to_app</mat-icon>
-                      Ir al inicio
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-
-            </form>
-          </mat-step>
-        </mat-stepper>
-      </div>
-    </div>
-    <!-- Footer -->
-    <app-footer></app-footer>
+<div class="card">
+  <div class="card-header bg-primary">
+    <h4 class="text-white text-center"><b>MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</b></h4>
   </div>
-</main>
+  <div class="card-body">
+    <mat-stepper linear #stepper>
+      <mat-step [stepControl]="primeraParteForm" label="Paso 1">
+        <form [formGroup]="primeraParteForm" >
+          <div class="card">
+            <div class="card-header bg-success">
+              <h5 class="text-white"><i class="bi bi-person-vcard"></i> Persona que declara</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Persona que declara</mat-label>
+                    <mat-select formControlName="tipo_persona" (selectionChange)="onTipoPersonaChange($event)" >
+                      <mat-option *ngFor="let item of tipoAtencion" [value]="item.id">
+                        {{ item.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row" *ngIf="showEmailField">
+                <div class="col-12">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Correo institucional</mat-label>
+                    <input matInput formControlName="email_institucional" placeholder="Tu correo de usuario" type="email" aria-describedby="email-icon">
+                    <mat-icon matSuffix>mail</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button mat-raised-button color="primary" routerLink="/home">
+                  <i class="bi bi-arrow-left"></i>
+                  Atras
+                </button>
+                <button mat-raised-button matStepperNext color="primary">
+                  <i class="bi bi-arrow-right"></i>
+                  Continuar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="segundaParteForm"  label="Paso 2">
+        <form [formGroup]="segundaParteForm">
+          <div class="card">
+            <div class="card-header bg-success d-flex justify-content-between align-items-center">
+              <h6 class="text-white mb-0"><i class="bi bi-person"></i> Datos de la persona</h6>
+              <mat-checkbox
+              class="example-margin"
+              formControlName="es_confidencial"
+              (change)="activaConfidencialidad()"
+              [disabled]="isCheckboxDisabled">
+                <span class="text-white">¿Desea que sus datos sean confidenciales?</span>
+              </mat-checkbox>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Tipo de documento</mat-label>
+                    <mat-select formControlName="tipo_documento">
+                      <mat-option *ngFor="let item of tipoDocumentos" [value]="item.id">
+                        {{item.descripcion}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['tipo_documento'].hasError('required')">
+                      Tipo de documento es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>N° de documento</mat-label>
+                    <input type="number" matInput #numeroDocumento formControlName="numero_documento" placeholder="Nro de documento" [maxlength]="15">
+                    <mat-hint align="end">{{numeroDocumento.value.length}} / 15</mat-hint>
+                    <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('required')">
+                      Nro de documento es <strong>obligatorio</strong>
+                    </mat-error>
+                    <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('maxlength')">
+                      Nro de documento no puede contener mas de 15 dígitos.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Género</mat-label>
+                    <mat-select formControlName="genero">
+                      <mat-option  value="1"> Masculino</mat-option>
+                      <mat-option  value="0"> Femenino</mat-option>
+                      <mat-option  value="99"> Prefiero no decirlo</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['genero'].hasError('required')">
+                      Género es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Nombres</mat-label>
+                    <input matInput formControlName="nombre" placeholder="Nombres" maxlength="100">
+                    <mat-error *ngIf="segundaParteForm.controls['nombre'].hasError('required')">
+                      Nombre es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Apellido paterno</mat-label>
+                    <input matInput formControlName="apellido_paterno" placeholder="Apellido paterno" maxlength="100">
+                    <mat-error *ngIf="segundaParteForm.controls['apellido_paterno'].hasError('required')">
+                      Apellido paterno es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Apellido materno</mat-label>
+                    <input matInput formControlName="apellido_materno" placeholder="Apellido materno">
+                    <mat-error *ngIf="segundaParteForm.controls['apellido_materno'].hasError('required')">
+                      Apellido materno es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card">
+            <div class="card-header bg-success">
+              <h5 class="text-white"><i class="bi bi-globe-americas"></i> Información de ubigeo</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Departamento</mat-label>
+                    <mat-select formControlName="departamento">
+                      <mat-option *ngFor="let item of regiones" [value]="item.id">
+                        {{ item.nombre }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['departamento'].hasError('required')">
+                      Departamento es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Provincia</mat-label>
+                    <mat-select formControlName="provincia">
+                      <mat-option *ngFor="let item of provincias" [value]="item.id">
+                        {{ item.nombre }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['provincia'].hasError('required')">
+                      Provincia es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Distrito</mat-label>
+                    <mat-select formControlName="distrito">
+                      <mat-option *ngFor="let item of distritos" [value]="item.id">
+                        {{ item.nombre }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['distrito'].hasError('required')">
+                      Distrito es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Dirección</mat-label>
+                    <textarea matInput formControlName="direccion" placeholder="Ingrese su dirección"></textarea>
+                    <mat-error *ngIf="segundaParteForm.controls['direccion'].hasError('required')">
+                      Dirección es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card">
+            <div class="card-header bg-success">
+              <h5 class="text-white"><i class="bi bi-person-vcard"></i> Información de contacto</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>N° de teléfono</mat-label>
+                    <input type="number" matInput formControlName="numero_telefono" placeholder="Nro de teléfono" maxlength="15">
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>N° de celular</mat-label>
+                    <input type="number" matInput #celular formControlName="numero_celular" placeholder="Nro de celular" maxlength="9">
+                    <mat-hint align="end">{{celular.value.length}} / 9</mat-hint>
+                    <mat-error *ngIf="segundaParteForm.controls['numero_celular'].hasError('required')">
+                      Número de celular es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Correo electrónico</mat-label>
+                    <input type="email" matInput
+                    formControlName="correo_electronico"
+                    placeholder="Correo electrónico"
+                      maxlength="100"
+                      [attr.readonly]="isReadOnly ? true : null"
+                      >
+                    <mat-error *ngIf="segundaParteForm.controls['correo_electronico'].hasError('required')">
+                      Correo electrónico es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-8 col-xs-12 col-md-12">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Comunidad/Asociación/Entidad a la que pertenece</mat-label>
+                    <input matInput formControlName="comunidad" placeholder="Ingrese Comunidad/Asociación/Entidad a la que pertenece">
+                    <mat-error *ngIf="segundaParteForm.controls['comunidad'].hasError('required')">
+                      Comunidad/Asociación/Entidad es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Cargo</mat-label>
+                    <input matInput formControlName="cargo" placeholder="Ingrese cargo" maxlength="100">
+                    <mat-error *ngIf="segundaParteForm.controls['cargo'].hasError('required')">
+                      Cargo es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="card">
+            <div class="card-header bg-success">
+              <h5 class="text-white"><i class="bi bi-card-heading"></i> Datos de la queja, reclamo o consulta</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Tipo</mat-label>
+                    <mat-select formControlName="tipo_consulta">
+                      <mat-option *ngFor="let item of tipoReclamos" [value]="item.id">
+                        {{item.descripcion}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="segundaParteForm.controls['tipo_consulta'].hasError('required')">
+                      Tipo de consulta es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Detalle aquí su queja, reclamo o consulta.</mat-label>
+                    <textarea #contenidoConsulta matInput formControlName="contenido_consulta" rows="10" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
+                    <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
+                    <mat-error *ngIf="segundaParteForm.controls['contenido_consulta'].hasError('required')">
+                      Este campo es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div align="left">
+                    <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: 5MB en total, solo se aceptan formatos pdf, jpg, docx, xls, xlsx,csv.</mat-label>
+                  </div>
+                  <input class="form-control" type="file" accept=".docx,.csv,.xls,.xlsx,.pdf,.jpg,.jpeg,image/jpeg"  formControlName="evidencia_consulta"  (change)="archivoSeleccionado($event)" >
+                  <!-- <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].invalid">
+                    Por favor, seleccione un archivo de imagen válido.
+                  </mat-error> -->
+
+                    <!-- <mat-form-field>
+                      <mat-label>Fotografía</mat-label>
+                      <input matInput formControlName="evidencia_consulta" text="" type="text" [value]="nombreArchivoSeleccionado" >
+                      <input class="form-control" type="file"  accept=".jpg,.jpeg,image/jpeg" (change)="archivoSeleccionado($event)" #inputArchivo>
+                    </mat-form-field>
+                    <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('fileType')">
+                      Por favor, seleccione un archivo de imagen válido.
+                    </mat-error>
+                    <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('required')">
+                      El campo Fotografía es <strong>obligatorio</strong> adjunte Imagen.
+                    </mat-error>
+                  -->
+
+
+                </div>
+              </div>
+              <br>
+              <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button mat-raised-button matStepperPrevious color="primary">
+                  <i class="bi bi-arrow-left"></i>
+                  Retornar
+                </button>
+                <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary">
+                  <mat-icon>send</mat-icon>
+                  Enviar
+                </button>
+                <button mat-raised-button (click)="stepper.reset()" color="primary">
+                  <mat-icon>exit_to_app</mat-icon>
+                  Ir al inicio
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>
+
+
 
 

@@ -32,14 +32,11 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   errorMessage: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  // Definir el tipo de clave para los filtros
   filterValues: { codigoExpediente: string; tipoReclamo: string; procedencia: string } = {
     codigoExpediente: '',
     tipoReclamo: '',
     procedencia: ''
   };
-
   //2. Inicializamos las variables en el constructor
   constructor(
     private _apiService: ExpedienteService,
@@ -50,7 +47,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     private _tipoReclamo: TipoReclamoService,
     private _tipoProcedencia: TipoProcedenciaReclamoService
   ){}
-
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showData();
@@ -113,7 +109,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
-
   //10. Función para filtrar información de la lista de datos
   filterData(event: Event, filterType: keyof typeof this.filterValues) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
@@ -123,7 +118,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  // Función para crear el filtro personalizado
+  //11. Función para crear el filtro personalizado
   createFilter(): (data: Expediente, filter: string) => boolean {
     return (data: Expediente, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
@@ -134,7 +129,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       );
     };
   }
-  // Para cambiar el filtro de reclamo o procedencia
+  //12. Para cambiar el filtro de reclamo o procedencia
   changeFilter(filterType: keyof typeof this.filterValues, value: string) {
     this.filterValues[filterType] = value.trim().toLowerCase();
     this.dataSource.filter = JSON.stringify(this.filterValues);
@@ -142,27 +137,19 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
-  // Método para resetear los filtros
+  //13. Método para resetear los filtros
   resetFilters() {
-    // Restablecer los valores de los filtros
     this.filterValues = {
       codigoExpediente: '',
       tipoReclamo: '',
       procedencia: ''
     };
-
-    // Actualizar el filtro de la dataSource
     this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    // Si hay paginación, volver a la primera página
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-
-
-  //11. Obtengo la lista de Tipos de eventos
+  //14. Obtengo la lista de Tipos de eventos
   showTipoReclamo():void{
     this._tipoReclamo.show().subscribe({
       next: (data) => {
@@ -174,7 +161,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
-  //12. Obtengo los tipos de Procedencia de los reclamos
+  //15. Obtengo los tipos de Procedencia de los reclamos
   showTipoProcedencia():void{
     this._tipoProcedencia.show().subscribe({
       next: (data) => {
@@ -186,12 +173,11 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
-
-  //12. Eliminamos un registro
+  //16. Eliminamos un registro
   delete():void{
 
   }
-  //13. Editamos un registro
+  //17. Editamos un registro
   edit(): void{
 
   }

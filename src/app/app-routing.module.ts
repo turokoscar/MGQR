@@ -13,10 +13,11 @@ import { DenegacionComponent } from './modules/reclamo/denegacion/denegacion.com
 import { AtencionComponent } from './modules/reclamo/atencion/atencion.component';
 import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignacion.component';
 import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
+import { MainComponent } from './main/reclamos/main/main.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'reclamo', component: ReclamoComponent },
+  { path: 'reclamo', component: MainComponent },
   { path: 'consulta', component: ConsultaComponent },
   { path: 'resultado/:numeroExpediente/:codigoVerificacion', component: ResultadoComponent },
   { path: 'login', component: AuthComponent },
