@@ -9,6 +9,7 @@ import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo'
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
+import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
@@ -45,7 +46,8 @@ export class ReclamoAtencionReasignadoComponent implements OnInit {
     private router: Router,
     private aRoute: ActivatedRoute,
     private _tipoReclamo: TipoReclamoService,
-    private _tipoProcedencia: TipoProcedenciaReclamoService
+    private _tipoProcedencia: TipoProcedenciaReclamoService,
+    private exportService: ExportService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
@@ -210,5 +212,9 @@ export class ReclamoAtencionReasignadoComponent implements OnInit {
       this.loading = false;
       this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
     }
+  }
+  //18. Exportamos la información requerida
+  export(format: string): void {
+    this.exportService.exportData(this.dataSource.data, format);
   }
 }
