@@ -14,11 +14,11 @@ import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 
 @Component({
-  selector: 'app-reclamo-recepcion-atendido',
-  templateUrl: './reclamo-recepcion-atendido.component.html',
-  styleUrls: ['./reclamo-recepcion-atendido.component.scss']
+  selector: 'app-reclamo-atencion-atendido',
+  templateUrl: './reclamo-atencion-atendido.component.html',
+  styleUrls: ['./reclamo-atencion-atendido.component.scss']
 })
-export class ReclamoRecepcionAtendidoComponent implements OnInit {
+export class ReclamoAtencionAtendidoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
   columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
@@ -173,7 +173,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
       }
     });
   }
-  //17. Mostramos un registro
+  //16. Mostramos un registro
   view(): void{
     this.loading = true;
     if (this.selection.selected.length > 0) {

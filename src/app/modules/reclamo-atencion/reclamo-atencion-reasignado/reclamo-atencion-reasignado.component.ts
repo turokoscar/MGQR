@@ -14,11 +14,11 @@ import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 
 @Component({
-  selector: 'app-reclamo-recepcion-atendido',
-  templateUrl: './reclamo-recepcion-atendido.component.html',
-  styleUrls: ['./reclamo-recepcion-atendido.component.scss']
+  selector: 'app-reclamo-atencion-reasignado',
+  templateUrl: './reclamo-atencion-reasignado.component.html',
+  styleUrls: ['./reclamo-atencion-reasignado.component.scss']
 })
-export class ReclamoRecepcionAtendidoComponent implements OnInit {
+export class ReclamoAtencionReasignadoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
   columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
@@ -93,8 +93,8 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   //9. Obtengo todos los registros
   showData():void{
     this.loading = true;
-    const estadoAtendido = 1;
-    this._apiService.show(estadoAtendido).subscribe({
+    const estadoReasignado = 1;
+    this._apiService.show(estadoReasignado).subscribe({
       next: (data) => {
         this.dataSource.data = data;
         this.dataSource.paginator = this.paginator;
@@ -173,13 +173,32 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
       }
     });
   }
-  //17. Mostramos un registro
+  //16. Mostramos un registro
   view(): void{
     this.loading = true;
     if (this.selection.selected.length > 0) {
       const registro = this.selection.selected[0];
       if (registro && registro.id) {
         this.router.navigate(['visualizacion', registro.id]);
+        this.loading = false;
+      }
+      else{
+        this.loading = false;
+        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
+      }
+    }
+    else{
+      this.loading = false;
+      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
+    }
+  }
+  //17. Atendemos el registro
+  atender(): void{
+    this.loading = true;
+    if (this.selection.selected.length > 0) {
+      const registro = this.selection.selected[0];
+      if (registro && registro.id) {
+        this.router.navigate(['atencion', registro.id]);
         this.loading = false;
       }
       else{

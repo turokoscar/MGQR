@@ -59,6 +59,11 @@ import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignaci
 import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
 import { MainComponent } from './main/reclamos/main/main.component';
 import { VisualizacionComponent } from './modules/reclamo/visualizacion/visualizacion.component';
+import { ReclamoAtencionMainComponent } from './modules/reclamo-atencion/reclamo-atencion-main/reclamo-atencion-main.component';
+import { ReclamoAtencionPendienteComponent } from './modules/reclamo-atencion/reclamo-atencion-pendiente/reclamo-atencion-pendiente.component';
+import { ReclamoAtencionProcesoComponent } from './modules/reclamo-atencion/reclamo-atencion-proceso/reclamo-atencion-proceso.component';
+import { ReclamoAtencionAtendidoComponent } from './modules/reclamo-atencion/reclamo-atencion-atendido/reclamo-atencion-atendido.component';
+import { ReclamoAtencionReasignadoComponent } from './modules/reclamo-atencion/reclamo-atencion-reasignado/reclamo-atencion-reasignado.component';
 
 
 @NgModule({
@@ -92,7 +97,12 @@ import { VisualizacionComponent } from './modules/reclamo/visualizacion/visualiz
     ReasignacionComponent,
     ReclamoManagementComponent,
     MainComponent,
-    VisualizacionComponent
+    VisualizacionComponent,
+    ReclamoAtencionMainComponent,
+    ReclamoAtencionPendienteComponent,
+    ReclamoAtencionProcesoComponent,
+    ReclamoAtencionAtendidoComponent,
+    ReclamoAtencionReasignadoComponent
   ],
   imports: [
     BrowserModule,

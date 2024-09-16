@@ -1,0 +1,61 @@
+<div id="wrapper">
+  <!-- Sidebar -->
+  <app-sidebar-admin></app-sidebar-admin>
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <!-- Topbar -->
+      <app-topbar-admin></app-topbar-admin>
+      <!-- Contenido -->
+      <div class="container-fluid">
+        <!--
+        <app-title titulo="Recepción de quejas, reclamos y consultas"></app-title>
+        <app-description texto="Bienvenido al módulo para la recepción de quejas, reclamos y consultas."></app-description>
+        -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 bg-success">
+            <h5 class="m-0 font-weight-bold text-white">Módulo para la atención de reclamos, quejas o sugerencias</h5>
+          </div>
+          <div class="card-body">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                  <i class="bi bi-file-earmark-text text-primary"></i>
+                  Por atender</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-en-proceso" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                  <i class="bi bi-arrow-repeat text-secondary"></i>
+                  En proceso</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-atendido" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                  Atendidos</button>
+                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-reasignado" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                  <i class="bi bi-x-circle-fill text-danger"></i>
+                  Reasignados</button>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-por-atender" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                <br>
+                <app-reclamo-atencion-pendiente></app-reclamo-atencion-pendiente>
+              </div>
+              <div class="tab-pane fade" id="nav-en-proceso" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+                <br>
+                <app-reclamo-atencion-proceso></app-reclamo-atencion-proceso>
+              </div>
+              <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                <br>
+                <app-reclamo-atencion-atendido></app-reclamo-atencion-atendido>
+              </div>
+              <div class="tab-pane fade" id="nav-reasignado" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+                <br>
+                <app-reclamo-atencion-reasignado></app-reclamo-atencion-reasignado>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <app-footer-admin></app-footer-admin>
+  </div>
+</div>
