@@ -1,1 +1,106 @@
-<p>recepcion works!</p>
+<app-spinner *ngIf="loading"></app-spinner>
+<div id="wrapper">
+  <!-- Sidebar -->
+  <app-sidebar-admin></app-sidebar-admin>
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+      <!-- Topbar -->
+      <app-topbar-admin></app-topbar-admin>
+      <!-- Contenido -->
+      <div class="container-fluid">
+        <!-- Formulario -->
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 bg-success">
+              <h5 class="m-0 font-weight-bold text-white">Formulario para la admisión de Reclamos, quejas y consultas</h5>
+            </div>
+            <div class="card-body">
+              <h5 class="font-weight-bold">Información general</h5>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Código</mat-label>
+                    <input type="number" matInput formControlName="codigo_expediente" placeholder="Código" [maxlength]="15" readonly="readonly">
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Fecha de registro</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fecha_registro" readonly="readonly">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Tipo de reclamo / queja / consulta</mat-label>
+                    <input matInput formControlName="tipo_reclamo" readonly="readonly">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>N° de documento</mat-label>
+                    <input  matInput formControlName="numero_documento" readonly="readonly">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-8 col-xs-12 col-md-12">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Nombres y apellidos</mat-label>
+                    <input  matInput formControlName="nombre" readonly="readonly">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Descripción del reclamo, queja o consulta</mat-label>
+                    <textarea #contenidoConsulta matInput formControlName="reclamo" rows="5" maxlength="500" placeholder="Detalle aquí su queja, reclamo o consulta (Máximo, 500 caracteres)."></textarea>
+                    <mat-hint align="end">{{contenidoConsulta.value.length}} / 500</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <h5><i class="bi bi-info-circle-fill text-warning"></i> Si admite el item, se generará el <strong>N° de expediente</strong> y se notificará vía correo al titular de la queja o reclamo.</h5>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Especialista al que se le asigna la queja, reclamo o consulta</mat-label>
+                    <mat-select formControlName="especialista">
+                      <mat-option *ngFor="let item of especialistas" [value]="item.id">
+                        {{item.nombre}} {{item.apellido_paterno}} {{item.apellido_paterno}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.controls['especialista'].hasError('required')">
+                      Este campo es <strong>obligatorio</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <button type="submit" class="btn btn-primary btn-icon-split mr-2" [disabled]="form.invalid || loading" matTooltip="Guardar cambios">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-check"></i>
+                    </span>
+                    <span class="text">Admitir</span>
+                  </button>
+                  <button class="btn btn-info btn-icon-split" [routerLink]="['/recepcion']" matTooltip="Cancelar la operación">
+                    <span class="icon text-white-50">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                    <span class="text">Cancelar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Footer -->
+    <app-footer-admin></app-footer-admin>
+  </div>
+</div>

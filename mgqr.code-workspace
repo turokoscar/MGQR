@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../INIA/SIDIGANB/SIDIGAN_FRONTEND"
 		}
 	],
 	"settings": {}

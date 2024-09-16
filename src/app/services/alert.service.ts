@@ -12,8 +12,21 @@ export class AlertService {
       title: 'Mensaje de información',
       html: `Se registró exitosamente con el Nro de expediente: <strong>${codigo_expediente}</strong>. Así mismo, se notificó vía correo su código de verificación para que pueda realizar seguimiento a su expediente.`,
       icon: 'success',
-      confirmButtonColor: '#006650',
+      confirmButtonColor: '#7f6000',
       confirmButtonText: 'Aceptar'
     });
   }
+
+  // Método al cual pasaremos 3 parámetros
+  showAlert(title: string, html: any): void{
+    Swal.fire({
+      title: title,
+      html: html,
+      icon: 'success',
+      confirmButtonColor: '#7f6000',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+
+
 }

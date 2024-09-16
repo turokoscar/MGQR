@@ -14,6 +14,7 @@ import { AtencionComponent } from './modules/reclamo/atencion/atencion.component
 import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignacion.component';
 import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
 import { MainComponent } from './main/reclamos/main/main.component';
+import { VisualizacionComponent } from './modules/reclamo/visualizacion/visualizacion.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'denegacion/:id', component: DenegacionComponent },
   { path: 'atencion/:id', component: AtencionComponent },
   { path: 'reasignacion/:id', component: ReasignacionComponent },
+  { path: 'visualizacion/:id', component: VisualizacionComponent },
   { path: '',   redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home'  }
 ];

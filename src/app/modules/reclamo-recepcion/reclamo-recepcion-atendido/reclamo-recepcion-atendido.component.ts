@@ -175,6 +175,39 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   }
   //17. Mostramos un registro
   view(): void{
-
+    this.loading = true;
+    if (this.selection.selected.length > 0) {
+      const registro = this.selection.selected[0];
+      if (registro && registro.id) {
+        this.router.navigate(['visualizacion', registro.id]);
+        this.loading = false;
+      }
+      else{
+        this.loading = false;
+        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
+      }
+    }
+    else{
+      this.loading = false;
+      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
+    }
+  }
+  atender(): void{
+    this.loading = true;
+    if (this.selection.selected.length > 0) {
+      const registro = this.selection.selected[0];
+      if (registro && registro.id) {
+        this.router.navigate(['atencion', registro.id]);
+        this.loading = false;
+      }
+      else{
+        this.loading = false;
+        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
+      }
+    }
+    else{
+      this.loading = false;
+      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
+    }
   }
 }

@@ -173,12 +173,42 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
-  //16. Eliminamos un registro
-  delete():void{
-
+  //16. Llamamos al formulario para la recepción de un expediente
+  recepcionar():void{
+    this.loading = true;
+    if (this.selection.selected.length > 0) {
+      const registro = this.selection.selected[0];
+      if (registro && registro.id) {
+        this.router.navigate(['recepcion', registro.id]);
+        this.loading = false;
+      }
+      else{
+        this.loading = false;
+        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
+      }
+    }
+    else{
+      this.loading = false;
+      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
+    }
   }
-  //17. Editamos un registro
-  edit(): void{
-
+  //17. Llamamos al formulario para denegar un expediente
+  denegar():void{
+    this.loading = true;
+    if (this.selection.selected.length > 0) {
+      const registro = this.selection.selected[0];
+      if (registro && registro.id) {
+        this.router.navigate(['denegacion', registro.id]);
+        this.loading = false;
+      }
+      else{
+        this.loading = false;
+        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
+      }
+    }
+    else{
+      this.loading = false;
+      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
+    }
   }
 }

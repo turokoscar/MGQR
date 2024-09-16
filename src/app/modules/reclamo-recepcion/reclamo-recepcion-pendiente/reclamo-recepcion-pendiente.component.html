@@ -4,10 +4,10 @@
   <a href="#" class="btn btn-primary btn-circle btn-lg mr-2" matTooltip="Resetear Filtros" (click)="resetFilters()">
     <i class="bi bi-stars"></i>
   </a>
-  <a href="#" class="btn btn-info btn-circle btn-lg mr-2" matTooltip="Recepcionar expediente" (click)="edit()" *ngIf="numeroSeleccion === 1 ">
+  <a href="#" class="btn btn-info btn-circle btn-lg mr-2" matTooltip="Recepcionar expediente" (click)="recepcionar()" *ngIf="numeroSeleccion === 1 ">
     <i class="bi bi-card-checklist"></i>
   </a>
-  <a href="#" class="btn btn-warning btn-circle btn-lg" matTooltip="Desestimar expediente" (click)="delete()" *ngIf="numeroSeleccion > 0 ">
+  <a href="#" class="btn btn-warning btn-circle btn-lg" matTooltip="Desestimar expediente" (click)="denegar()" *ngIf="numeroSeleccion === 1 ">
     <i class="bi bi-archive"></i>
   </a>
 </div>

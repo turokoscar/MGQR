@@ -34,6 +34,8 @@ import { MatSortModule } from '@angular/material/sort';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 import { DialogComponent } from './components/dialog/dialog.component';
 import { AuthComponent } from './modules/auth/auth.component';
@@ -56,6 +58,7 @@ import { AtencionComponent } from './modules/reclamo/atencion/atencion.component
 import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignacion.component';
 import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
 import { MainComponent } from './main/reclamos/main/main.component';
+import { VisualizacionComponent } from './modules/reclamo/visualizacion/visualizacion.component';
 
 
 @NgModule({
@@ -88,7 +91,8 @@ import { MainComponent } from './main/reclamos/main/main.component';
     AtencionComponent,
     ReasignacionComponent,
     ReclamoManagementComponent,
-    MainComponent
+    MainComponent,
+    VisualizacionComponent
   ],
   imports: [
     BrowserModule,
@@ -121,7 +125,9 @@ import { MainComponent } from './main/reclamos/main/main.component';
     MatProgressBarModule,
     SweetAlert2Module.forRoot(),
     MatProgressSpinnerModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
