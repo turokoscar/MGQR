@@ -3,7 +3,7 @@
     <!-- Contenido -->
     <div class="card">
       <div class="card-header bg-primary">
-        <h4 class="text-white text-center">MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROYECTO DE INVERSIÓN PLANTACIONES DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</h4>
+        <h4 class="text-white text-center"><b>MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</b></h4>
       </div>
       <div class="card-body" *ngIf="!resultadoDiv">
         <form [formGroup]="formConsulta" (ngSubmit)="onSubmit()">
@@ -16,7 +16,7 @@
                 <div class="col-lg-8 col-xs-12 col-md-12">
                   <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Número de expediente</mat-label>
-                    <input matInput formControlName="numero_expediente" placeholder="Ingrese el número de expediente">
+                    <input matInput formControlName="numero_expediente" placeholder="Ingrese el número de expediente Ejemp: EXP202400152">
                     <mat-error *ngIf="formConsulta.controls['numero_expediente'].hasError('required')">
                       Número de expediente es <strong>obligatorio</strong>
                     </mat-error>
@@ -63,7 +63,7 @@
             <!-- Resultado de la consulta -->
             <div class="card">
               <div class="card-header bg-success">
-                <h6 class="text-white"><i class="bi bi-credit-card-2-front"></i> Estado del expediente</h6>
+                <h5 class="text-white"><i class="bi bi-credit-card-2-front"></i> Estado del expediente</h5>
               </div>
               <div class="card-body">
     
