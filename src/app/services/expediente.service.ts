@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment.development';
 import { ExpedienteResponse } from '../models/expediente-response';
 import { ExpedienteConsultaResponse } from '../models/expediente-consulta-response';
 import { Expediente } from '../models/expediente';
+import { ExpedienteManagement } from '../models/expediente/expediente-management';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,6 @@ import { Expediente } from '../models/expediente';
 export class ExpedienteService {
   //1. Obtengo la ruta del api
   private apiUrl = environment.apiUrl;
-  // private apiUrl = environment.apiUrl+'/Expediente/Guardar';
   private fakeApi = environment.fakeApi+'/expedientes';
 
  //Obtengo el peso maximo del expediente
@@ -21,15 +21,24 @@ export class ExpedienteService {
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
   show(estado: number): Observable<Expediente[]>{
-  //4. Aca colocamos la logica para obtener los expedientes de acuerdo a su estado (Por ahora obviamos esto)
     return this.http.get<Expediente[]>(this.fakeApi);
   }
-  //4. Metodo para obtener todos los registros
-  guardar(parametro: any): Observable<ExpedienteResponse> {
-    return this.http.post(this.apiUrl+'/Expediente/Guardar',parametro);
+  //4. Método para obtener los datos de un expediente
+  showById(id: number): Observable<Expediente>{
+    const url = `${this.fakeApi}/${id}`;
+    return this.http.get<Expediente>(url);
   }
-  
-  //5. Metodo para poder cargar archivos
+  //5. Metodo para obtener todos los registros
+  guardar(parametro: any): Observable<ExpedienteResponse> {
+    const url = this.apiUrl+'/Expediente/Guardar';
+    return this.http.post(url, parametro);
+  }
+  //6. Metodo para poder actualizar un registro
+  update(expediente: ExpedienteManagement): Observable<ExpedienteManagement>{
+    const url = this.fakeApi;
+    return this.http.put<ExpedienteManagement>(url, expediente);
+  }
+  //7. Metodo para poder cargar archivos
   upload(formData: FormData): Observable<any> {
     const headers = new HttpHeaders({
       'accept': '/'
@@ -37,10 +46,10 @@ export class ExpedienteService {
     return this.http.post(this.apiUrl+'/General/upload', formData, { headers });
   }
 
- 
-    consultar(parametro: any): Observable<ExpedienteConsultaResponse> {
-      return this.http.post(this.apiUrl+'/Expediente/Consultar',parametro);
-    }
+
+  consultar(parametro: any): Observable<ExpedienteConsultaResponse> {
+    return this.http.post(this.apiUrl+'/Expediente/Consultar',parametro);
+  }
   // uploadFile(formData: FormData): Observable<any> {
   //   const headers = new HttpHeaders({
   //     'accept': '/'

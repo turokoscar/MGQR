@@ -1,0 +1,105 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<!-- Área de botones -->
+<div class="text-right">
+  <a href="#" class="btn btn-primary btn-circle btn-lg mr-2" matTooltip="Resetear Filtros" (click)="resetFilters()">
+    <i class="bi bi-stars"></i>
+  </a>
+  <a href="#" class="btn btn-success btn-circle btn-lg mr-2" matTooltip="Exportar información a formato Excel" (click)="export('excel')">
+    <i class="bi bi-box-arrow-down"></i>
+  </a>
+  <a href="#" class="btn btn-info btn-circle btn-lg mr-2" matTooltip="Visualizar expediente" (click)="view()" *ngIf="numeroSeleccion === 1 ">
+    <i class="bi bi-binoculars"></i>
+  </a>
+  <a href="#" class="btn btn-secondary btn-circle btn-lg mr-2" matTooltip="Atender queja, consulta o reclamo" (click)="atender()" *ngIf="numeroSeleccion === 1 ">
+    <i class="bi bi-folder-check"></i>
+  </a>
+</div>
+<div class="my-2"></div>
+<!-- Área de filtros -->
+<div class="row">
+  <!-- Filtro de búsqueda general por número de expediente -->
+  <div class="col">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Filtro por Número de Expediente:</mat-label>
+      <input matInput (keyup)="filterData($event, 'codigoExpediente')" placeholder="Ingrese el número de expediente..." #input >
+    </mat-form-field>
+  </div>
+  <!-- Filtro por procedencia del reclamo -->
+  <div class="col">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Seleccione Procedencia</mat-label>
+      <mat-select (selectionChange)="changeFilter('procedencia', $event.value)">
+        <mat-option *ngFor="let item of tipoProcedencia" [value]="item.descripcion">
+          {{item.descripcion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!-- Filtro por tipo de reclamo -->
+  <div class="col">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Seleccione Tipo de Reclamo</mat-label>
+      <mat-select (selectionChange)="changeFilter('tipoReclamo', $event.value)">
+        <mat-option *ngFor="let item of tipoReclamos" [value]="item.descripcion">
+          {{item.descripcion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div class="my-2"></div>
+<!-- Área de datos -->
+<div class="mat-elevation-z3">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? seleccionar(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
+      <td mat-cell *matCellDef="let row"> {{row.codigo_expediente}} </td>
+    </ng-container>
+    <ng-container matColumnDef="procedencia">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Procedencia </th>
+      <td mat-cell *matCellDef="let row"> {{row.tipo_expediente}} </td>
+    </ng-container>
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+      <td mat-cell *matCellDef="let row"> {{row.tipo_reclamo}} </td>
+    </ng-container>
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+      <td mat-cell *matCellDef="let row">{{ row.fecha | date: 'dd/MM/yyyy' }} </td>
+    </ng-container>
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+      <td mat-cell *matCellDef="let row"> {{row.contenido_consulta}} </td>
+    </ng-container>
+    <ng-container matColumnDef="usuario">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombres y apellidos </th>
+      <td mat-cell *matCellDef="let row"> {{row.nombres}} {{row.apellido_paterno}} {{row.apellido_materno}} </td>
+    </ng-container>
+    <ng-container matColumnDef="ubigeo">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Ubigeo </th>
+      <td mat-cell *matCellDef="let row"> {{row.ubigeo}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+
+
+

@@ -33,6 +33,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 import { DialogComponent } from './components/dialog/dialog.component';
 import { AuthComponent } from './modules/auth/auth.component';
@@ -42,13 +45,25 @@ import { FooterAdminComponent } from './components/template/footer-admin/footer-
 import { SidebarAdminComponent } from './components/template/sidebar-admin/sidebar-admin.component';
 import { TopbarAdminComponent } from './components/template/topbar-admin/topbar-admin.component';
 import { ReclamoRecepcionMainComponent } from './modules/reclamo-recepcion/reclamo-recepcion-main/reclamo-recepcion-main.component';
-import { ReclamoRecepcionManagementComponent } from './modules/reclamo-recepcion/reclamo-recepcion-management/reclamo-recepcion-management.component';
 import { TitleComponent } from './components/title/title.component';
 import { DescriptionComponent } from './components/description/description.component';
 import { ReclamoRecepcionPendienteComponent } from './modules/reclamo-recepcion/reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component';
 import { ReclamoRecepcionAtendidoComponent } from './modules/reclamo-recepcion/reclamo-recepcion-atendido/reclamo-recepcion-atendido.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { LoadingAppComponent } from './components/loading-app/loading-app.component';
+import { ReclamoRecepcionDenegadoComponent } from './modules/reclamo-recepcion/reclamo-recepcion-denegado/reclamo-recepcion-denegado.component';
+import { RecepcionComponent } from './modules/reclamo/recepcion/recepcion.component';
+import { DenegacionComponent } from './modules/reclamo/denegacion/denegacion.component';
+import { AtencionComponent } from './modules/reclamo/atencion/atencion.component';
+import { ReasignacionComponent } from './modules/reclamo/reasignacion/reasignacion.component';
+import { ReclamoManagementComponent } from './modules/reclamo/reclamo-management/reclamo-management.component';
+import { MainComponent } from './main/reclamos/main/main.component';
+import { VisualizacionComponent } from './modules/reclamo/visualizacion/visualizacion.component';
+import { ReclamoAtencionMainComponent } from './modules/reclamo-atencion/reclamo-atencion-main/reclamo-atencion-main.component';
+import { ReclamoAtencionPendienteComponent } from './modules/reclamo-atencion/reclamo-atencion-pendiente/reclamo-atencion-pendiente.component';
+import { ReclamoAtencionProcesoComponent } from './modules/reclamo-atencion/reclamo-atencion-proceso/reclamo-atencion-proceso.component';
+import { ReclamoAtencionAtendidoComponent } from './modules/reclamo-atencion/reclamo-atencion-atendido/reclamo-atencion-atendido.component';
+import { ReclamoAtencionReasignadoComponent } from './modules/reclamo-atencion/reclamo-atencion-reasignado/reclamo-atencion-reasignado.component';
 
 
 @NgModule({
@@ -69,13 +84,25 @@ import { LoadingAppComponent } from './components/loading-app/loading-app.compon
     SidebarAdminComponent,
     TopbarAdminComponent,
     ReclamoRecepcionMainComponent,
-    ReclamoRecepcionManagementComponent,
     TitleComponent,
     DescriptionComponent,
     ReclamoRecepcionPendienteComponent,
     ReclamoRecepcionAtendidoComponent,
     SpinnerComponent,
-    LoadingAppComponent
+    LoadingAppComponent,
+    ReclamoRecepcionDenegadoComponent,
+    RecepcionComponent,
+    DenegacionComponent,
+    AtencionComponent,
+    ReasignacionComponent,
+    ReclamoManagementComponent,
+    MainComponent,
+    VisualizacionComponent,
+    ReclamoAtencionMainComponent,
+    ReclamoAtencionPendienteComponent,
+    ReclamoAtencionProcesoComponent,
+    ReclamoAtencionAtendidoComponent,
+    ReclamoAtencionReasignadoComponent
   ],
   imports: [
     BrowserModule,
@@ -107,7 +134,10 @@ import { LoadingAppComponent } from './components/loading-app/loading-app.compon
     MatSortModule,
     MatProgressBarModule,
     SweetAlert2Module.forRoot(),
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
