@@ -12,11 +12,14 @@ import { Region } from 'src/app/models/region';
 import { TipoAtencion } from 'src/app/models/tipo-atencion';
 import { TipoDocumento } from 'src/app/models/tipo-documento';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
-
+import { TipoProyecto } from 'src/app/models/tipo-proyecto';
 
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { TipoProyectoService } from 'src/app/services/tipo-proyecto.service';
+
+
 import { TipoAtencionService } from 'src/app/services/tipo-atencion.service';
 import { UbigeoService } from 'src/app/services/ubigeo.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
@@ -41,6 +44,7 @@ export class ReclamoComponent implements OnInit {
   tipoAtencion: TipoAtencion[] = [];
   tipoDocumentos: TipoDocumento[] = [];
   tipoReclamos: TipoReclamo[] = [];
+  tipoProyectos: TipoProyecto[] = [];
   regiones: Region[] = [];
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
@@ -51,6 +55,7 @@ export class ReclamoComponent implements OnInit {
  /******carga de imagen inicio */
   ArchivoSeleccionados: string = 'Sin imagen seleccionada';
   nombreArchivoSeleccionado: string = '';
+  codigo_validacion:string='';
   ListFiles: any[] = [];
   formDataFiles = new FormData();
  //  urlPrevisualizacion: string | ArrayBuffer | null = '';
@@ -77,6 +82,7 @@ export class ReclamoComponent implements OnInit {
     private _tipoDocumento: TipoDocumentoService,
     private _tipoAtencion: TipoAtencionService,
     private _tipoReclamo: TipoReclamoService,
+    private _tipoProyecto: TipoProyectoService,
     private _ubigeo: UbigeoService,
     private _expediente: ExpedienteService,
     private router: Router,
@@ -90,6 +96,7 @@ export class ReclamoComponent implements OnInit {
     this.showTipoAtencion();
     this.showTipoDocumentos();
     this.showTipoReclamos();
+    this.showTipoProyectos();
     this.showRegiones();
     // Observa cambios en la variable disabled
     this.onActivaReactividad();
@@ -161,6 +168,8 @@ export class ReclamoComponent implements OnInit {
       contenido_consulta: ['',
         [Validators.required, Validators.maxLength(500)]
       ],
+      tipo_proyecto: ['', Validators.required],
+      
       evidencia_consulta: [''],
       es_confidencial: [false]
     });
@@ -201,6 +210,20 @@ export class ReclamoComponent implements OnInit {
       }
     });
   }
+  //7. Obtengo los tipos de reclamos
+  private showTipoProyectos(): void{
+    this._tipoProyecto.show().subscribe({
+      next: (data) => {
+        this.tipoProyectos = data;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+
+  
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -301,6 +324,8 @@ export class ReclamoComponent implements OnInit {
       "tipo_canal": "1",
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
+      "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
+      
       "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
       "genero": ""+this.segundaParteForm.value.genero,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
@@ -312,9 +337,16 @@ export class ReclamoComponent implements OnInit {
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1",
-      "evidencia":this.nombreArchivoSeleccionado
+      "evidencia":this.nombreArchivoSeleccionado,
+      "codigo_validacion":this.codigo_validacion,
      }
 
+
+     if(this.codigo_validacion==''){
+      this.openDialog("Se envio un codigo de validacion de correo :");
+     }
+
+     
      //Primero guardo la data data del expediente
      this._expediente.guardar(param).subscribe({
         next: (data:ExpedienteResponse) => {

@@ -33,6 +33,11 @@ export class ExpedienteService {
     const url = this.apiUrl+'/Expediente/Guardar';
     return this.http.post(url, parametro);
   }
+
+  validacionCorreo(parametro: any): Observable<ExpedienteResponse> {
+    const url = this.apiUrl+'/Expediente/ValidarCorreo';
+    return this.http.post(url, parametro);
+  }
   //6. Metodo para poder actualizar un registro
   update(expediente: ExpedienteManagement): Observable<ExpedienteManagement>{
     const url = this.fakeApi;
