@@ -22,7 +22,7 @@ import { ExportService } from 'src/app/services/export.service';
 export class ReclamoRecepcionPendienteComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['select','numero', 'procedencia', 'canal','tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
@@ -93,12 +93,45 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
   //9. Obtengo todos los registros
-  showData():void{
+  showData2():void{
     this.loading = true;
     const estadoPendiente = 1;
+    console.log("llega aquiiiiiiiiiiiiiiii");
     this._apiService.show(estadoPendiente).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+
+        const registroEstatico: Expediente = {
+          id: 0, // ID único para identificarlo fácilmente
+          tipo_canal: 0,
+          tipo_expediente: 'EJEMPLO',
+          codigo_expediente: 99999,
+          tipo_reclamo: 'Demostración',
+          fecha: new Date(),
+          evidencia: '',
+          es_confidencial: 0,
+          tipo_documento: 'DNI',
+          numero_documento: '00000000',
+          nombres: 'Registro',
+          apellido_paterno: 'Estático',
+          apellido_materno: 'Demo',
+          genero: 'N/A',
+          telefono: 0,
+          celular: 0,
+          email: 0,
+          ubigeo: 'DEMO-00',
+          direccion: 'Av. Ejemplo 123',
+          estado_proceso: 'EJEMPLO',
+          contenido_consulta: 'Este es un registro estático solo para demostración',
+          comunidad: 'N/A',
+          cargo: 'N/A',
+          usuario_id: 0,
+          estado: estadoPendiente,
+          create_at: new Date(),
+          update_at: new Date()
+        };
+        console.log(registroEstatico);
+        this.dataSource.data = [registroEstatico, ...data];
+        /*this.dataSource.data = data;*/
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.dataSource.filterPredicate = this.createFilter();
@@ -109,6 +142,52 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
         this.errorMessage = "Se presentó un problema al realizar la operación"+ e;
         this._notificacion.showError("Error", this.errorMessage);
       }
+    });
+  }
+  //9. Obtengo todos los registros - versión solo con registro estático
+  showData():void {
+    this.loading = true;
+
+    // Crear un elemento estático con todas las propiedades necesarias
+    const registroEstatico: Expediente = {
+      id: 0,
+      tipo_canal: 0,
+      tipo_expediente: 'Interno',
+      codigo_expediente: 99999,
+      tipo_reclamo: 'Queja',
+      fecha: new Date(),
+      evidencia: '',
+      es_confidencial: 0,
+      tipo_documento: 'DNI',
+      numero_documento: '00000000',
+      nombres: 'Juan',
+      apellido_paterno: 'Miranda',
+      apellido_materno: 'Dextre',
+      genero: 'N/A',
+      telefono: 0,
+      celular: 0,
+      email: 0,
+      ubigeo: '1',
+      direccion: 'Web',
+      estado_proceso: 'EJEMPLO',
+      contenido_consulta: 'Este es un registro estático solo para demostración',
+      comunidad: 'N/A',
+      cargo: 'N/A',
+      usuario_id: 0,
+      estado: 1, // Estado pendiente
+      create_at: new Date(),
+      update_at: new Date()
+    };
+
+    // Asignar directamente solo el registro estático
+    this.dataSource.data = [registroEstatico];
+
+    // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = this.createFilter();
+      this.loading = false;
     });
   }
   //10. Función para filtrar información de la lista de datos
@@ -216,5 +295,20 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   //18. Exportamos la información requerida
   export(format: string): void {
     this.exportService.exportData(this.dataSource.data, format);
+  }
+
+  verDetalle(row: Expediente): void {
+    console.log('Ver detalle de:', row);
+    // Implementa aquí la lógica para ver detalles
+  }
+
+  aprobar(row: Expediente): void {
+    console.log('Aprobar:', row);
+    // Implementa aquí la lógica para aprobar
+  }
+
+  rechazar(row: Expediente): void {
+    console.log('Rechazar:', row);
+    // Implementa aquí la lógica para rechazar
   }
 }

@@ -49,28 +49,40 @@ mat-form-field {
     &.active {
       background-color: #e4e4e4;
       font-weight: bold;
+      font-size: 1.2rem!important;
     }
   }
 }
 
 /* Tabla */
 ::ng-deep table.mat-table {
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 0.85rem;
+  border: 1px solid #a4cee1!important;
+  border-radius: 4px!important;
+  overflow: hidden!important;
 
   th.mat-header-cell {
-    background-color: #e0f0fb;
-    font-weight: 600;
-    color: #333;
+    background-color: #bae9ff!important;
+    border-right: 1px solid #a4cee1!important;
+    color: #333!important;
+    font-weight: 600!important;
+    font-size: 0.85rem!important;
+    text-align: center!important;
+
+    &:last-child {
+      border-right: none!important;
+    }
   }
 
   td.mat-cell {
-    vertical-align: middle;
+    font-size: 0.85rem!important;
+    border-top: 1px solid #ddd!important;
+    text-align: center!important;
+    vertical-align: middle!important;
+    padding: 8px!important;
   }
 
   tr.mat-row:hover {
-    background-color: #f8f8f8;
+    background-color: #f8f8f8!important;
   }
 }
+
