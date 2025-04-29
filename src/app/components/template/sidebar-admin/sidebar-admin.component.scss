@@ -1,0 +1,127 @@
+@import 'src/assets/styles/theme';
+
+.sidebar-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 260px;
+  z-index: 1000;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: $color-background;
+  border-right: 1px solid $color-footer-border;
+}
+
+.sidebar-logo {
+  background-color: $color-background;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-width: 18rem;
+    height: auto;
+  }
+}
+
+.sidebar-profile {
+  background-color: $color-background;
+  text-align: center;
+  padding: 15px 10px;
+
+  .profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  .profile-info {
+    font-size: 14px;
+    color: $color-text;
+
+    span {
+      display: block;
+      font-size: 12px;
+      color: $color-muted;
+    }
+  }
+}
+
+hr.sidebar-divider {
+  margin: 0;
+  border-top: 1px solid $color-footer-border;
+}
+
+.nav-item {
+  margin-top: 5px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  background-color: $color-primary-light;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: $color-text;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  i {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+
+  &:hover {
+    background-color: lighten($color-primary-light, 10%);
+    color: $color-primary-hover;
+  }
+
+  span {
+    flex-grow: 1;
+  }
+}
+
+.collapse-inner {
+  background-color: $color-background;
+  padding: 10px 0;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+
+  .collapse-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 10px 15px;
+    color: $color-text;
+    text-decoration: none;
+    background: transparent;
+    border-bottom: 1px solid $color-footer-border;
+    transition: background-color 0.3s ease;
+
+    i {
+      margin-right: 8px;
+      color: $color-primary;
+    }
+
+    &:hover {
+      background-color: lighten($color-primary-light, 20%);
+      color: $color-primary-hover;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+

@@ -1,25 +1,94 @@
-.bg-image {
-  background-image: url('/assets/images/bg.jpg');
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+@import 'src/assets/styles/theme';
+
+.top-bar {
+  background-color: $color-background;
+  padding: 15px 30px;
+  height: 90px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $color-footer-border;
 }
 
-.card {
-  border-radius: 15px;
-  opacity: 0.9;
-  animation: fadeIn 1s ease-in-out;
+.logo-left {
+  height: 65px;
+}
+.title {
+  font-weight: bold;
+  font-size: 1.7rem
+}
+.subtitle {
+  font-weight: bold;
+  color: $color-text;
+  font-size: 1.4rem;
+}
+.small {
+  font-size: 14px!important;
+  color: $color-text!important;
+}
+.subtitle2 {
+  font-weight: bold;
+  font-size: 16px;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
+.logo-right {
+  height: 60px;
+}
+
+.login-container {
+  background-color: $color-background2!important;
+  min-height: calc(100vh - 90px - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 2.5rem 3rem;
+  background-color: $color-background;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-base;
+  box-shadow: $box-shadow-card;
+}
+
+mat-form-field {
+  width: 100%;
+
+  .mat-form-field-appearance-outline .mat-form-field-outline,
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: $color-outline;
   }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+.btn-green {
+  background-color: $color-primary !important;
+  color: $color-background !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+  font-weight: bold;
+  height: 45px;
+  font-size: 16px;
+
+  &:hover {
+    background-color: $color-primary-hover !important;
   }
+}
+
+.footer {
+  width: 100%;
+  height: 60px;
+  padding: 15px 30px;
+  background-color: $color-background;
+  border-top: 1px solid $color-footer-border;
+  font-size: 14px;
+  color: $color-text;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }

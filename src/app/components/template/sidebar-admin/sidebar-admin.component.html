@@ -1,3 +1,4 @@
+<!--
 <ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
   <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/admin">
     <div class="sidebar-brand-icon rotate-n-15">
@@ -125,3 +126,64 @@
       <button class="rounded-circle border-0" id="sidebarToggle"></button>
   </div>
 </ul>
+-->
+
+<ul class="sidebar-nav" id="accordionSidebar">
+
+  <!-- Logo SERFOR arriba -->
+  <div class="sidebar-logo">
+    <img src="/assets/images/logo_midagri.png" alt="Logo Ministerio">
+  </div>
+
+  <!-- Perfil de usuario -->
+  <div class="sidebar-profile">
+    <img src="/assets/images/undraw_profile_2.svg" alt="Usuario" class="profile-img">
+    <div class="profile-info">
+      <strong>Pepito Ramos Chumpitaz</strong>
+      <span>Administrador</span>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <hr class="sidebar-divider">
+
+  <!-- Menú principal -->
+  <li class="nav-item">
+    <a class="nav-link" routerLink="/admin">
+      <i class="bi bi-house-gear-fill"></i>
+      <span>Inicio</span>
+    </a>
+  </li>
+
+  <hr class="sidebar-divider">
+
+  <!-- Menú colapsable -->
+  <li class="nav-item">
+    <div class="nav-link-wrapper">
+      <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+         aria-expanded="false" aria-controls="collapseTwo">
+        <i class="bi bi-inboxes"></i>
+        <span>Quejas y Reclamos</span>
+        <i class="bi bi-chevron-down ml-auto"></i>
+      </a>
+    </div>
+
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="collapse-inner">
+        <a class="collapse-item" routerLink="/reclamo/create">
+          <i class="bi bi-plus-circle"></i> Registrar
+        </a>
+        <a class="collapse-item" routerLink="/recepcion">
+          <i class="bi bi-file-earmark-text"></i> Admitir
+        </a>
+        <a class="collapse-item" routerLink="/atencion">
+          <i class="bi bi-calendar-plus"></i> Atender
+        </a>
+      </div>
+    </div>
+  </li>
+
+
+  <!-- Repetir similar para Reportes, Gestión, Configuración, Utilitarios -->
+</ul>
+

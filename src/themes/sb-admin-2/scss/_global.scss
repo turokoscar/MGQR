@@ -19,18 +19,24 @@ a {
 #wrapper {
   display: flex;
   #content-wrapper {
-    background-color: $gray-100;
+    background-color: #f4f6f9;
     width: 100%;
     overflow-x: hidden;
+    margin-left: 260px!important;
     #content {
       flex: 1 0 auto;
     }
+
+    //width: calc(100% - 260px)!important;
+    flex-direction: column!important;
+    min-height: 100vh!important;
   }
 }
 
 // Set container padding to match gutter width instead of default 15px
 .container,
 .container-fluid {
+  padding-top: 1.7rem !important;
   padding-left: $grid-gutter-width;
   padding-right: $grid-gutter-width;
 }

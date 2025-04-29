@@ -1,51 +1,57 @@
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-xl-10 col-lg-12 col-md-9">
-      <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
-          <div class="row">
-              <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-              <div class="col-lg-6">
-                  <div class="p-5">
-                      <div class="text-center">
-                          <h1 class="h4 text-gray-900 mb-4">Bienvenido al Panel de Administración</h1>
-                      </div>
-                      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                        <mat-form-field appearance="outline" class="w-100 mb-3">
-                          <mat-label>Correo electrónico</mat-label>
-                          <input matInput type="email" formControlName="email" placeholder="name@example.com">
-                          <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
-                            Email es <strong>obligatorio</strong>
-                          </mat-error>
-                          <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
-                            Ingrese un correo electrónico válido
-                          </mat-error>
-                        </mat-form-field>
+<div class="top-bar">
+  <img src="assets/images/logo_midagri.png" alt="Ministerio" class="logo-left">
+  <img src="assets/images/logo_serfor.png" alt="Serfor" class="logo-right">
+</div>
 
-                        <mat-form-field appearance="outline" class="w-100 mb-3">
-                          <mat-label>Contraseña</mat-label>
-                          <input matInput type="password" formControlName="password" placeholder="Password">
-                          <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
-                            Contraseña es <strong>obligatorio</strong>
-                          </mat-error>
-                          <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
-                            El campo Contraseña debe contener <strong>8</strong> caracteres como mínimo.
-                          </mat-error>
-                        </mat-form-field>
-                        <mat-checkbox formControlName="rememberMe">Recuérdame</mat-checkbox>
-                        <button mat-raised-button color="primary" class="w-100 py-2" type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
-                      </form>
-                      <hr>
-                      <div class="text-center">
-                          <a class="small" href="#">Olvidó su contraseña?</a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-      </div>
+<div class="login-container">
+  <div class="login-card">
+    <div class="text-center mb-4">
+      <h4 class="text-success title">INTRANET</h4>
+      <h5 class="mb-3 subtitle">SISTEMA DE MECANISMO DE GESTIÓN DE QUEJAS, RECLAMOS Y CONSULTAS</h5>
+      <p class="text-success subtitle2">Iniciar Sesión</p>
     </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Ingrese número de documento</mat-label>
+        <mat-icon matPrefix>person</mat-icon> <!-- Ícono de usuario -->
+        <input matInput type="text" formControlName="email" placeholder="Número de documento">
+        <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+          El número de documento es <strong>obligatorio</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-4">
+        <mat-label>Ingrese Contraseña</mat-label>
+        <mat-icon matPrefix>lock</mat-icon> <!-- Ícono de candado -->
+        <input matInput type="password" formControlName="password" placeholder="Contraseña">
+        <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+          La contraseña es <strong>obligatoria</strong>
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+          El campo Contraseña debe contener <strong>8</strong> caracteres como mínimo.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button class="btn-green w-100 mb-3" type="submit" [disabled]="loginForm.invalid">
+        <mat-icon>login</mat-icon> Ingresar
+      </button>
+
+      <div class="text-center">
+        <a class="small text-primary" href="#">¿Se olvidó de su contraseña? <span style="color: #2e59d9">Recupérela</span></a>
+      </div>
+    </form>
+
   </div>
 </div>
+
+<footer class="footer">
+  <div class="footer-left">
+    Copyright © 2024 <strong>SERFOR - MGQR</strong>. Todos los derechos reservados.
+  </div>
+  <div class="footer-right">
+    <strong>Versión 1.0.0</strong>
+  </div>
+</footer>
 
 
