@@ -28,5 +28,27 @@ export class AlertService {
     });
   }
 
+// Método al cual pasaremos 3 parámetros
+showAError(title: string, html: any): void{
+  Swal.fire({
+    title: title,
+    html: html,
+    icon: 'error',
+    confirmButtonColor: '#7f6000',
+    confirmButtonText: 'Aceptar'
+  });
+}
+
+  // Método al cual pasaremos 3 parámetros
+  showAlertGeneral(title: string, html: any,icon:string): void{
+    Swal.fire({
+      title: title,
+      html: html,
+      icon: 'success',
+      confirmButtonColor: '#7f6000',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+
 
 }
