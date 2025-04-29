@@ -22,7 +22,7 @@ import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 export class ReclamoRecepcionAtendidoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['select','fechaasignacion','numero','canal', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
@@ -130,6 +130,10 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
         (searchTerms.procedencia === '' || (data.tipo_expediente?.toLowerCase() || '').includes(searchTerms.procedencia))
       );
     };
+  }
+  verDetalle(row: Expediente): void {
+    console.log('Ver detalle de:', row);
+    // Implementa aquí la lógica para ver detalles
   }
   //12. Para cambiar el filtro de reclamo o procedencia
   changeFilter(filterType: keyof typeof this.filterValues, value: string) {
