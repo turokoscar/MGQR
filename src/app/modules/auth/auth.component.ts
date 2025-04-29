@@ -28,7 +28,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   //4. Defino el formulario
   showForm():void{
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       rememberMe: [false]
     });
@@ -37,7 +37,8 @@ export class AuthComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      if (email === 'admin@gmail.com' && password === '12345678') {
+
+      if (email === '12345678' && password === '12345678') {
         this.router.navigate(['/admin']);
       } else {
         this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");

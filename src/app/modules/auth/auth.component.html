@@ -14,12 +14,13 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Ingrese número de documento</mat-label>
-        <mat-icon matPrefix>person</mat-icon> <!-- Ícono de usuario -->
+        <mat-icon matPrefix>person</mat-icon>
         <input matInput type="text" formControlName="email" placeholder="Número de documento">
         <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
           El número de documento es <strong>obligatorio</strong>
         </mat-error>
       </mat-form-field>
+
 
       <mat-form-field appearance="outline" class="w-100 mb-4">
         <mat-label>Ingrese Contraseña</mat-label>
