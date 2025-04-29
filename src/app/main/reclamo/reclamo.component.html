@@ -345,10 +345,19 @@
                 <i class="bi bi-arrow-left"></i>
                 Retornar
               </button> -->
-              <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary">
+              <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmitValidacion()" color="primary" *ngIf="showEnviarNotificacionField">
+                <mat-icon>send</mat-icon>
+                Validar Correo
+              </button>
+
+              <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary"  *ngIf="showEnviarExpedienteField">
                 <mat-icon>send</mat-icon>
                 Enviar
               </button>
+
+
+
+              
               <button mat-raised-button  color="primary">
                 <mat-icon>exit_to_app</mat-icon>
                 Ir al inicio

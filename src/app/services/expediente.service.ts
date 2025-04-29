@@ -6,6 +6,7 @@ import { ExpedienteResponse } from '../models/expediente-response';
 import { ExpedienteConsultaResponse } from '../models/expediente-consulta-response';
 import { Expediente } from '../models/expediente';
 import { ExpedienteManagement } from '../models/expediente/expediente-management';
+import { ExpedienteValidacionResponse } from '../models/expediente-validacion-response';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class ExpedienteService {
     return this.http.post(url, parametro);
   }
 
-  validacionCorreo(parametro: any): Observable<ExpedienteResponse> {
+  validacionCorreo(parametro: any): Observable<ExpedienteValidacionResponse> {
     const url = this.apiUrl+'/Expediente/ValidarCorreo';
     return this.http.post(url, parametro);
   }

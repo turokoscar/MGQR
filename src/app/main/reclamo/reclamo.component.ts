@@ -25,6 +25,8 @@ import { UbigeoService } from 'src/app/services/ubigeo.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { ExpedienteResponse } from 'src/app/models/expediente-response';
 
+import { ExpedienteValidacionResponse } from 'src/app/models/expediente-validacion-response';
+
 import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/services/alert.service';
 
@@ -49,6 +51,12 @@ export class ReclamoComponent implements OnInit {
   provincias: Provincia[] = [];
   distritos: Distrito[] = [];
   showEmailField = false;
+  showEnviarNotificacionField = true;
+  showEnviarExpedienteField = false;
+
+  listValidacionCorreo!:ExpedienteValidacionResponse;
+  
+
   disabled: boolean = false;
   errorMessage: string = "";
 
@@ -301,7 +309,7 @@ export class ReclamoComponent implements OnInit {
     this.onActivaReactividad();
   }
   //14. Proceso el formulario
-  onSubmit():void{
+onSubmitValidacion():void{
     this.loading = true;
     const formData = {
       form1: this.primeraParteForm.value,
@@ -342,13 +350,79 @@ export class ReclamoComponent implements OnInit {
      }
 
 
-     if(this.codigo_validacion==''){
-      this.openDialog("Se envio un codigo de validacion de correo :");
-     }
+    
+      this._expediente.validacionCorreo(param).subscribe({
+        next: (data:ExpedienteValidacionResponse) => {
+          console.log(data);
+          this.listValidacionCorreo=data;
+          if(data.codigo_validacion!=""){
+            // this.quitarImagen();
+            this.openDialogGeneral("Mensaje de Información","Se  envio via correo su codigo de validacion","success");
+            this.showEnviarNotificacionField = false;
+            this.showEnviarExpedienteField = true;
+          
+          
+          }
+          this.loading = false;
+        },
+        error: (e) => {
+          this.loading = false;
+          this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
+        }
+      });
+     
 
      
-     //Primero guardo la data data del expediente
-     this._expediente.guardar(param).subscribe({
+
+}
+
+
+
+ //14. Proceso el formulario
+ onSubmit():void{
+  this.loading = true;
+  const formData = {
+    form1: this.primeraParteForm.value,
+    form2: this.segundaParteForm.value
+  };
+  localStorage.setItem('formData', JSON.stringify(formData));
+  //Valida si selecciono el archivo
+  const file: File = this.segundaParteForm.value.evidencia_consulta;
+  if(!file){
+    this.nombreArchivoSeleccionado="";
+  }
+  let param = {
+    //("perTipDoc": ""+ 1,
+
+    "tipo_documento_id": ""+(this.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+    "numero_documento": ""+(this.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
+    "nombres": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
+    "apellido_paterno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
+    "apellido_materno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_materno,
+    "tipo_canal": "1",
+    "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
+    "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
+    "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
+    
+    "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
+    "genero": ""+this.segundaParteForm.value.genero,
+    "ubigeo_id": ""+this.segundaParteForm.value.distrito,
+    "direccion": ""+this.segundaParteForm.value.direccion,
+    "telefono": ""+this.segundaParteForm.value.numero_telefono,
+    "celular": ""+this.segundaParteForm.value.numero_celular,
+    "email": ""+this.segundaParteForm.value.correo_electronico,
+    "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
+    "comunidad": ""+this.segundaParteForm.value.comunidad,
+    "cargo": ""+this.segundaParteForm.value.cargo,
+    "usuario_id": "1",
+    "evidencia":this.nombreArchivoSeleccionado,
+    "codigo_validacion":this.codigo_validacion,
+   }
+
+
+   if(this.codigo_validacion==this.listValidacionCorreo.codigo_validacion){
+       //Primero guardo la data data del expediente
+      this._expediente.guardar(param).subscribe({
         next: (data:ExpedienteResponse) => {
           console.log(data);
           if(data.id!=0){
@@ -369,7 +443,7 @@ export class ReclamoComponent implements OnInit {
                 let formData = new FormData();
                 for (let i = 0; i < files.length; i++) {
                   let file: File = files[i];
-                   formData.append("files", file);
+                  formData.append("files", file);
                 }
 
                   console.log("forData:"+formData);
@@ -379,11 +453,7 @@ export class ReclamoComponent implements OnInit {
                 }, error => {
                   console.error('Error uploading file', error);
                 });
-                }
-
-
-
-
+            }
 
             this.quitarImagen();
             this.openDialog(data.expediente);
@@ -396,11 +466,29 @@ export class ReclamoComponent implements OnInit {
           this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
         }
       });
-  }
+   }else{
+    this.openDialogError("Errores","El codigo de validacion es incorrecto");
+   }
+
+   
+
+}
+
+
   //15. Mostramos un cuadro de dialogo
   openDialog(codigo_expediente: any): void {
     this.alertService.showInfoAlert(codigo_expediente);
   }
+
+  openDialogError(title: string, html: any): void {
+    this.alertService.showAError(title,html);
+  }
+
+  openDialogGeneral(title: string, html: any, icon: string): void {
+    this.alertService.showAlertGeneral(title,html,icon);
+  }
+
+
   //16. Establesco un valor por default para el boton guardar del formulario
   isFormValid(): boolean {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
