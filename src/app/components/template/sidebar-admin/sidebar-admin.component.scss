@@ -65,7 +65,7 @@ hr.sidebar-divider {
 
 .nav-link {
   background-color: $color-primary-light;
-  padding: 10px 15px;
+  padding: 5px 15px;
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -92,7 +92,7 @@ hr.sidebar-divider {
 
 .collapse-inner {
   background-color: $color-background;
-  padding: 10px 0;
+  padding: 1px 0;
   margin-top: 0;
   display: flex;
   flex-direction: column;
@@ -101,11 +101,11 @@ hr.sidebar-divider {
     display: flex;
     align-items: center;
     font-size: 14px;
-    padding: 10px 15px;
+    padding: 5px 15px;
     color: $color-text;
     text-decoration: none;
     background: transparent;
-    border-bottom: 1px solid $color-footer-border;
+    border-bottom: 1px solid $color-footer-border!important;
     transition: background-color 0.3s ease;
 
     i {

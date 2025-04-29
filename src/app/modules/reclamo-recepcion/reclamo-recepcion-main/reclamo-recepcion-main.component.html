@@ -16,7 +16,41 @@
           <div class="card-header py-3 bg-success">
             <h5 class="m-0 font-weight-bold text-white">Módulo para admitir los reclamos, quejas o sugerencias</h5>
           </div>
+
           <div class="card-body">
+            <div class="row">
+              <!-- Filtro de búsqueda general por número de expediente -->
+              <div class="col">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Filtro por Número de Expediente:</mat-label>
+                  <input matInput placeholder="Ingrese el número de expediente...">
+                </mat-form-field>
+              </div>
+
+              <!-- Filtro por procedencia del reclamo -->
+              <div class="col">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Procedencia</mat-label>
+                  <mat-select>
+                    <mat-option value="Oficina Central">Oficina Central</mat-option>
+                    <mat-option value="Sede Regional">Sede Regional</mat-option>
+                    <mat-option value="Correo Electrónico">Correo Electrónico</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Filtro por tipo de reclamo -->
+              <div class="col">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Tipo de Reclamo</mat-label>
+                  <mat-select>
+                    <mat-option value="Retraso en atención">Retraso en atención</mat-option>
+                    <mat-option value="Maltrato">Maltrato</mat-option>
+                    <mat-option value="Información errónea">Información errónea</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">

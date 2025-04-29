@@ -14,6 +14,7 @@ export class TipoDocumentoService {
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
   show(): Observable<TipoDocumento[]>{
+    console.log('Consumiendo API en:', this.apiUrl);
     return this.http.get<TipoDocumento[]>(this.apiUrl);
   }
 }
