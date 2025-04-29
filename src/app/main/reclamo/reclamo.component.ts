@@ -309,7 +309,7 @@ export class ReclamoComponent implements OnInit {
     this.onActivaReactividad();
   }
   //14. Proceso el formulario
-onSubmitValidacion():void{
+  onSubmitValidacion():void{
     this.loading = true;
     const formData = {
       form1: this.primeraParteForm.value,
@@ -346,7 +346,6 @@ onSubmitValidacion():void{
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1",
       "evidencia":this.nombreArchivoSeleccionado,
-      "codigo_validacion":this.codigo_validacion,
      }
 
 
@@ -416,11 +415,16 @@ onSubmitValidacion():void{
     "cargo": ""+this.segundaParteForm.value.cargo,
     "usuario_id": "1",
     "evidencia":this.nombreArchivoSeleccionado,
-    "codigo_validacion":this.codigo_validacion,
+    "codigo_validacion":this.segundaParteForm.value.codigo_validacion,
    }
 
 
-   if(this.codigo_validacion==this.listValidacionCorreo.codigo_validacion){
+   let codigo=   this.segundaParteForm.controls['codigo_validacion'].value;
+
+
+   
+   console.log(codigo+"  --  "+this.listValidacionCorreo.codigo_validacion);
+   if(codigo==this.listValidacionCorreo.codigo_validacion){
        //Primero guardo la data data del expediente
       this._expediente.guardar(param).subscribe({
         next: (data:ExpedienteResponse) => {
@@ -467,6 +471,7 @@ onSubmitValidacion():void{
         }
       });
    }else{
+    this.loading = false;
     this.openDialogError("Errores","El codigo de validacion es incorrecto");
    }
 
