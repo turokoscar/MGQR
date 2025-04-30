@@ -51,3 +51,55 @@
     }
   }
 }
+
+// Estilos para los botones de acción
+.acciones-celda {
+  padding: 0 8px !important;
+
+  .botones-accion {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .btn-accion {
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 18px;
+    }
+
+    &.btn-ver {
+      background-color: #3498db; // Azul
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    &.btn-aprobar {
+      background-color: #2ecc71; // Verde
+      color: white;
+
+      &:hover {
+        background-color: #27ae60;
+      }
+    }
+
+    &.btn-rechazar {
+      background-color: #e74c3c; // Rojo
+      color: white;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+}

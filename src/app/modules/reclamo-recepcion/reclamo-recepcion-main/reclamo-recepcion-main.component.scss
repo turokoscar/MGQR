@@ -1,3 +1,4 @@
+@import 'src/assets/styles/theme';
 .card-header {
   //background-color: #69b441 !important;
   padding: 12px 20px;
@@ -37,7 +38,7 @@ mat-form-field {
     font-size: 1.2rem;
     border-radius: 4px 4px 0 0;
     padding: 6px 12px;
-    background-color: #f1f1f1;
+    background-color: #f3f3f3;
     color: #333;
     margin-right: 4px;
     font-weight: 500;
@@ -85,4 +86,110 @@ mat-form-field {
     background-color: #f8f8f8!important;
   }
 }
+
+.botones-acciones {
+  display: flex!important;
+  justify-content: flex-end!important;
+  gap: 10px!important;
+  margin-bottom: 1.875rem!important;
+
+  .btn-descargar {
+    background-color: #7a5900; // marrón
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: #5d4500;
+    }
+  }
+  .btn-resetear {
+    background-color: $color-primary !important;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: $color-primary-hover !important;
+    }
+  }
+}
+
+// Estilos para los botones de acción
+.acciones-celda {
+  padding: 0 8px !important;
+
+  .botones-accion {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .btn-accion {
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 18px;
+    }
+
+    &.btn-ver {
+      background-color: #3498db; // Azul
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    &.btn-aprobar {
+      background-color: #2ecc71; // Verde
+      color: white;
+
+      &:hover {
+        background-color: #27ae60;
+      }
+    }
+
+    &.btn-rechazar {
+      background-color: #e74c3c; // Rojo
+      color: white;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+}
+
+
 

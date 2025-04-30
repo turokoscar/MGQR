@@ -18,17 +18,17 @@
           </div>
 
           <div class="card-body">
-            <div class="row">
-              <!-- Filtro de búsqueda general por número de expediente -->
-              <div class="col">
+            <div class="row align-items-end">
+              <!-- Filtro por Número de Expediente -->
+              <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Filtro por Número de Expediente:</mat-label>
                   <input matInput placeholder="Ingrese el número de expediente...">
                 </mat-form-field>
               </div>
 
-              <!-- Filtro por procedencia del reclamo -->
-              <div class="col">
+              <!-- Filtro por Procedencia -->
+              <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Procedencia</mat-label>
                   <mat-select>
@@ -39,8 +39,8 @@
                 </mat-form-field>
               </div>
 
-              <!-- Filtro por tipo de reclamo -->
-              <div class="col">
+              <!-- Filtro por Tipo de Reclamo -->
+              <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Tipo de Reclamo</mat-label>
                   <mat-select>
@@ -50,7 +50,18 @@
                   </mat-select>
                 </mat-form-field>
               </div>
+
+              <!-- Botones -->
+              <div class="botones-acciones col-md-3 d-flex justify-content-end gap-2">
+                <button class="btn-resetear">
+                  <i class="bi bi-trash"></i> Limpiar Filtros
+                </button>
+                <button class="btn-descargar">
+                  <i class="bi bi-download"></i> Descargar
+                </button>
+              </div>
             </div>
+
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">

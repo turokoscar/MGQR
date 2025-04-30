@@ -22,7 +22,7 @@ import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 export class ReclamoRecepcionDenegadoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
@@ -85,6 +85,10 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
     this.selection.toggle(row);
     this.habilitaBotones(this.selection.selected.length);
   }
+  verDetalle(row: Expediente): void {
+    console.log('Ver detalle de:', row);
+    // Implementa aquí la lógica para ver detalles
+  }
   //8. Método que genera etiquetas dinámicas para los checkboxes en función de si se trata de la operación "Seleccionar todo" o de la selección individual de una fila específica. La etiqueta indica al usuario qué acción realizar (seleccionar o deseleccionar) y el identificador de la fila afectada.
   checkboxLabel(row?: Expediente): string {
     if (!row) {
@@ -93,7 +97,7 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
   //9. Obtengo todos los registros
-  showData():void{
+  showData2():void{
     this.loading = true;
     const estadoAtendido = 1;
     this._apiService.show(estadoAtendido).subscribe({
@@ -109,6 +113,51 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
         this.errorMessage = "Se presentó un problema al realizar la operación"+ e;
         this._notificacion.showError("Error", this.errorMessage);
       }
+    });
+  }
+  showData():void{
+    this.loading = true;
+
+    // Crear un elemento estático con todas las propiedades necesarias
+    const registroEstatico: Expediente = {
+      id: 0,
+      tipo_canal: 0,
+      tipo_expediente: 'Interno',
+      codigo_expediente: 99999,
+      tipo_reclamo: 'Queja',
+      fecha: new Date(),
+      evidencia: '',
+      es_confidencial: 0,
+      tipo_documento: 'DNI',
+      numero_documento: '00000000',
+      nombres: 'Juan',
+      apellido_paterno: 'Miranda',
+      apellido_materno: 'Dextre',
+      genero: 'N/A',
+      telefono: 0,
+      celular: 0,
+      email: 0,
+      ubigeo: '1',
+      direccion: 'Pedro Fernandez',
+      estado_proceso: 'EJEMPLO',
+      contenido_consulta: 'Este es un registro estático solo para demostración',
+      comunidad: 'N/A',
+      cargo: 'N/A',
+      usuario_id: 0,
+      estado: 1, // Estado pendiente
+      create_at: new Date(),
+      update_at: new Date()
+    };
+
+    // Asignar directamente solo el registro estático
+    this.dataSource.data = [registroEstatico];
+
+    // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = this.createFilter();
+      this.loading = false;
     });
   }
   //10. Función para filtrar información de la lista de datos

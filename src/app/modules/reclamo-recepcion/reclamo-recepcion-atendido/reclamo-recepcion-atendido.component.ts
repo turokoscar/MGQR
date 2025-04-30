@@ -93,7 +93,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
   //9. Obtengo todos los registros
-  showData():void{
+  showData2():void{
     this.loading = true;
     const estadoAtendido = 1;
     this._apiService.show(estadoAtendido).subscribe({
@@ -110,6 +110,52 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
         this._notificacion.showError("Error", this.errorMessage);
       }
     });
+  }
+  showData():void{
+    this.loading = true;
+
+    // Crear un elemento estático con todas las propiedades necesarias
+    const registroEstatico: Expediente = {
+      id: 0,
+      tipo_canal: 0,
+      tipo_expediente: 'Interno',
+      codigo_expediente: 99999,
+      tipo_reclamo: 'Queja',
+      fecha: new Date(),
+      evidencia: '',
+      es_confidencial: 0,
+      tipo_documento: 'DNI',
+      numero_documento: '00000000',
+      nombres: 'Juan',
+      apellido_paterno: 'Miranda',
+      apellido_materno: 'Dextre',
+      genero: 'N/A',
+      telefono: 0,
+      celular: 0,
+      email: 0,
+      ubigeo: '1',
+      direccion: 'Pedro Fernandez',
+      estado_proceso: 'EJEMPLO',
+      contenido_consulta: 'Este es un registro estático solo para demostración',
+      comunidad: 'N/A',
+      cargo: 'N/A',
+      usuario_id: 0,
+      estado: 1, // Estado pendiente
+      create_at: new Date(),
+      update_at: new Date()
+    };
+
+    // Asignar directamente solo el registro estático
+    this.dataSource.data = [registroEstatico];
+
+    // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = this.createFilter();
+      this.loading = false;
+    });
+
   }
   //10. Función para filtrar información de la lista de datos
   filterData(event: Event, filterType: keyof typeof this.filterValues) {
