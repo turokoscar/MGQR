@@ -32,6 +32,10 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   textoFiltro:string = '';
   errorMessage: string = '';
 
+  alertaVisible: boolean = false;
+  alertaTitulo: string = 'Mensaje de Notificación';
+  alertaMensaje: string = '';
+
   modalVisible = false;
   esAprobacion = true;
   itemSeleccionado: any = null;
@@ -163,23 +167,23 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     const registroEstatico2: Expediente = {
           id: 1, // ID único para identificarlo fácilmente
           tipo_canal: 0,
-          tipo_expediente: 'EJEMPLO 2',
+          tipo_expediente: 'Interno',
           codigo_expediente: 99999,
-          tipo_reclamo: 'Demostración',
+          tipo_reclamo: 'Reclamo',
           fecha: new Date(),
           evidencia: '',
           es_confidencial: 0,
           tipo_documento: 'DNI',
           numero_documento: '00000000',
-          nombres: 'Registro',
-          apellido_paterno: 'Estático',
-          apellido_materno: 'Demo',
+          nombres: 'Pablo',
+          apellido_paterno: 'Bautista',
+          apellido_materno: 'Chacon',
           genero: 'N/A',
           telefono: 0,
           celular: 0,
           email: 0,
           ubigeo: '1',
-          direccion: 'Av. Ejemplo 123',
+          direccion: 'Web',
           estado_proceso: 'EJEMPLO',
           contenido_consulta: 'Este es un registro estático solo para demostración',
           comunidad: 'N/A',
@@ -306,6 +310,15 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.exportService.exportData(this.dataSource.data, format);
   }
 
+  mostrarAlerta(titulo: string, mensaje: string) {
+    this.alertaTitulo = titulo;
+    this.alertaMensaje = mensaje;
+    this.alertaVisible = true;
+  }
+  cerrarAlerta() {
+    this.alertaVisible = false;
+  }
+
   verDetalle(row: Expediente): void {
     console.log('Ver detalle de:', row);
     // Implementa aquí la lógica para ver detalles
@@ -336,7 +349,21 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
 
   confirmarAccion(): void {
     if (this.esAprobacion) {
-      console.log("Confirmar accion");
+      this.mostrarAlerta(
+        'Mensaje de Notificación',
+        'El Ítem ha sido admitido con éxito con el <strong>Expediente N° EXP240001</strong> y se notificó al titular.'
+      );
+    } else {
+      this.mostrarAlerta(
+        'Mensaje de Notificación',
+        'El Ítem ha sido Denegado con exito y se notificó al titular de la queja o reclamo.'
+      );
+    }
+    this.cerrarModal();
+  }
+  aceptarAccion(): void {
+    this.cerrarAlerta();
+    if (this.esAprobacion) {
       this.cambiarPestania.emit('atendido');
     } else {
       this.cambiarPestania.emit('denegado');

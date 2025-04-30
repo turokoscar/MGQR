@@ -115,7 +115,36 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     this.loading = true;
 
     // Crear un elemento estático con todas las propiedades necesarias
-    const registroEstatico: Expediente = {
+    const registroEstatico1: Expediente = {
+      id: 0,
+      tipo_canal: 0,
+      tipo_expediente: 'Interno',
+      codigo_expediente: 99999,
+      tipo_reclamo: 'Queja',
+      fecha: new Date(),
+      evidencia: '',
+      es_confidencial: 0,
+      tipo_documento: 'DNI',
+      numero_documento: '00000000',
+      nombres: 'Juan',
+      apellido_paterno: 'Miranda',
+      apellido_materno: 'Dextre',
+      genero: 'N/A',
+      telefono: 0,
+      celular: 0,
+      email: 0,
+      ubigeo: '1',
+      direccion: 'Pedro Fernandez',
+      estado_proceso: 'EJEMPLO',
+      contenido_consulta: 'Este es un registro estático solo para demostración',
+      comunidad: 'N/A',
+      cargo: 'N/A',
+      usuario_id: 0,
+      estado: 1, // Estado pendiente
+      create_at: new Date(),
+      update_at: new Date()
+    };
+    const registroEstatico2: Expediente = {
       id: 0,
       tipo_canal: 0,
       tipo_expediente: 'Interno',
@@ -146,7 +175,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     };
 
     // Asignar directamente solo el registro estático
-    this.dataSource.data = [registroEstatico];
+    this.dataSource.data = [registroEstatico1,registroEstatico2];
 
     // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
     setTimeout(() => {
