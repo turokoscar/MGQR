@@ -148,13 +148,13 @@ export class ReclamoComponent implements OnInit {
         [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
       ],
       genero: ['', Validators.required],
-      nombre: [{ value: '', disabled: false },
+      nombre: ['',
         [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
-      apellido_paterno: [{ value: '', disabled: false },
+      apellido_paterno: ['',
         [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
-      apellido_materno: [{ value: '', disabled: false },
+      apellido_materno: ['',
         [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
       ],
       departamento: ['', Validators.required],
@@ -179,7 +179,10 @@ export class ReclamoComponent implements OnInit {
       tipo_proyecto: ['', Validators.required],
       
       evidencia_consulta: [''],
-      es_confidencial: [false]
+      es_confidencial: [false],
+      codigo_validacion: ['', [Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]],
+      referencia: ['']
+     
     });
   }
   //6. Obtengo la lista de tipo de Atencion
@@ -290,6 +293,14 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
 
+      this.segundaParteForm.controls['tipo_documento'].setValue('0');
+      this.segundaParteForm.controls['numero_documento'].setValue('');
+      this.segundaParteForm.controls['nombre'].setValue('');
+      this.segundaParteForm.controls['apellido_materno'].setValue('');
+      this.segundaParteForm.controls['apellido_paterno'].setValue('');
+
+
+
     } else {
       this.es_confidencial=false;
       this.segundaParteForm.controls['tipo_documento'].enable();
@@ -324,17 +335,17 @@ export class ReclamoComponent implements OnInit {
     let param = {
       //("perTipDoc": ""+ 1,
 
-      "tipo_documento_id": ""+(this.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
-      "numero_documento": ""+(this.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
-      "nombres": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
-      "apellido_paterno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
-      "apellido_materno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_materno,
+      "tipo_documento_id": ""+(this.segundaParteForm.value.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+      "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.numero_documento),
+      "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
+      "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
+      "apellido_materno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_materno),
       "tipo_canal": "1",
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
       "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
       
-      "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
+      "es_confidencial": ""+(this.es_confidencial==true,1,0),
       "genero": ""+this.segundaParteForm.value.genero,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
       "direccion": ""+this.segundaParteForm.value.direccion,
@@ -343,6 +354,7 @@ export class ReclamoComponent implements OnInit {
       "email": ""+this.segundaParteForm.value.correo_electronico,
       "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
       "comunidad": ""+this.segundaParteForm.value.comunidad,
+      "referencia": ""+this.segundaParteForm.value.referencia,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1",
       "evidencia":this.nombreArchivoSeleccionado,
@@ -393,17 +405,21 @@ export class ReclamoComponent implements OnInit {
   let param = {
     //("perTipDoc": ""+ 1,
 
-    "tipo_documento_id": ""+(this.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
-    "numero_documento": ""+(this.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
-    "nombres": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
-    "apellido_paterno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
-    "apellido_materno": ""+(this.es_confidencial==true)?'':this.segundaParteForm.value.apellido_materno,
+    
+    "tipo_documento_id": ""+(this.segundaParteForm.value.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+    // "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
+    // "nombres": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
+    // "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
+    "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.numero_documento),
+    "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
+    "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
+    "apellido_materno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_materno),
     "tipo_canal": "1",
     "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
     "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
     "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
     
-    "es_confidencial": ""+(this.segundaParteForm.value.es_confidencial==true,1,0),
+    "es_confidencial": ""+(this.es_confidencial==true,1,0),
     "genero": ""+this.segundaParteForm.value.genero,
     "ubigeo_id": ""+this.segundaParteForm.value.distrito,
     "direccion": ""+this.segundaParteForm.value.direccion,
@@ -412,6 +428,7 @@ export class ReclamoComponent implements OnInit {
     "email": ""+this.segundaParteForm.value.correo_electronico,
     "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
     "comunidad": ""+this.segundaParteForm.value.comunidad,
+    "referencia": ""+this.segundaParteForm.value.referencia,
     "cargo": ""+this.segundaParteForm.value.cargo,
     "usuario_id": "1",
     "evidencia":this.nombreArchivoSeleccionado,
@@ -419,10 +436,10 @@ export class ReclamoComponent implements OnInit {
    }
 
 
-   let codigo=   this.segundaParteForm.controls['codigo_validacion'].value;
+   let codigo=   param.codigo_validacion;
 
 
-   
+
    console.log(codigo+"  --  "+this.listValidacionCorreo.codigo_validacion);
    if(codigo==this.listValidacionCorreo.codigo_validacion){
        //Primero guardo la data data del expediente
