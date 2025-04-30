@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,7 +22,7 @@ import { ExportService } from 'src/app/services/export.service';
 export class ReclamoRecepcionPendienteComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'canal','tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
+  columnas: string[] = ['select','numero', 'procedencia', 'canal','tipo', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
@@ -31,6 +31,15 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   numeroSeleccion!: number;
   textoFiltro:string = '';
   errorMessage: string = '';
+
+  modalVisible = false;
+  esAprobacion = true;
+  itemSeleccionado: any = null;
+  especialistaSeleccionado = '';
+  especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  motivoRechazo = '';
+  archivoAdjunto: File | null = null;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   filterValues: { codigoExpediente: string; tipoReclamo: string; procedencia: string } = {
@@ -55,6 +64,9 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.showTipoReclamo();
     this.showTipoProcedencia();
   }
+
+  @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -99,38 +111,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     console.log("llega aquiiiiiiiiiiiiiiii");
     this._apiService.show(estadoPendiente).subscribe({
       next: (data) => {
-
-        const registroEstatico: Expediente = {
-          id: 0, // ID único para identificarlo fácilmente
-          tipo_canal: 0,
-          tipo_expediente: 'EJEMPLO',
-          codigo_expediente: 99999,
-          tipo_reclamo: 'Demostración',
-          fecha: new Date(),
-          evidencia: '',
-          es_confidencial: 0,
-          tipo_documento: 'DNI',
-          numero_documento: '00000000',
-          nombres: 'Registro',
-          apellido_paterno: 'Estático',
-          apellido_materno: 'Demo',
-          genero: 'N/A',
-          telefono: 0,
-          celular: 0,
-          email: 0,
-          ubigeo: 'DEMO-00',
-          direccion: 'Av. Ejemplo 123',
-          estado_proceso: 'EJEMPLO',
-          contenido_consulta: 'Este es un registro estático solo para demostración',
-          comunidad: 'N/A',
-          cargo: 'N/A',
-          usuario_id: 0,
-          estado: estadoPendiente,
-          create_at: new Date(),
-          update_at: new Date()
-        };
-        console.log(registroEstatico);
-        this.dataSource.data = [registroEstatico, ...data];
+        console.log(this.dataSource.data);
         /*this.dataSource.data = data;*/
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -149,11 +130,11 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.loading = true;
 
     // Crear un elemento estático con todas las propiedades necesarias
-    const registroEstatico: Expediente = {
+    const registroEstatico1: Expediente = {
       id: 0,
       tipo_canal: 0,
       tipo_expediente: 'Interno',
-      codigo_expediente: 99999,
+      codigo_expediente: 99998,
       tipo_reclamo: 'Queja',
       fecha: new Date(),
       evidencia: '',
@@ -179,8 +160,36 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       update_at: new Date()
     };
 
-    // Asignar directamente solo el registro estático
-    this.dataSource.data = [registroEstatico];
+    const registroEstatico2: Expediente = {
+          id: 1, // ID único para identificarlo fácilmente
+          tipo_canal: 0,
+          tipo_expediente: 'EJEMPLO 2',
+          codigo_expediente: 99999,
+          tipo_reclamo: 'Demostración',
+          fecha: new Date(),
+          evidencia: '',
+          es_confidencial: 0,
+          tipo_documento: 'DNI',
+          numero_documento: '00000000',
+          nombres: 'Registro',
+          apellido_paterno: 'Estático',
+          apellido_materno: 'Demo',
+          genero: 'N/A',
+          telefono: 0,
+          celular: 0,
+          email: 0,
+          ubigeo: '1',
+          direccion: 'Av. Ejemplo 123',
+          estado_proceso: 'EJEMPLO',
+          contenido_consulta: 'Este es un registro estático solo para demostración',
+          comunidad: 'N/A',
+          cargo: 'N/A',
+          usuario_id: 0,
+          estado: 1,
+          create_at: new Date(),
+          update_at: new Date()
+        };
+        this.dataSource.data = [registroEstatico1, registroEstatico2];
 
     // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
     setTimeout(() => {
@@ -303,12 +312,35 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   }
 
   aprobar(row: Expediente): void {
-    console.log('Aprobar:', row);
-    // Implementa aquí la lógica para aprobar
+    this.esAprobacion = true;
+    this.itemSeleccionado = row;
+    this.modalVisible = true;
   }
 
   rechazar(row: Expediente): void {
-    console.log('Rechazar:', row);
-    // Implementa aquí la lógica para rechazar
+    this.esAprobacion = false;
+    this.itemSeleccionado = row;
+    this.modalVisible = true;
+  }
+  cerrarModal(): void {
+    this.modalVisible = false;
+    this.itemSeleccionado = null;
+    this.motivoRechazo = '';
+    this.archivoAdjunto = null;
+    this.especialistaSeleccionado = '';
+  }
+
+  onArchivoSeleccionado(event: any): void {
+    this.archivoAdjunto = event.target.files[0] || null;
+  }
+
+  confirmarAccion(): void {
+    if (this.esAprobacion) {
+      console.log("Confirmar accion");
+      this.cambiarPestania.emit('atendido');
+    } else {
+      this.cambiarPestania.emit('denegado');
+    }
+    this.cerrarModal();
   }
 }
