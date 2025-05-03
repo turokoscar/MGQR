@@ -64,12 +64,31 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
-    this.showTipoReclamo();
-    this.showTipoProcedencia();
+    //this.showData();
+    //this.cargarExpedientes();
   }
 
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+
+  cargarExpedientes(filtros: any): void {
+    console.log("Hola", filtros);
+    console.log("Hola Finbal");
+    this.loading = true;
+    this._apiService.listarPorFiltros(filtros).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = this.createFilter();
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
+        this._notificacion.showError("Error", this.errorMessage);
+      }
+    });
+  }
 
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
@@ -108,11 +127,12 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
+
+
   //9. Obtengo todos los registros
-  showData2():void{
+  showData():void{
     this.loading = true;
     const estadoPendiente = 1;
-    console.log("llega aquiiiiiiiiiiiiiiii");
     this._apiService.show(estadoPendiente).subscribe({
       next: (data) => {
         console.log(this.dataSource.data);
@@ -130,7 +150,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     });
   }
   //9. Obtengo todos los registros - versión solo con registro estático
-  showData():void {
+  showDataAntes():void {
     this.loading = true;
 
     // Crear un elemento estático con todas las propiedades necesarias
@@ -243,30 +263,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  //14. Obtengo la lista de Tipos de eventos
-  showTipoReclamo():void{
-    this._tipoReclamo.show().subscribe({
-      next: (data) => {
-        this.tipoReclamos = data;
-      },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
-      }
-    });
-  }
-  //15. Obtengo los tipos de Procedencia de los reclamos
-  showTipoProcedencia():void{
-    this._tipoProcedencia.show().subscribe({
-      next: (data) => {
-        this.tipoProcedencia = data;
-      },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
-      }
-    });
-  }
+
   //16. Llamamos al formulario para la recepción de un expediente
   recepcionar():void{
     this.loading = true;

@@ -15,6 +15,7 @@ export class ExpedienteService {
   //1. Obtengo la ruta del api
   private apiUrl = environment.apiUrl;
   private fakeApi = environment.fakeApi+'/expedientes';
+  private apiUrlExp = environment.apiUrl+'/Expediente/ListarPorFiltros';
 
  //Obtengo el peso maximo del expediente
   pesoMaxKB: number = environment.file_max_length_kb;
@@ -22,8 +23,12 @@ export class ExpedienteService {
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
   show(estado: number): Observable<Expediente[]>{
-    return this.http.get<Expediente[]>(this.fakeApi);
+    return this.http.get<Expediente[]>(this.apiUrlExp);
   }
+  listarPorFiltros(filtros: any): Observable<Expediente[]> {
+    return this.http.post<Expediente[]>(this.apiUrlExp, filtros);
+  }
+
   //4. Método para obtener los datos de un expediente
   showById(id: number): Observable<Expediente>{
     const url = `${this.fakeApi}/${id}`;

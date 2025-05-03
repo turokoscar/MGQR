@@ -118,6 +118,28 @@ mat-form-field {
       background-color: #5d4500;
     }
   }
+  .btn-buscar {
+    background-color: #3498db!important;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: #1b72ac !important;
+    }
+  }
   .btn-resetear {
     background-color: $color-primary !important;
     color: #fff;

@@ -1,17 +1,9 @@
 <div id="wrapper">
-  <!-- Sidebar -->
   <app-sidebar-admin></app-sidebar-admin>
-  <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
-      <!-- Topbar -->
       <app-topbar-admin></app-topbar-admin>
-      <!-- Contenido -->
       <div class="container-fluid">
-        <!--
-        <app-title titulo="Recepción de quejas, reclamos y consultas"></app-title>
-        <app-description texto="Bienvenido al módulo para la recepción de quejas, reclamos y consultas."></app-description>
-        -->
         <div class="card shadow mb-4">
           <div class="card-header py-3 bg-success">
             <h5 class="m-0 font-weight-bold text-white title">Módulo para admitir los reclamos, quejas o sugerencias</h5>
@@ -31,10 +23,10 @@
               <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Procedencia</mat-label>
-                  <mat-select>
-                    <mat-option value="Oficina Central">Oficina Central</mat-option>
-                    <mat-option value="Sede Regional">Sede Regional</mat-option>
-                    <mat-option value="Correo Electrónico">Correo Electrónico</mat-option>
+                  <mat-select [(ngModel)]="filtro.tipoCanalId">
+                    <mat-option *ngFor="let item of tipoProcedencia" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
@@ -43,16 +35,19 @@
               <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Tipo de Reclamo</mat-label>
-                  <mat-select>
-                    <mat-option value="Retraso en atención">Retraso en atención</mat-option>
-                    <mat-option value="Maltrato">Maltrato</mat-option>
-                    <mat-option value="Información errónea">Información errónea</mat-option>
+                  <mat-select [(ngModel)]="filtro.tipoReclamoId">
+                    <mat-option *ngFor="let item of tipoReclamos" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
 
               <!-- Botones -->
               <div class="botones-acciones col-md-3 d-flex justify-content-end gap-2">
+                <button class="btn-buscar" (click)="buscarConFiltros()">
+                  <i class="bi bi-search"></i> Buscar
+                </button>
                 <button class="btn-resetear">
                   <i class="bi bi-trash"></i> Limpiar Filtros
                 </button>
@@ -78,7 +73,7 @@
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="nav-por-atender" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <br>
-                <app-reclamo-recepcion-pendiente (cambiarPestania)="activarPestania($event)"></app-reclamo-recepcion-pendiente>
+                <app-reclamo-recepcion-pendiente #reclamoPendiente (cambiarPestania)="activarPestania($event)"></app-reclamo-recepcion-pendiente>
               </div>
               <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
