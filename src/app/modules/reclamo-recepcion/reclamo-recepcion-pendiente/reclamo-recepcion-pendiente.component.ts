@@ -64,12 +64,31 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
-    this.showTipoReclamo();
-    this.showTipoProcedencia();
+    //this.showData();
+    //this.cargarExpedientes();
   }
 
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+
+  cargarExpedientes(filtros: any): void {
+    console.log("Hola", filtros);
+    console.log("Hola Finbal");
+    this.loading = true;
+    this._apiService.listarPorFiltros(filtros).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = this.createFilter();
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
+        this._notificacion.showError("Error", this.errorMessage);
+      }
+    });
+  }
 
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
@@ -108,110 +127,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
-  //9. Obtengo todos los registros
-  showData2():void{
-    this.loading = true;
-    const estadoPendiente = 1;
-    console.log("llega aquiiiiiiiiiiiiiiii");
-    this._apiService.show(estadoPendiente).subscribe({
-      next: (data) => {
-        console.log(this.dataSource.data);
-        /*this.dataSource.data = data;*/
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
-        this.loading = false;
-      },
-      error: (e) => {
-        this.loading = false;
-        this.errorMessage = "Se presentó un problema al realizar la operación"+ e;
-        this._notificacion.showError("Error", this.errorMessage);
-      }
-    });
-  }
-  //9. Obtengo todos los registros - versión solo con registro estático
-  showData():void {
-    this.loading = true;
 
-    // Crear un elemento estático con todas las propiedades necesarias
-    const registroEstatico1: Expediente = {
-      id: 0,
-      tipo_canal: 0,
-      tipo_expediente: 'Interno',
-      codigo_expediente: 99998,
-      tipo_reclamo: 'Queja',
-      fecha: new Date(),
-      evidencia: '',
-      es_confidencial: 0,
-      tipo_documento: 'DNI',
-      numero_documento: '00000000',
-      nombres: 'Juan',
-      apellido_paterno: 'Miranda',
-      apellido_materno: 'Dextre',
-      genero: 'N/A',
-      telefono: 0,
-      celular: 0,
-      email: 0,
-      ubigeo: '1',
-      direccion: 'Web',
-      estado_proceso: 'EJEMPLO',
-      contenido_consulta: 'Este es un registro estático solo para demostración',
-      comunidad: 'N/A',
-      cargo: 'N/A',
-      usuario_id: 0,
-      estado: 1, // Estado pendiente
-      create_at: new Date(),
-      update_at: new Date()
-    };
-
-    const registroEstatico2: Expediente = {
-          id: 1, // ID único para identificarlo fácilmente
-          tipo_canal: 0,
-          tipo_expediente: 'Interno',
-          codigo_expediente: 99999,
-          tipo_reclamo: 'Reclamo',
-          fecha: new Date(),
-          evidencia: '',
-          es_confidencial: 0,
-          tipo_documento: 'DNI',
-          numero_documento: '00000000',
-          nombres: 'Pablo',
-          apellido_paterno: 'Bautista',
-          apellido_materno: 'Chacon',
-          genero: 'N/A',
-          telefono: 0,
-          celular: 0,
-          email: 0,
-          ubigeo: '1',
-          direccion: 'Web',
-          estado_proceso: 'EJEMPLO',
-          contenido_consulta: 'Este es un registro estático solo para demostración',
-          comunidad: 'N/A',
-          cargo: 'N/A',
-          usuario_id: 0,
-          estado: 1,
-          create_at: new Date(),
-          update_at: new Date()
-        };
-        this.dataSource.data = [registroEstatico1, registroEstatico2];
-
-    // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.dataSource.filterPredicate = this.createFilter();
-      this.loading = false;
-    });
-  }
-  //10. Función para filtrar información de la lista de datos
-  filterData(event: Event, filterType: keyof typeof this.filterValues) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues[filterType] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
   //11. Función para crear el filtro personalizado
   createFilter(): (data: Expediente, filter: string) => boolean {
     return (data: Expediente, filter: string): boolean => {
@@ -223,50 +139,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       );
     };
   }
-  //12. Para cambiar el filtro de reclamo o procedencia
-  changeFilter(filterType: keyof typeof this.filterValues, value: string) {
-    this.filterValues[filterType] = value.trim().toLowerCase();
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  //13. Método para resetear los filtros
-  resetFilters() {
-    this.filterValues = {
-      codigoExpediente: '',
-      tipoReclamo: '',
-      procedencia: ''
-    };
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  //14. Obtengo la lista de Tipos de eventos
-  showTipoReclamo():void{
-    this._tipoReclamo.show().subscribe({
-      next: (data) => {
-        this.tipoReclamos = data;
-      },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
-      }
-    });
-  }
-  //15. Obtengo los tipos de Procedencia de los reclamos
-  showTipoProcedencia():void{
-    this._tipoProcedencia.show().subscribe({
-      next: (data) => {
-        this.tipoProcedencia = data;
-      },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
-      }
-    });
-  }
+
   //16. Llamamos al formulario para la recepción de un expediente
   recepcionar():void{
     this.loading = true;

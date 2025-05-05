@@ -8,7 +8,7 @@ import { TipoProcedenciaReclamo } from '../models/tipo-procedencia-reclamo';
 })
 export class TipoProcedenciaReclamoService {
   //1. Obtengo la ruta del api
-  private apiUrl = environment.fakeApi+'/tipo_procedencia_reclamo';
+  private apiUrl = environment.apiUrl+'/General/GetTipoAtencion';
   //2. Defino el constructor
   constructor( private http: HttpClient ) { }
   //3. Metodo para obtener todos los registros
