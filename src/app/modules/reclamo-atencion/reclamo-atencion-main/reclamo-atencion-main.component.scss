@@ -1,0 +1,217 @@
+@import 'src/assets/styles/theme';
+.card-header {
+  //background-color: #69b441 !important;
+  padding: 12px 20px;
+
+  h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+.card-body {
+  padding: 1rem 1.5rem;
+}
+.title {
+  font-size: 1.3rem!important;
+}
+
+mat-form-field {
+  background: #f3f3f300!important;
+  border-radius: 5px;
+  padding: 2px 4px;
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    background-color: white;
+    border-radius: 4px;
+  }
+}
+
+.nav-tabs {
+  margin-top: 1rem;
+  border-bottom: none;
+
+  .nav-link {
+    border: none;
+    font-size: 1.2rem;
+    border-radius: 4px 4px 0 0;
+    padding: 6px 12px;
+    background-color: #f3f3f3;
+    color: #333;
+    margin-right: 4px;
+    font-weight: 500;
+
+    i {
+      margin-right: 6px;
+    }
+
+    &.active {
+      background-color: #e4e4e4;
+      font-weight: bold;
+      font-size: 1.2rem!important;
+    }
+  }
+}
+
+/* Tabla */
+::ng-deep table.mat-table {
+  border: 1px solid #a4cee1!important;
+  border-radius: 4px!important;
+  overflow: hidden!important;
+
+  th.mat-header-cell {
+    background-color: #bae9ff!important;
+    border-right: 1px solid #a4cee1!important;
+    color: #333!important;
+    font-weight: 600!important;
+    font-size: 0.85rem!important;
+    text-align: center!important;
+
+    &:last-child {
+      border-right: none!important;
+    }
+  }
+
+  td.mat-cell {
+    font-size: 0.85rem!important;
+    border-top: 1px solid #ddd!important;
+    text-align: center!important;
+    vertical-align: middle!important;
+    padding: 8px!important;
+  }
+
+  tr.mat-row:hover {
+    background-color: #f8f8f8!important;
+  }
+}
+
+.botones-acciones {
+  display: flex!important;
+  justify-content: flex-end!important;
+  gap: 10px!important;
+  margin-bottom: 1.875rem!important;
+
+  .btn-descargar {
+    background-color: #7a5900; // marrón
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: #5d4500;
+    }
+  }
+  .btn-buscar {
+    background-color: #3498db!important;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: #1b72ac !important;
+    }
+  }
+  .btn-resetear {
+    background-color: $color-primary !important;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 0px #000; // sombra negra como en el mockup
+    border-radius: 2px;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 18px;
+    }
+
+    &:hover {
+      background-color: $color-primary-hover !important;
+    }
+  }
+}
+
+// Estilos para los botones de acción
+.acciones-celda {
+  padding: 0 8px !important;
+
+  .botones-accion {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .btn-accion {
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 18px;
+    }
+
+    &.btn-ver {
+      background-color: #3498db; // Azul
+      color: white;
+
+      &:hover {
+        background-color: #2980b9;
+      }
+    }
+
+    &.btn-aprobar {
+      background-color: #2ecc71; // Verde
+      color: white;
+
+      &:hover {
+        background-color: #27ae60;
+      }
+    }
+
+    &.btn-rechazar {
+      background-color: #e74c3c; // Rojo
+      color: white;
+
+      &:hover {
+        background-color: #c0392b;
+      }
+    }
+  }
+}

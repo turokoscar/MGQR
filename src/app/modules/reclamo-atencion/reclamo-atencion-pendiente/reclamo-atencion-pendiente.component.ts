@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -55,6 +55,28 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     this.showTipoReclamo();
     this.showTipoProcedencia();
   }
+  @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+
+  cargarExpedientes(filtros: any): void {
+    console.log("Hola", filtros);
+    console.log("Hola Finbal");
+    this.loading = true;
+    this._apiService.listarPorFiltros(filtros).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.dataSource.filterPredicate = this.createFilter();
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
+        this._notificacion.showError("Error", this.errorMessage);
+      }
+    });
+  }
+
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
     const numSelected = this.selection.selected.length;

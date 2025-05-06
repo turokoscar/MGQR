@@ -101,13 +101,12 @@ hr.sidebar-divider {
     display: flex;
     align-items: center;
     font-size: 14px;
-    padding: 5px 15px;
+    padding: 5px 15px 5px 40px;
     color: $color-text;
     text-decoration: none;
     background: transparent;
     border-bottom: 1px solid $color-footer-border!important;
     transition: background-color 0.3s ease;
-
     i {
       margin-right: 8px;
       color: $color-primary;

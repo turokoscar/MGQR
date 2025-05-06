@@ -72,6 +72,8 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   buscarConFiltros() {
     const filtrosConEstado = {
       ...this.filtro,
+      tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
+      tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
       estado: 1 // Estado pendiente
     };
     this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
@@ -98,7 +100,10 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   showTipoReclamo():void{
     this._tipoReclamo.show().subscribe({
       next: (data) => {
-        this.tipoReclamos = data;
+        this.tipoReclamos = [
+          { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
+          ...data
+        ];
       },
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
@@ -110,7 +115,10 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   showTipoProcedencia():void{
     this._tipoProcedencia.show().subscribe({
       next: (data) => {
-        this.tipoProcedencia = data;
+        this.tipoProcedencia = [
+          { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
+          ...data
+        ];
       },
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;

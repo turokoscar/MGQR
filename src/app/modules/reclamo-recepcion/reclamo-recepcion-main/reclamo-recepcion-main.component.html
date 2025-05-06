@@ -15,7 +15,11 @@
               <div class="col-md-3">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Filtro por Número de Expediente:</mat-label>
-                  <input matInput placeholder="Ingrese el número de expediente...">
+                  <input
+                    matInput
+                    [(ngModel)]="filtro.codigoExpediente"
+                    placeholder="Ingrese el número de expediente..."
+                  />
                 </mat-form-field>
               </div>
 
@@ -49,7 +53,7 @@
                   <i class="bi bi-search"></i> Buscar
                 </button>
                 <button class="btn-resetear" (click)="limpiarFiltros()">
-                  <i class="bi bi-trash"></i> Limpiar Filtros
+                  <i class="bi bi-trash"></i> Limpiar
                 </button>
                 <button class="btn-descargar">
                   <i class="bi bi-download"></i> Descargar

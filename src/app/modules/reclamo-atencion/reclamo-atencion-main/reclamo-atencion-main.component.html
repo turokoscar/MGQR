@@ -17,6 +17,56 @@
             <h5 class="m-0 font-weight-bold text-white">Módulo para la atención de reclamos, quejas o sugerencias</h5>
           </div>
           <div class="card-body">
+            <div class="row align-items-end">
+              <!-- Filtro por Número de Expediente -->
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Filtro por Número de Expediente:</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="filtro.codigoExpediente"
+                    placeholder="Ingrese el número de expediente..."
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Filtro por Procedencia -->
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Procedencia</mat-label>
+                  <mat-select [(ngModel)]="filtro.tipoCanalId">
+                    <mat-option *ngFor="let item of tipoProcedencia" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Filtro por Tipo de Reclamo -->
+              <div class="col-md-3">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Tipo de Reclamo</mat-label>
+                  <mat-select [(ngModel)]="filtro.tipoReclamoId">
+                    <mat-option *ngFor="let item of tipoReclamos" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <!-- Botones -->
+              <div class="botones-acciones col-md-3 d-flex justify-content-end gap-2">
+                <button class="btn-buscar" (click)="buscarConFiltros()">
+                  <i class="bi bi-search"></i> Buscar
+                </button>
+                <button class="btn-resetear" (click)="limpiarFiltros()">
+                  <i class="bi bi-trash"></i> Limpiar
+                </button>
+                <button class="btn-descargar">
+                  <i class="bi bi-download"></i> Descargar
+                </button>
+              </div>
+            </div>
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
@@ -36,7 +86,7 @@
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="nav-por-atender" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <br>
-                <app-reclamo-atencion-pendiente></app-reclamo-atencion-pendiente>
+                <app-reclamo-atencion-pendiente #reclamoPendiente (cambiarPestania)="activarPestania($event)"></app-reclamo-atencion-pendiente>
               </div>
               <div class="tab-pane fade" id="nav-en-proceso" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
