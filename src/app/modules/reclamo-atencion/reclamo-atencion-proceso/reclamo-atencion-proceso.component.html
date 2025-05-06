@@ -1,6 +1,6 @@
 <app-spinner *ngIf="loading"></app-spinner>
 <!-- Área de botones -->
-<div class="text-right">
+<!--<div class="text-right">
   <a href="#" class="btn btn-primary btn-circle btn-lg mr-2" matTooltip="Resetear Filtros" (click)="resetFilters()">
     <i class="bi bi-stars"></i>
   </a>
@@ -13,18 +13,18 @@
   <a href="#" class="btn btn-secondary btn-circle btn-lg mr-2" matTooltip="Atender queja, consulta o reclamo" (click)="atender()" *ngIf="numeroSeleccion === 1 ">
     <i class="bi bi-folder-check"></i>
   </a>
-</div>
+</div>-->
 <div class="my-2"></div>
 <!-- Área de filtros -->
-<div class="row">
-  <!-- Filtro de búsqueda general por número de expediente -->
+<!--<div class="row">
+  &lt;!&ndash; Filtro de búsqueda general por número de expediente &ndash;&gt;
   <div class="col">
     <mat-form-field appearance="fill" class="w-100">
       <mat-label>Filtro por Número de Expediente:</mat-label>
       <input matInput (keyup)="filterData($event, 'codigoExpediente')" placeholder="Ingrese el número de expediente..." #input >
     </mat-form-field>
   </div>
-  <!-- Filtro por procedencia del reclamo -->
+  &lt;!&ndash; Filtro por procedencia del reclamo &ndash;&gt;
   <div class="col">
     <mat-form-field appearance="fill" class="w-100">
       <mat-label>Seleccione Procedencia</mat-label>
@@ -35,7 +35,7 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <!-- Filtro por tipo de reclamo -->
+  &lt;!&ndash; Filtro por tipo de reclamo &ndash;&gt;
   <div class="col">
     <mat-form-field appearance="fill" class="w-100">
       <mat-label>Seleccione Tipo de Reclamo</mat-label>
@@ -46,7 +46,7 @@
       </mat-select>
     </mat-form-field>
   </div>
-</div>
+</div>-->
 <div class="my-2"></div>
 <!-- Área de datos -->
 <div class="mat-elevation-z3">
