@@ -15,6 +15,7 @@ import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo'
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { ExportService } from 'src/app/services/export.service';
 
+
 @Component({
   selector: 'app-reclamo-recepcion-pendiente',
   templateUrl: './reclamo-recepcion-pendiente.component.html',
