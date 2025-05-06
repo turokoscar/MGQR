@@ -39,7 +39,7 @@
     </ng-container>
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Registro </th>
-      <td mat-cell *matCellDef="let row">{{ row.fecha | date: 'dd/MM/yyyy' }} </td>
+      <td mat-cell *matCellDef="let row">{{ row.fecha }} </td>
     </ng-container>
     <ng-container matColumnDef="descripcion">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
@@ -180,11 +180,11 @@
       <div class="form-grid">
         <div class="form-group">
           <label class="title-modal">Codigo</label>
-          <div class="input-field">{{ itemSeleccionado?.codigo_expediente || '240001' }}</div>
+          <div class="input-field">{{ itemSeleccionado?.expediente || '240001' }}</div>
         </div>
         <div class="form-group">
           <label class="title-modal">Fecha de registro</label>
-          <div class="input-field">{{ itemSeleccionado?.fecha | date: 'dd/MM/yyyy' }}</div>
+          <div class="input-field">{{ itemSeleccionado?.fecha }}</div>
         </div>
         <div class="form-group">
           <label class="title-modal">Tipo de reclamo/queja/consulta</label>
@@ -193,11 +193,11 @@
 
         <div class="form-group">
           <label class="title-modal">N° Documento</label>
-          <div class="input-field">{{ itemSeleccionado?.numero_documento || '43993164' }}</div>
+          <div class="input-field">{{ itemSeleccionado?.documento || '43993164' }}</div>
         </div>
         <div class="form-group two-columns">
           <label class="title-modal">Nombres y apellidos</label>
-          <div class="input-field">{{ itemSeleccionado?.nombres }} {{ itemSeleccionado?.apellido_paterno }} {{ itemSeleccionado?.apellido_materno }}</div>
+          <div class="input-field">{{ itemSeleccionado?.nombre_completo }}</div>
         </div>
 
         <div class="form-group full-width">

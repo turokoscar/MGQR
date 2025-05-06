@@ -1,5 +1,6 @@
 export interface ExpedienteDetalleDto {
   nombre_completo: string;
+  documento: string;
   tipo_canal: string;
   tipo_reclamo: string;
   procedencia: string;
