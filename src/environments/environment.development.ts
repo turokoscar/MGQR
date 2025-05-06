@@ -7,7 +7,7 @@ export const environment = {
   app_name_sigla: 'MGQR',
   stage: 'DEV',
 
-  file_max_length_kb: 105120, //<!-- 5 MB -->
+  file_max_length_kb: 5000, //<!-- 5 MB -->
   file_allow_exts: ["pdf", "zip", "rar", "jpg", "jpeg", "png", "xls", "xlsx"],
 
 };

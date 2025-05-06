@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { LowerCasePipe } from '@angular/common';
+import { environment } from 'src/environments/environment.development';
 import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 
 
@@ -37,7 +38,18 @@ import { AlertService } from 'src/app/services/alert.service';
   providers: [LowerCasePipe]
 })
 export class ReclamoComponent implements OnInit {
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   //1. Declaro las variables a utilizar
+  maxLengthDocumento: number = 15;
+  environment = environment;
+  maxFileSizeBytes = environment.file_max_length_kb * 1024;
+  maxFileSizeMB: number = Math.round(environment.file_max_length_kb / 1024);
+  allowedExtensions = environment.file_allow_exts;
+  errorArchivo: string = '';
+  acceptFileTypes: string = '';
+
   loading: boolean = false;
   isReadOnly: boolean = false;
   isCheckboxDisabled = false;
@@ -55,7 +67,7 @@ export class ReclamoComponent implements OnInit {
   showEnviarExpedienteField = false;
 
   listValidacionCorreo!:ExpedienteValidacionResponse;
-  
+
 
   disabled: boolean = false;
   errorMessage: string = "";
@@ -106,6 +118,9 @@ export class ReclamoComponent implements OnInit {
     this.showTipoReclamos();
     this.showTipoProyectos();
     this.showRegiones();
+
+    this.acceptFileTypes = this.allowedExtensions.map(ext => '.' + ext).join(',');
+
     // Observa cambios en la variable disabled
     this.onActivaReactividad();
     this.segundaParteForm.get('departamento')?.valueChanges.subscribe(region => {
@@ -132,6 +147,30 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.get('correo_electronico')?.setValue(value, { emitEvent: false });
       this.isReadOnly = !!value;
     });
+    this.segundaParteForm.get('tipo_documento')?.valueChanges.subscribe((valor: number) => {
+      console.log("valor dni",valor);
+      if (valor == 1) {
+        this.maxLengthDocumento = 8;
+        this.setDocumentoMaxLength(8);
+      } else if (valor == 2) {
+        this.maxLengthDocumento = 15;
+        this.setDocumentoMaxLength(15);
+      } else {
+        this.maxLengthDocumento = 15;
+        this.setDocumentoMaxLength(15);
+      }
+    });
+  }
+  private setDocumentoMaxLength(maxLength: number): void {
+    const control = this.segundaParteForm.get('numero_documento');
+    if (control) {
+      control.setValidators([
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.maxLength(maxLength),
+      ]);
+      control.updateValueAndValidity();
+    }
   }
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
@@ -177,12 +216,12 @@ export class ReclamoComponent implements OnInit {
         [Validators.required, Validators.maxLength(500)]
       ],
       tipo_proyecto: ['', Validators.required],
-      
+
       evidencia_consulta: [''],
       es_confidencial: [false],
       codigo_validacion: ['', [Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]],
       referencia: ['']
-     
+
     });
   }
   //6. Obtengo la lista de tipo de Atencion
@@ -234,7 +273,7 @@ export class ReclamoComponent implements OnInit {
     });
   }
 
-  
+
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -344,7 +383,7 @@ export class ReclamoComponent implements OnInit {
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
       "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
-      
+
       "es_confidencial": ""+(this.es_confidencial==true,1,0),
       "genero": ""+this.segundaParteForm.value.genero,
       "ubigeo_id": ""+this.segundaParteForm.value.distrito,
@@ -361,7 +400,7 @@ export class ReclamoComponent implements OnInit {
      }
 
 
-    
+
       this._expediente.validacionCorreo(param).subscribe({
         next: (data:ExpedienteValidacionResponse) => {
           console.log(data);
@@ -371,8 +410,8 @@ export class ReclamoComponent implements OnInit {
             this.openDialogGeneral("Mensaje de Información","Se  envio via correo su codigo de validacion","success");
             this.showEnviarNotificacionField = false;
             this.showEnviarExpedienteField = true;
-          
-          
+
+
           }
           this.loading = false;
         },
@@ -381,9 +420,9 @@ export class ReclamoComponent implements OnInit {
           this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
         }
       });
-     
 
-     
+
+
 
 }
 
@@ -405,7 +444,7 @@ export class ReclamoComponent implements OnInit {
   let param = {
     //("perTipDoc": ""+ 1,
 
-    
+
     "tipo_documento_id": ""+(this.segundaParteForm.value.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
     // "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
     // "nombres": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
@@ -418,7 +457,7 @@ export class ReclamoComponent implements OnInit {
     "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
     "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
     "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
-    
+
     "es_confidencial": ""+(this.es_confidencial==true,1,0),
     "genero": ""+this.segundaParteForm.value.genero,
     "ubigeo_id": ""+this.segundaParteForm.value.distrito,
@@ -492,7 +531,7 @@ export class ReclamoComponent implements OnInit {
     this.openDialogError("Errores","El codigo de validacion es incorrecto");
    }
 
-   
+
 
 }
 
@@ -515,66 +554,39 @@ export class ReclamoComponent implements OnInit {
   isFormValid(): boolean {
     return this.primeraParteForm.valid && this.segundaParteForm.valid;
   }
-  archivoSeleccionado(event: any) {
-    const file = event.target.files[0];
-    const nombreArchivo = file.name;
-    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
+  archivoSeleccionado(event: any): void {
+    this.errorArchivo = ''; // limpia errores anteriores
 
-      if (file) {
-        const nuevoNombre = this.generarNombreArchivo(extension);
-        // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
-        const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
-        this.nombreArchivoSeleccionado = nuevoNombre;
+    const file: File = event.target.files[0];
+    if (!file) return;
 
-       // let ext = this.segundaParteForm.controls['evidencia_consulta'].value.name.split(".");
-       // let extension = nombreArchivo.split('.').pop()?.toLowerCase();
-        //let extencion = ext[ext.length - 1];
-        let m_extencion = this.lowerCasePipe.transform(extension);
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    const size = file.size;
 
-        //let tipoArchivo = this.ValidacionTipoArchivo(m_extencion);
+    if (!this.allowedExtensions.includes(extension)) {
+      this.errorArchivo = `El tipo de archivo .${extension} no está permitido.`;
+      this.quitarImagen();
+      return;
+    }
 
-         //Validacion de tamaño de archivo
-        let tamañoArchivo = 10000 ;
-        if (tamañoArchivo> 10000)
-        {
-          this.quitarImagen()
-          return;
-        }
-        if (this.segundaParteForm.value.evidencia_consulta== "")
-          {
-            this.toastr.warning('Seleccione un archivo','');
-            return;
-          }
+    if (size > this.maxFileSizeBytes) {
+      this.errorArchivo = `El archivo supera el tamaño máximo de ${this.maxFileSizeMB} MB.`;
+      this.quitarImagen();
+      return;
+    }
 
-            //validación de  duplicidad de archivos
-            this.ListFiles.forEach(element => {
-              console.log("element.nomArchivo :::::" + element.file);
-              if (this.lowerCasePipe.transform(element.nomArchivo.toString()) ==  this.lowerCasePipe.transform(this.segundaParteForm.controls['evidencia_consulta'].value.name))
-              {
-                this.toastr.warning('El ARCHIVO que estas cargando ya existe en la bandeja de lista de archivos.','');
-                this.segundaParteForm.controls['evidencia_consulta'].value.setValue('');
-                return;
-              }
-            });
+    const nuevoNombre = this.generarNombreArchivo(extension);
+    const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
 
-
-          this.ListFiles.push({
-            id: this.ListFiles.length,
-            //descrip: "xxx",//this.formGroupParent.controls.descrip.value,
-            //nomArchivo: this.segundaParteForm.controls['evidencia_consulta'].value.name,
-            //tamArchivo: ((this.segundaParteForm.controls['evidencia_consulta'].value.size / 1024) / 1024).toFixed(2) + "MB",
-            //fecha: new Date(),
-            extension: extension,
-            file: File = this.segundaParteForm.controls['evidencia_consulta'].value
-          });
-          //this.segundaParteForm.controls['evidencia_consulta'].value;
-
-      }
-
-
-
-       console.log(".....-....",this.ListFiles);
+    this.nombreArchivoSeleccionado = nuevoNombre;
+    this.segundaParteForm.controls['evidencia_consulta'].setValue(nuevoArchivo);
+    this.ListFiles = [{ id: 1, extension, file: nuevoArchivo }];
   }
+
+
+
+
+
   //12. Carga de imagen Inicio
   archivoSeleccionadovv1(event: any) {
     const file = event.target.files[0];
@@ -609,12 +621,16 @@ export class ReclamoComponent implements OnInit {
     return `${timestamp}-${random}.${extension}`;
   }
   //14. Limpiamos input file
-  quitarImagen() {
+  quitarImagen(): void {
     this.nombreArchivoSeleccionado = '';
-    //this.urlPrevisualizacion = null;
     this.segundaParteForm.controls['evidencia_consulta'].setValue('');
-    this.ArchivoSeleccionados = 'Sin archivo seleccionada'; // Valor predeterminado
+    this.ArchivoSeleccionados = 'Sin archivo seleccionada';
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
+
   getFile(event: Event) {
     const target = event.target as HTMLInputElement;
     const files: FileList | null = target.files;

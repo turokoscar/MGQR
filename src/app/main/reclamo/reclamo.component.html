@@ -88,8 +88,18 @@
               <div class="col">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>N° de documento</mat-label>
-                  <input type="number" matInput #numeroDocumento formControlName="numero_documento" placeholder="Nro de documento" [maxlength]="15">
-                  <mat-hint align="end">{{numeroDocumento.value.length}} / 15</mat-hint>
+                  <input
+                    type="text"
+                    matInput
+                    #numeroDocumento
+                    formControlName="numero_documento"
+                    placeholder="Nro de documento"
+                    [attr.maxlength]="maxLengthDocumento"
+                    pattern="[0-9]*"
+                    inputmode="numeric"
+                  />
+
+                  <mat-hint align="end">{{ numeroDocumento.value?.length || 0 }} / {{ maxLengthDocumento }}</mat-hint>
                   <mat-error *ngIf="segundaParteForm.controls['numero_documento'].hasError('required')">
                     Nro de documento es <strong>obligatorio</strong>
                   </mat-error>
@@ -312,27 +322,18 @@
             <div class="row">
               <div class="col">
                 <div align="left">
-                  <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: 5MB en total, solo se aceptan formatos pdf, jpg, docx, xls, xlsx,csv.</mat-label>
+                  <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: {{ maxFileSizeMB }}MB en total, solo se aceptan formatos {{ allowedExtensions.join(', ') }}.</mat-label>
                 </div>
-                <input class="form-control" type="file" accept=".docx,.csv,.xls,.xlsx,.pdf,.jpg,.jpeg,image/jpeg"  formControlName="evidencia_consulta"  (change)="archivoSeleccionado($event)" >
-                <!-- <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].invalid">
-                  Por favor, seleccione un archivo de imagen válido.
-                </mat-error> -->
-
-                  <!-- <mat-form-field>
-                    <mat-label>Fotografía</mat-label>
-                    <input matInput formControlName="evidencia_consulta" text="" type="text" [value]="nombreArchivoSeleccionado" >
-                    <input class="form-control" type="file"  accept=".jpg,.jpeg,image/jpeg" (change)="archivoSeleccionado($event)" #inputArchivo>
-                  </mat-form-field>
-                  <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('fileType')">
-                    Por favor, seleccione un archivo de imagen válido.
-                  </mat-error>
-                  <mat-error *ngIf="segundaParteForm.controls['evidencia_consulta'].hasError('required')">
-                    El campo Fotografía es <strong>obligatorio</strong> adjunte Imagen.
-                  </mat-error>
-                -->
-
-
+                <input
+                  #fileInput
+                  class="form-control"
+                  type="file"
+                  [accept]="acceptFileTypes"
+                  (change)="archivoSeleccionado($event)"
+                />
+                <div *ngIf="errorArchivo" class="text-danger mt-1">
+                  {{ errorArchivo }}
+                </div>
               </div>
             </div>
             <br>
@@ -344,11 +345,11 @@
                 <mat-form-field appearance="fill" class="w-100" *ngIf="showEnviarExpedienteField">
                   <mat-label>Ingrese código de Validación</mat-label>
                   <input matInput formControlName="codigo_validacion" placeholder="Ingrese código de Validación" maxlength="100">
-                  
+
                 </mat-form-field>
 
 
-              
+
               </div>
               <div class="col">
                 <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -364,15 +365,15 @@
                     <mat-icon>send</mat-icon>
                     Validar Correo
                   </button>
-    
+
                   <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary"  *ngIf="showEnviarExpedienteField">
                     <mat-icon>send</mat-icon>
                     Enviar
                   </button>
-    
-    
-    
-                  
+
+
+
+
                   <button mat-raised-button  color="primary">
                     <mat-icon>exit_to_app</mat-icon>
                     Ir al inicio
@@ -382,10 +383,10 @@
             </div>
 
 
-        
-           
 
-           
+
+
+
           </div>
         </div>
 
