@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Expediente } from 'src/app/models/expediente';
+import { ExpedienteDetalleDto } from 'src/app/models/expediente-detalle-dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -24,6 +25,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   loading: boolean = false;
   columnas: string[] = ['select','numero', 'procedencia', 'canal','tipo', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
+  dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
@@ -71,15 +73,13 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
 
   cargarExpedientes(filtros: any): void {
-    console.log("Hola", filtros);
-    console.log("Hola Finbal");
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
+        this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
       },
       error: (e) => {
@@ -129,13 +129,13 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   }
 
   //11. Función para crear el filtro personalizado
-  createFilter(): (data: Expediente, filter: string) => boolean {
-    return (data: Expediente, filter: string): boolean => {
+  createFilter(): (data: ExpedienteDetalleDto, filter: string) => boolean {
+    return (data: ExpedienteDetalleDto, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
       return (
-        (searchTerms.codigoExpediente === '' || (data.codigo_expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
+        (searchTerms.codigoExpediente === '' || (data.expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
         (searchTerms.tipoReclamo === '' || (data.tipo_reclamo?.toLowerCase() || '').includes(searchTerms.tipoReclamo)) &&
-        (searchTerms.procedencia === '' || (data.tipo_expediente?.toLowerCase() || '').includes(searchTerms.procedencia))
+        (searchTerms.procedencia === '' || (data.procedencia?.toLowerCase() || '').includes(searchTerms.procedencia))
       );
     };
   }

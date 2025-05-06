@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Expediente } from 'src/app/models/expediente';
+import { ExpedienteDetalleDto } from 'src/app/models/expediente-detalle-dto';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
 import { AuthService } from 'src/app/services/auth.service';
@@ -24,6 +25,7 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
   loading: boolean = false;
   columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
   dataSource = new MatTableDataSource<Expediente>();
+  dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
@@ -51,7 +53,7 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
+    //this.showData();
     this.showTipoReclamo();
     this.showTipoProcedencia();
   }
@@ -63,10 +65,10 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
+        this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
       },
       error: (e) => {
@@ -115,15 +117,15 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
   //9. Obtengo todos los registros
-  showData():void{
+  /*showData():void{
     this.loading = true;
     const estadoPendiente = 1;
     this._apiService.show(estadoPendiente).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
+        this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
       },
       error: (e) => {
@@ -132,7 +134,7 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
         this._notificacion.showError("Error", this.errorMessage);
       }
     });
-  }
+  }*/
   //10. Función para filtrar información de la lista de datos
   filterData(event: Event, filterType: keyof typeof this.filterValues) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
@@ -143,13 +145,13 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     }
   }
   //11. Función para crear el filtro personalizado
-  createFilter(): (data: Expediente, filter: string) => boolean {
-    return (data: Expediente, filter: string): boolean => {
+  createFilter(): (data: ExpedienteDetalleDto, filter: string) => boolean {
+    return (data: ExpedienteDetalleDto, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
       return (
-        (searchTerms.codigoExpediente === '' || (data.codigo_expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
+        (searchTerms.codigoExpediente === '' || (data.expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
         (searchTerms.tipoReclamo === '' || (data.tipo_reclamo?.toLowerCase() || '').includes(searchTerms.tipoReclamo)) &&
-        (searchTerms.procedencia === '' || (data.tipo_expediente?.toLowerCase() || '').includes(searchTerms.procedencia))
+        (searchTerms.procedencia === '' || (data.procedencia?.toLowerCase() || '').includes(searchTerms.procedencia))
       );
     };
   }

@@ -2,6 +2,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
+import { ExpedienteDetalleDto } from '../models/expediente-detalle-dto';
 import { ExpedienteResponse } from '../models/expediente-response';
 import { ExpedienteConsultaResponse } from '../models/expediente-consulta-response';
 import { Expediente } from '../models/expediente';
@@ -25,8 +26,8 @@ export class ExpedienteService {
   show(estado: number): Observable<Expediente[]>{
     return this.http.get<Expediente[]>(this.apiUrlExp);
   }
-  listarPorFiltros(filtros: any): Observable<Expediente[]> {
-    return this.http.post<Expediente[]>(this.apiUrlExp, filtros);
+  listarPorFiltros(filtros: any): Observable<ExpedienteDetalleDto[]> {
+    return this.http.post<ExpedienteDetalleDto[]>(this.apiUrlExp, filtros);
   }
 
   //4. Método para obtener los datos de un expediente
