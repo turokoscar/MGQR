@@ -4,20 +4,10 @@
 <!-- Área de datos -->
 <div class="mat-elevation-z3">
   <table mat-table [dataSource]="dataSourceExp" matSort>
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()"
-                      [aria-label]="checkboxLabel()">
-        </mat-checkbox>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? seleccionar(row) : null"
-                      [checked]="selection.isSelected(row)"
-                      [aria-label]="checkboxLabel(row)">
-        </mat-checkbox>
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef> # </th>
+      <td mat-cell *matCellDef="let row; let i = index;">
+        {{ i + 1 + (paginator.pageIndex * paginator.pageSize) }}
       </td>
     </ng-container>
     <ng-container matColumnDef="numero">
@@ -32,7 +22,6 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
       <td mat-cell *matCellDef="let row"> {{row.tipo_reclamo}} </td>
     </ng-container>
-
     <ng-container matColumnDef="canal">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Canal de Ingreso </th>
       <td mat-cell *matCellDef="let row"> {{row.tipo_canal}} </td>

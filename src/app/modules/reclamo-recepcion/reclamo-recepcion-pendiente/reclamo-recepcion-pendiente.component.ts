@@ -24,7 +24,7 @@ import { ExportService } from 'src/app/services/export.service';
 export class ReclamoRecepcionPendienteComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'canal','tipo', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
+  columnas: string[] = ['index','numero', 'procedencia','tipo','canal', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);

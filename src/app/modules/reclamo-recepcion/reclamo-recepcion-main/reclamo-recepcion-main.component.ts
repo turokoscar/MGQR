@@ -30,6 +30,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   dataSource = new MatTableDataSource<Expediente>();
+  pestaniaActiva: 'pendiente' | 'atendido' | 'denegado' = 'pendiente';
   errorMessage: string = '';
   filtro = {
     tipoCanalId: 0,
@@ -86,13 +87,23 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
       tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
-      estado: 1 // Estado pendiente
+      estado: this.pestaniaActiva === 'pendiente' ? 1 :
+              this.pestaniaActiva === 'atendido' ? 2 :
+              this.pestaniaActiva === 'denegado' ? 3 : null
     };
-    this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
+
+    if (this.pestaniaActiva === 'pendiente') {
+      this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
+    } else if (this.pestaniaActiva === 'atendido') {
+      this.reclamoAtendido.cargarExpedientes(filtrosConEstado);
+    } else if (this.pestaniaActiva === 'denegado') {
+      this.reclamoDenegado.cargarExpedientes(filtrosConEstado);
+    }
   }
 
+
   activarPestania(pestania: 'atendido' | 'denegado') {
-    console.log('Cambio de pestaña a:', pestania);
+    this.pestaniaActiva = pestania;
 
     const filtrosConEstado = {
       ...this.filtro,

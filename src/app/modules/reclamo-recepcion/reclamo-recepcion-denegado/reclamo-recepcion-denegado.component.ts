@@ -23,7 +23,7 @@ import {ExpedienteDetalleDto} from "../../../models/expediente-detalle-dto";
 export class ReclamoRecepcionDenegadoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
+  columnas: string[] = ['index','numero', 'procedencia', 'tipo','canal', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);

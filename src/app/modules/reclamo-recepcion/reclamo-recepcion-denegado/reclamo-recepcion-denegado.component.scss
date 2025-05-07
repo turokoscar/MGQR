@@ -1,4 +1,64 @@
 @import 'src/assets/styles/theme';
+::ng-deep .mat-mdc-header-cell {
+  background-color: #bae9ff !important;
+  border-right: 1px solid #a4cee1 !important;
+  color: #000 !important;
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+::ng-deep .mat-mdc-header-row {
+  border: 1px solid #a4cee1;
+}
+
+::ng-deep .mat-sort-header-content {
+  display: flex!important;
+  justify-content: center!important;
+  align-items: center!important;
+  font-size: 1.2rem!important;
+}
+
+::ng-deep .mat-column-numero {
+  width: 11rem;
+  max-width: 11rem;
+  min-width: 11rem;
+  text-align: center;
+}
+
+::ng-deep .mat-column-procedencia {
+  width: 15rem;
+}
+
+::ng-deep .mat-column-tipo {
+  width: 15rem;
+  text-align: center!important;
+}
+
+::ng-deep .mat-column-canal {
+  width: 10rem;
+  text-align: center!important;
+}
+
+::ng-deep .mat-column-fecha {
+  width: 10rem;
+}
+
+::ng-deep .mat-column-descripcion {
+  width: 31rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep .mat-column-usuario {
+  width: 15rem;
+}
+
+::ng-deep .mat-column-plazo {
+  width: 4rem;
+  text-align: center!important;
+}
 
 .botones-acciones {
   display: flex;
