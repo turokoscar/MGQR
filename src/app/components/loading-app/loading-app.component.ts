@@ -6,4 +6,5 @@ import { Component, Input } from '@angular/core';
 })
 export class LoadingAppComponent {
   @Input() isLoading: boolean = false;
+  @Input() mensaje: string = 'Espere un momento, se está procesando el formulario ...';
 }

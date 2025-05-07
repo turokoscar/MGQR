@@ -30,6 +30,7 @@ import { ExpedienteValidacionResponse } from 'src/app/models/expediente-validaci
 
 import { ToastrService } from 'ngx-toastr';
 import { AlertService } from 'src/app/services/alert.service';
+import {SweetAlertIcon} from "sweetalert2";
 
 @Component({
   selector: 'app-reclamo',
@@ -65,6 +66,8 @@ export class ReclamoComponent implements OnInit {
   showEmailField = false;
   showEnviarNotificacionField = true;
   showEnviarExpedienteField = false;
+  dniValidado = false;
+  loadingMessage: string = 'Espere un momento, se está procesando el formulario ...';
 
   listValidacionCorreo!:ExpedienteValidacionResponse;
 
@@ -119,6 +122,11 @@ export class ReclamoComponent implements OnInit {
     this.showTipoProyectos();
     this.showRegiones();
 
+    this.dniValidado = false;
+    this.segundaParteForm.controls['nombre'].disable();
+    this.segundaParteForm.controls['apellido_paterno'].disable();
+    this.segundaParteForm.controls['apellido_materno'].disable();
+
     this.acceptFileTypes = this.allowedExtensions.map(ext => '.' + ext).join(',');
 
     // Observa cambios en la variable disabled
@@ -172,6 +180,45 @@ export class ReclamoComponent implements OnInit {
       control.updateValueAndValidity();
     }
   }
+  onDniInputBlur(): void {
+    const dni = this.segundaParteForm.get('numero_documento')?.value;
+
+    if (dni && dni.length === 8) {
+      this.loadingMessage = 'Validando DNI en la RENIEC...';
+      this.loading = true;
+
+      this._expediente.buscarDni(dni).subscribe({
+        next: (response) => {
+          this.loading = false;
+          if (response.c === 1 && response.d) {
+            const data = response.d;
+            this.segundaParteForm.patchValue({
+              nombre: data.prenombres,
+              apellido_paterno: data.primerApellido,
+              apellido_materno: data.segundoApellido
+            });
+
+            this.segundaParteForm.controls['nombre'].disable();
+            this.segundaParteForm.controls['apellido_paterno'].disable();
+            this.segundaParteForm.controls['apellido_materno'].disable();
+          } else {
+            this.openDialogGeneral("Mensaje de Información", "Ocurrió un error al validar con el API RENIEC, ingrese sus datos de manera manual", "error");
+            this.segundaParteForm.controls['nombre'].enable();
+            this.segundaParteForm.controls['apellido_paterno'].enable();
+            this.segundaParteForm.controls['apellido_materno'].enable();
+          }
+        },
+        error: () => {
+          this.loading = false;
+          this.openDialogGeneral("Mensaje de Información", "Error al conectar con el servicio RENIEC", "error");
+          this.segundaParteForm.controls['nombre'].enable();
+          this.segundaParteForm.controls['apellido_paterno'].enable();
+          this.segundaParteForm.controls['apellido_materno'].enable();
+        }
+      });
+    }
+  }
+
   //4. Estructuro la primera parte del formulario
   private showPrimerForm():void{
     this.primeraParteForm = this.fb.group({
@@ -273,7 +320,6 @@ export class ReclamoComponent implements OnInit {
     });
   }
 
-
   //8. Obtengo la lista de regiones
   showRegiones(){
     const filtro = 0;
@@ -325,34 +371,38 @@ export class ReclamoComponent implements OnInit {
   //12. Deshabilita o habilita los campos según el valor del input Checkbox
   private onActivaReactividad(): void {
     if (this.disabled) {
-      this.es_confidencial=true;
+      // Caso confidencial: deshabilitar todo
+      this.es_confidencial = true;
       this.segundaParteForm.controls['tipo_documento'].disable();
       this.segundaParteForm.controls['numero_documento'].disable();
       this.segundaParteForm.controls['nombre'].disable();
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
-
-      this.segundaParteForm.controls['tipo_documento'].setValue('0');
-      this.segundaParteForm.controls['numero_documento'].setValue('');
-      this.segundaParteForm.controls['nombre'].setValue('');
-      this.segundaParteForm.controls['apellido_materno'].setValue('');
-      this.segundaParteForm.controls['apellido_paterno'].setValue('');
-
-
-
+      // Limpiar valores
+      this.segundaParteForm.patchValue({
+        tipo_documento: '0',
+        numero_documento: '',
+        nombre: '',
+        apellido_paterno: '',
+        apellido_materno: ''
+      });
     } else {
-      this.es_confidencial=false;
+      this.es_confidencial = false;
       this.segundaParteForm.controls['tipo_documento'].enable();
       this.segundaParteForm.controls['numero_documento'].enable();
-      this.segundaParteForm.controls['nombre'].enable();
-      this.segundaParteForm.controls['apellido_paterno'].enable();
-      this.segundaParteForm.controls['apellido_materno'].enable();
 
-
+      if (this.dniValidado) {
+        this.segundaParteForm.controls['nombre'].disable();
+        this.segundaParteForm.controls['apellido_paterno'].disable();
+        this.segundaParteForm.controls['apellido_materno'].disable();
+      } else {
+        this.segundaParteForm.controls['nombre'].disable(); // o enable si deseas
+        this.segundaParteForm.controls['apellido_paterno'].disable();
+        this.segundaParteForm.controls['apellido_materno'].disable();
+      }
     }
-
-
   }
+
   //13. Método que se ejecuta cuando cambia el checkbox de confidencialidad
   activaConfidencialidad(): void {
     this.disabled = this.segundaParteForm.get('es_confidencial')?.value || false;
@@ -398,9 +448,6 @@ export class ReclamoComponent implements OnInit {
       "usuario_id": "1",
       "evidencia":this.nombreArchivoSeleccionado,
      }
-
-
-
       this._expediente.validacionCorreo(param).subscribe({
         next: (data:ExpedienteValidacionResponse) => {
           console.log(data);
@@ -420,13 +467,7 @@ export class ReclamoComponent implements OnInit {
           this.errorMessage = "Se presentó un problema al realizar la operación: " + e;
         }
       });
-
-
-
-
 }
-
-
 
  //14. Proceso el formulario
  onSubmit():void{
@@ -530,12 +571,13 @@ export class ReclamoComponent implements OnInit {
     this.loading = false;
     this.openDialogError("Errores","El codigo de validacion es incorrecto");
    }
-
-
-
 }
-
-
+  onlyNumberInput(event: KeyboardEvent): void {
+    const charCode = event.charCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Solo permite del 0 al 9
+    }
+  }
   //15. Mostramos un cuadro de dialogo
   openDialog(codigo_expediente: any): void {
     this.alertService.showInfoAlert(codigo_expediente);
@@ -546,9 +588,8 @@ export class ReclamoComponent implements OnInit {
   }
 
   openDialogGeneral(title: string, html: any, icon: string): void {
-    this.alertService.showAlertGeneral(title,html,icon);
+    this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
   }
-
 
   //16. Establesco un valor por default para el boton guardar del formulario
   isFormValid(): boolean {
@@ -583,33 +624,6 @@ export class ReclamoComponent implements OnInit {
     this.ListFiles = [{ id: 1, extension, file: nuevoArchivo }];
   }
 
-
-
-
-
-  //12. Carga de imagen Inicio
-  archivoSeleccionadovv1(event: any) {
-    const file = event.target.files[0];
-    const nombreArchivo = file.name;
-    const extension = nombreArchivo.split('.').pop()?.toLowerCase();
-    // if (extension === 'pdf' ) {
-      if (file) {
-        const nuevoNombre = this.generarNombreArchivo(extension);
-        // No puedes cambiar directamente el nombre de un archivo, pero puedes crear un nuevo archivo con el nuevo nombre
-        const nuevoArchivo = new File([file], nuevoNombre, { type: file.type });
-        this.nombreArchivoSeleccionado = nuevoNombre;
-        // const reader = new FileReader();
-        // reader.onload = e => this.urlPrevisualizacion = reader.result as string;
-        // reader.readAsDataURL(nuevoArchivo);
-        // // Setear el valor del campo foto en el formulario
-        // this.segundaParteForm.controls['evidencia_consulta'].setValue(nuevoArchivo);
-      }
-    // } else {
-    //   // this.ArchivoSeleccionados = 'seleccione un archivo JPG válido.'; // Valor predeterminado
-    //   // this._notificacion.showWarning("Warning: ", "Por favor, seleccione un archivo JPG válido.");
-    //   this.toastr.error('Warning',"Por favor, seleccione un archivo JPG válido.");
-    // }
-  }
   //13. Genero un nombre para el archivo a cargar
   private generarNombreArchivo(extension: string): string {
     // Usar la fecha y hora actuales para crear una cadena única
@@ -629,23 +643,5 @@ export class ReclamoComponent implements OnInit {
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';
     }
-  }
-
-  getFile(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const files: FileList | null = target.files;
-    if (files!.length > 0 && files != null) {
-      Array.prototype.forEach.call(files, (file: File) => {
-        this.formDataFiles.append("files", file);
-        console.log("Lista de Archivo"+this.formDataFiles);
-      });
-
-      // this._expediente.upload(formData).subscribe(response => {
-      //   console.log('File uploaded successfully', response);
-      // }, error => {
-      //   console.error('Error uploading file', error);
-      // });
-    }
-
   }
 }

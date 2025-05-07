@@ -29,7 +29,9 @@ export class ExpedienteService {
   listarPorFiltros(filtros: any): Observable<ExpedienteDetalleDto[]> {
     return this.http.post<ExpedienteDetalleDto[]>(this.apiUrlExp, filtros);
   }
-
+  buscarDni(numdni: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/Reniec/api/reniec?numdni=${numdni}`, {});
+  }
   //4. Método para obtener los datos de un expediente
   showById(id: number): Observable<Expediente>{
     const url = `${this.fakeApi}/${id}`;

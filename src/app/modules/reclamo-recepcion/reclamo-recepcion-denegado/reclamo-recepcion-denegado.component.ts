@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import {ExpedienteDetalleDto} from "../../../models/expediente-detalle-dto";
 
 @Component({
   selector: 'app-reclamo-recepcion-denegado',
@@ -24,6 +25,7 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   loading: boolean = false;
   columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
+  dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
@@ -51,11 +53,28 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
-    this.showTipoReclamo();
-    this.showTipoProcedencia();
+
+  }
+  @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+
+  cargarExpedientes(filtros: any): void {
+    this.loading = true;
+    this._apiService.listarPorFiltros(filtros).subscribe({
+      next: (data) => {
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
+        this._notificacion.showError("Error", this.errorMessage);
+      }
+    });
   }
   //4. Verificamos que todos los elementos esten seleccionados
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     if (this.dataSource) {

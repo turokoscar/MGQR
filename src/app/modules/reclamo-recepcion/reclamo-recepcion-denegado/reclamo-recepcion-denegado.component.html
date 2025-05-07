@@ -3,7 +3,7 @@
 <div class="my-2"></div>
 <!-- Área de datos -->
 <div class="mat-elevation-z3">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSourceExp" matSort>
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -22,11 +22,11 @@
     </ng-container>
     <ng-container matColumnDef="numero">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-      <td mat-cell *matCellDef="let row"> {{row.codigo_expediente}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.expediente}} </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Procedencia </th>
-      <td mat-cell *matCellDef="let row"> {{row.tipo_expediente}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.procedencia}} </td>
     </ng-container>
     <ng-container matColumnDef="tipo">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
@@ -34,7 +34,7 @@
     </ng-container>
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
-      <td mat-cell *matCellDef="let row">{{ row.fecha | date: 'dd/MM/yyyy' }} </td>
+      <td mat-cell *matCellDef="let row">{{ row.fecha }} </td>
     </ng-container>
     <ng-container matColumnDef="descripcion">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
@@ -42,11 +42,11 @@
     </ng-container>
     <ng-container matColumnDef="usuario">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
-      <td mat-cell *matCellDef="let row"> {{row.nombres}} {{row.apellido_paterno}} {{row.apellido_materno}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.nombre_completo}} </td>
     </ng-container>
     <ng-container matColumnDef="ubigeo">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Plazo (día)</th>
-      <td mat-cell *matCellDef="let row"> {{row.ubigeo}} </td>
+      <td mat-cell *matCellDef="let row"> {{row.dias_transcurridos}} </td>
     </ng-container>
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </th>

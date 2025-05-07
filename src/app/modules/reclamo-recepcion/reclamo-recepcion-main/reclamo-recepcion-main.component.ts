@@ -1,6 +1,8 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { TipoProyecto } from 'src/app/models/tipo-proyecto';
+import { TipoProyectoService } from 'src/app/services/tipo-proyecto.service';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import {ExpedienteService} from "../../../services/expediente.service";
@@ -13,6 +15,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {Expediente} from "../../../models/expediente";
 import {ReclamoRecepcionPendienteComponent} from "../reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component";
+import {ReclamoRecepcionAtendidoComponent} from "../reclamo-recepcion-atendido/reclamo-recepcion-atendido.component";
+import {ReclamoRecepcionDenegadoComponent} from "../reclamo-recepcion-denegado/reclamo-recepcion-denegado.component";
 import { AfterViewInit } from '@angular/core';
 
 @Component({
@@ -23,12 +27,14 @@ import { AfterViewInit } from '@angular/core';
 export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   tipoReclamos: TipoReclamo[] = [];
+  tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   dataSource = new MatTableDataSource<Expediente>();
   errorMessage: string = '';
   filtro = {
-    tipoCanalId: null,
-    tipoReclamoId: null,
+    tipoCanalId: 0,
+    tipoReclamoId: 0,
+    tipoProyectoId: 0,
     codigoExpediente: null,
     estado: null
   };
@@ -36,6 +42,8 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reclamoPendiente') reclamoPendiente!: ReclamoRecepcionPendienteComponent;
+  @ViewChild('reclamoAtendido') reclamoAtendido!: ReclamoRecepcionAtendidoComponent;
+  @ViewChild('reclamoDenegado') reclamoDenegado!: ReclamoRecepcionDenegadoComponent;
 
   constructor(
     private _apiService: ExpedienteService,
@@ -44,12 +52,14 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     private router: Router,
     private aRoute: ActivatedRoute,
     private _tipoReclamo: TipoReclamoService,
+    private _tipoProyecto: TipoProyectoService,
     private _tipoProcedencia: TipoProcedenciaReclamoService,
     private exportService: ExportService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showTipoReclamo();
+    this.showTipoProyecto();
     this.showTipoProcedencia();
   }
 
@@ -60,8 +70,9 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
 
   limpiarFiltros(): void {
     this.filtro = {
-      tipoCanalId: null,
-      tipoReclamoId: null,
+      tipoCanalId: 0,
+      tipoReclamoId: 0,
+      tipoProyectoId: 0,
       codigoExpediente: null,
       estado: null
     };
@@ -74,6 +85,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
       ...this.filtro,
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
+      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
       estado: 1 // Estado pendiente
     };
     this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
@@ -82,25 +94,40 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   activarPestania(pestania: 'atendido' | 'denegado') {
     console.log('Cambio de pestaña a:', pestania);
 
-    // IDs de los botones de las pestañas
-    const tabIds = {
-      atendido: '#nav-profile-tab',
-      denegado: '#nav-contact-tab'
+    const filtrosConEstado = {
+      ...this.filtro,
+      tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
+      tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
+      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
+      estado: pestania === 'atendido' ? 2 : (pestania === 'denegado' ? 3 : null)
     };
 
-    // Simular clic en el botón de la pestaña correspondiente
-    const tab = document.querySelector(tabIds[pestania]!) as HTMLElement;
-    if (tab) {
-      tab.click(); // Esto activa la pestaña como si el usuario hiciera clic
-    } else {
-      console.warn('No se encontró el botón de pestaña con ID:', tabIds[pestania]);
+    if (pestania === 'atendido') {
+      this.reclamoAtendido.cargarExpedientes(filtrosConEstado);
+    } else if (pestania === 'denegado') {
+      this.reclamoDenegado.cargarExpedientes(filtrosConEstado);
     }
   }
+
 
   showTipoReclamo():void{
     this._tipoReclamo.show().subscribe({
       next: (data) => {
         this.tipoReclamos = [
+          { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
+          ...data
+        ];
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  showTipoProyecto():void{
+    this._tipoProyecto.show().subscribe({
+      next: (data) => {
+        this.tipoProyectos = [
           { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
           ...data
         ];

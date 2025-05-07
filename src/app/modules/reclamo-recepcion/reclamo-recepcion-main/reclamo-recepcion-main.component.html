@@ -12,19 +12,19 @@
           <div class="card-body">
             <div class="row align-items-end">
               <!-- Filtro por Número de Expediente -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
-                  <mat-label>Filtro por Número de Expediente:</mat-label>
+                  <mat-label>Filtro Nº de Expediente:</mat-label>
                   <input
                     matInput
                     [(ngModel)]="filtro.codigoExpediente"
-                    placeholder="Ingrese el número de expediente..."
+                    placeholder="Ingrese Nº de expediente..."
                   />
                 </mat-form-field>
               </div>
 
               <!-- Filtro por Procedencia -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Procedencia</mat-label>
                   <mat-select [(ngModel)]="filtro.tipoCanalId">
@@ -36,7 +36,7 @@
               </div>
 
               <!-- Filtro por Tipo de Reclamo -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Tipo de Reclamo</mat-label>
                   <mat-select [(ngModel)]="filtro.tipoReclamoId">
@@ -47,8 +47,19 @@
                 </mat-form-field>
               </div>
 
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Proyecto</mat-label>
+                  <mat-select [(ngModel)]="filtro.tipoProyectoId">
+                    <mat-option *ngFor="let item of tipoProyectos" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
               <!-- Botones -->
-              <div class="botones-acciones col-md-3 d-flex justify-content-end gap-2">
+              <div class="botones-acciones col-md-4 d-flex justify-content-end gap-2">
                 <button class="btn-buscar" (click)="buscarConFiltros()">
                   <i class="bi bi-search"></i> Buscar
                 </button>
@@ -66,12 +77,32 @@
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
                   <i class="bi bi-file-earmark-text text-primary"></i>
                   Por admitir</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-atendido" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                <button class="nav-link"
+                        id="nav-profile-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-atendido"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-profile"
+                        aria-selected="false"
+                        (click)="activarPestania('atendido')">
                   <i class="bi bi-file-earmark-text text-warning"></i>
-                  Admitidos</button>
-                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-denegado" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                  Admitidos
+                </button>
+
+                <!-- Denegados -->
+                <button class="nav-link"
+                        id="nav-contact-tab"
+                        data-bs-toggle="tab"
+                        data-bs-target="#nav-denegado"
+                        type="button"
+                        role="tab"
+                        aria-controls="nav-contact"
+                        aria-selected="false"
+                        (click)="activarPestania('denegado')">
                   <i class="bi bi-x-circle-fill text-danger"></i>
-                  Denegados</button>
+                  Denegados
+                </button>
               </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
@@ -81,11 +112,11 @@
               </div>
               <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
-                <app-reclamo-recepcion-atendido></app-reclamo-recepcion-atendido>
+                <app-reclamo-recepcion-atendido #reclamoAtendido></app-reclamo-recepcion-atendido>
               </div>
               <div class="tab-pane fade" id="nav-denegado" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                 <br>
-                <app-reclamo-recepcion-denegado></app-reclamo-recepcion-denegado>
+                <app-reclamo-recepcion-denegado #reclamoDenegado></app-reclamo-recepcion-denegado>
               </div>
             </div>
           </div>

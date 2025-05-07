@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
+import Swal, {SweetAlertIcon} from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
 })
@@ -40,11 +40,11 @@ showAError(title: string, html: any): void{
 }
 
   // Método al cual pasaremos 3 parámetros
-  showAlertGeneral(title: string, html: any,icon:string): void{
+  showAlertGeneral(title: string, html: any,icon:SweetAlertIcon): void{
     Swal.fire({
       title: title,
       html: html,
-      icon: 'success',
+      icon: icon,
       confirmButtonColor: '#7f6000',
       confirmButtonText: 'Aceptar'
     });

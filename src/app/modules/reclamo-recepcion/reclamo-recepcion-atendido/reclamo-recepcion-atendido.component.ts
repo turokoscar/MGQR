@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,6 +13,7 @@ import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import {ExpedienteDetalleDto} from "../../../models/expediente-detalle-dto";
 
 @Component({
   selector: 'app-reclamo-recepcion-atendido',
@@ -25,6 +26,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   columnas: string[] = ['select','fechaasignacion','numero','canal', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   selection = new SelectionModel<Expediente>(true, []);
+  dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   id!: number;
@@ -51,9 +53,23 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
-    this.showTipoReclamo();
-    this.showTipoProcedencia();
+  }
+  @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+  cargarExpedientes(filtros: any): void {
+    this.loading = true;
+    this._apiService.listarPorFiltros(filtros).subscribe({
+      next: (data) => {
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
+        this.loading = false;
+      },
+      error: (e) => {
+        this.loading = false;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
+        this._notificacion.showError("Error", this.errorMessage);
+      }
+    });
   }
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
@@ -93,99 +109,6 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
   }
   //9. Obtengo todos los registros
-  showData2():void{
-    this.loading = true;
-    const estadoAtendido = 1;
-    this._apiService.show(estadoAtendido).subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
-        this.loading = false;
-      },
-      error: (e) => {
-        this.loading = false;
-        this.errorMessage = "Se presentó un problema al realizar la operación"+ e;
-        this._notificacion.showError("Error", this.errorMessage);
-      }
-    });
-  }
-  showData():void{
-    this.loading = true;
-
-    // Crear un elemento estático con todas las propiedades necesarias
-    const registroEstatico1: Expediente = {
-      id: 0,
-      tipo_canal: 0,
-      tipo_expediente: 'Interno',
-      codigo_expediente: 99999,
-      tipo_reclamo: 'Queja',
-      fecha: new Date(),
-      evidencia: '',
-      es_confidencial: 0,
-      tipo_documento: 'DNI',
-      numero_documento: '00000000',
-      nombres: 'Juan',
-      apellido_paterno: 'Miranda',
-      apellido_materno: 'Dextre',
-      genero: 'N/A',
-      telefono: 0,
-      celular: 0,
-      email: 0,
-      ubigeo: '1',
-      direccion: 'Pedro Fernandez',
-      estado_proceso: 'EJEMPLO',
-      contenido_consulta: 'Este es un registro estático solo para demostración',
-      comunidad: 'N/A',
-      cargo: 'N/A',
-      usuario_id: 0,
-      estado: 1, // Estado pendiente
-      create_at: new Date(),
-      update_at: new Date()
-    };
-    const registroEstatico2: Expediente = {
-      id: 0,
-      tipo_canal: 0,
-      tipo_expediente: 'Interno',
-      codigo_expediente: 99999,
-      tipo_reclamo: 'Queja',
-      fecha: new Date(),
-      evidencia: '',
-      es_confidencial: 0,
-      tipo_documento: 'DNI',
-      numero_documento: '00000000',
-      nombres: 'Juan',
-      apellido_paterno: 'Miranda',
-      apellido_materno: 'Dextre',
-      genero: 'N/A',
-      telefono: 0,
-      celular: 0,
-      email: 0,
-      ubigeo: '1',
-      direccion: 'Pedro Fernandez',
-      estado_proceso: 'EJEMPLO',
-      contenido_consulta: 'Este es un registro estático solo para demostración',
-      comunidad: 'N/A',
-      cargo: 'N/A',
-      usuario_id: 0,
-      estado: 1, // Estado pendiente
-      create_at: new Date(),
-      update_at: new Date()
-    };
-
-    // Asignar directamente solo el registro estático
-    this.dataSource.data = [registroEstatico1,registroEstatico2];
-
-    // Configurar paginator y sort (con un pequeño timeout para asegurar que se han inicializado)
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.dataSource.filterPredicate = this.createFilter();
-      this.loading = false;
-    });
-
-  }
   //10. Función para filtrar información de la lista de datos
   filterData(event: Event, filterType: keyof typeof this.filterValues) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
