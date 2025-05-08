@@ -113,7 +113,7 @@ export class ReclamoComponent implements OnInit {
     private alertService: AlertService
   ){}
   //3. Inicializo el componente
-  ngOnInit(): void {
+/*  ngOnInit(): void {
     this.showPrimerForm();
     this.showSegundoForm();
     this.showTipoAtencion();
@@ -168,6 +168,58 @@ export class ReclamoComponent implements OnInit {
         this.setDocumentoMaxLength(15);
       }
     });
+  }*/
+  ngOnInit(): void {
+    this.initFormsAndData(); // 1. Inicializa formularios y listas
+
+    const data = history.state.expediente;
+
+    if (data) {
+      // 2. Precarga los datos si vienen desde "Ver detalle"
+      this.primeraParteForm.patchValue({
+        tipo_persona: data.tipo_expediente,
+        email_institucional: data.correo_electronico
+      });
+
+      this.segundaParteForm.patchValue({
+        tipo_documento: data.tipo_documento_id,
+        numero_documento: data.numero_documento,
+        genero: data.genero,
+        nombre: data.nombres,
+        apellido_paterno: data.apellido_paterno,
+        apellido_materno: data.apellido_materno,
+        departamento: data.departamento_id,
+        provincia: data.provincia_id,
+        distrito: data.distrito_id,
+        direccion: data.direccion,
+        numero_telefono: data.telefono,
+        numero_celular: data.celular,
+        correo_electronico: data.correo_electronico,
+        comunidad: data.comunidad,
+        cargo: data.cargo,
+        tipo_consulta: data.tipo_reclamo_id,
+        tipo_proyecto: data.tipo_proyecto_id,
+        contenido_consulta: data.contenido_consulta,
+        referencia: data.referencia
+      });
+
+      this.segundaParteForm.controls['nombre'].disable();
+      this.segundaParteForm.controls['apellido_paterno'].disable();
+      this.segundaParteForm.controls['apellido_materno'].disable();
+
+      this.showEnviarNotificacionField = false;
+      this.showEnviarExpedienteField = false;
+    }
+  }
+  initFormsAndData(): void {
+    this.showPrimerForm();
+    this.showSegundoForm();
+    this.showTipoAtencion();
+    this.showTipoDocumentos();
+    this.showTipoReclamos();
+    this.showTipoProyectos();
+    this.showRegiones();
+    this.onActivaReactividad();
   }
   private setDocumentoMaxLength(maxLength: number): void {
     const control = this.segundaParteForm.get('numero_documento');

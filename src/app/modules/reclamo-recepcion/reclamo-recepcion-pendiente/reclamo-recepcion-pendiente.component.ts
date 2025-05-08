@@ -193,9 +193,10 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.alertaVisible = false;
   }
 
-  verDetalle(row: Expediente): void {
-    console.log('Ver detalle de:', row);
-    // Implementa aquí la lógica para ver detalles
+  verDetalle(row: any): void {
+    this.router.navigate(['/reclamo/create'], {
+      state: { expediente: row }
+    });
   }
 
   aprobar(row: Expediente): void {

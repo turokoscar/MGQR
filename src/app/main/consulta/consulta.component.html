@@ -57,8 +57,8 @@
 
       <div class="container py-4"  *ngIf="resultadoDiv">
         <!-- Contenido -->
-      
-          
+
+
           <div class="card-body">
             <!-- Resultado de la consulta -->
             <div class="card">
@@ -66,7 +66,7 @@
                 <h5 class="text-white"><i class="bi bi-credit-card-2-front"></i> Estado del expediente</h5>
               </div>
               <div class="card-body">
-    
+
                 <mat-list>
                   <mat-list-item><strong>Número de expediente:</strong> {{resultadoFinal.expediente}}</mat-list-item>
                   <mat-divider></mat-divider>
@@ -79,10 +79,10 @@
                   <mat-list-item style="white-space: normal!important;">
                     {{resultadoFinal.contenido_consulta}}
                   </mat-list-item>
-                    
-                 
-                
-                  
+
+
+
+
                   <!--<mat-list-item><strong>Nombre del área actual:</strong> Especialista en gestión de riesgos sociales</mat-list-item>
                   <mat-divider></mat-divider>
                   <mat-list-item><strong>Respuesta:</strong> -</mat-list-item>
@@ -94,7 +94,7 @@
                   <mat-divider></mat-divider>
                   <mat-list-item><strong>Estado:</strong> {{resultadoFinal.estado}}</mat-list-item>
                 </mat-list>
-    
+
                 <div style="display: flex; justify-content: flex-end; gap: 10px;">
                   <button mat-raised-button color="primary" (click)="consultarOtraVez()">
                     <i class="bi bi-arrow-left"></i>
@@ -104,8 +104,8 @@
               </div>
             </div>
           </div>
-       
-       
+
+
       </div>
 
     </div>
