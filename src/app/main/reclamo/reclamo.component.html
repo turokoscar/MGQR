@@ -42,6 +42,31 @@
                 </mat-form-field>
               </div>
             </div>
+            <div class="row" *ngIf="esInterno">
+              <div class="col-6">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Fecha de Ocurrencia</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="fecha_ocurrencia">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Tipo Canal</mat-label>
+                  <mat-select formControlName="tipo_canal">
+                    <mat-option value="1">Web</mat-option>
+                    <mat-option value="2">Presencial</mat-option>
+                    <mat-option value="3">Comunicacion Escrita</mat-option>
+                    <mat-option value="4">Redes Sociales</mat-option>
+                    <mat-option value="5">Llamada Telefónica</mat-option>
+                    <mat-option value="6">Whatsapp</mat-option>
+                    <!-- ajusta según tus opciones reales -->
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
             <!-- <div style="display: flex; justify-content: flex-end; gap: 10px;">
               <button mat-raised-button color="primary" routerLink="/home">
                 <i class="bi bi-arrow-left"></i>

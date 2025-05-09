@@ -86,6 +86,7 @@ export class ReclamoComponent implements OnInit {
 
   expediente_id: any=0;
   numero_expediente: any="";
+  esInterno: boolean = false;
 
   result_expediente:string="";
   result_dias:string="";
@@ -112,65 +113,10 @@ export class ReclamoComponent implements OnInit {
     private lowerCasePipe: LowerCasePipe,
     private alertService: AlertService
   ){}
-  //3. Inicializo el componente
-/*  ngOnInit(): void {
-    this.showPrimerForm();
-    this.showSegundoForm();
-    this.showTipoAtencion();
-    this.showTipoDocumentos();
-    this.showTipoReclamos();
-    this.showTipoProyectos();
-    this.showRegiones();
-
-    this.dniValidado = false;
-    this.segundaParteForm.controls['nombre'].disable();
-    this.segundaParteForm.controls['apellido_paterno'].disable();
-    this.segundaParteForm.controls['apellido_materno'].disable();
-
-    this.acceptFileTypes = this.allowedExtensions.map(ext => '.' + ext).join(',');
-
-    // Observa cambios en la variable disabled
-    this.onActivaReactividad();
-    this.segundaParteForm.get('departamento')?.valueChanges.subscribe(region => {
-      if (region) {
-        this.showProvincias(region);
-        this.segundaParteForm.get('provincia')?.enable();
-      } else {
-        this.segundaParteForm.get('provincia')?.disable();
-        this.segundaParteForm.get('distrito')?.disable();
-      }
-    });
-    this.segundaParteForm.get('provincia')?.valueChanges.subscribe(provincia => {
-      if (provincia) {
-        this.showDistritos(provincia);
-        this.segundaParteForm.get('distrito')?.enable();
-      } else {
-        this.segundaParteForm.get('distrito')?.disable();
-      }
-    });
-    this.segundaParteForm.get('es_confidencial')?.valueChanges.subscribe(value => {
-      this.activaConfidencialidad();
-    });
-    this.primeraParteForm.get('email_institucional')?.valueChanges.subscribe(value => {
-      this.segundaParteForm.get('correo_electronico')?.setValue(value, { emitEvent: false });
-      this.isReadOnly = !!value;
-    });
-    this.segundaParteForm.get('tipo_documento')?.valueChanges.subscribe((valor: number) => {
-      console.log("valor dni",valor);
-      if (valor == 1) {
-        this.maxLengthDocumento = 8;
-        this.setDocumentoMaxLength(8);
-      } else if (valor == 2) {
-        this.maxLengthDocumento = 15;
-        this.setDocumentoMaxLength(15);
-      } else {
-        this.maxLengthDocumento = 15;
-        this.setDocumentoMaxLength(15);
-      }
-    });
-  }*/
   ngOnInit(): void {
     this.initFormsAndData(); // 1. Inicializa formularios y listas
+    this.esInterno = this.router.url.includes('/reclamo/create');
+    this.initFormsAndData();
 
     const data = history.state.expediente;
     console.log("LLEGA AQUI OBS");
@@ -203,8 +149,6 @@ export class ReclamoComponent implements OnInit {
         contenido_consulta: data.contenido_consulta
       });
 
-      this.primeraParteForm.controls['tipo_persona'].disable();
-      this.primeraParteForm.controls['referencia'].disable();
       this.segundaParteForm.controls['tipo_documento'].disable();
       this.segundaParteForm.controls['numero_documento'].disable();
       this.segundaParteForm.controls['nombre'].disable();
@@ -220,6 +164,9 @@ export class ReclamoComponent implements OnInit {
       this.segundaParteForm.controls['tipo_consulta'].disable();
       this.segundaParteForm.controls['tipo_proyecto'].disable();
       this.segundaParteForm.controls['contenido_consulta'].disable();
+
+      this.primeraParteForm.controls['referencia'].disable();
+      this.primeraParteForm.controls['tipo_persona'].disable();
 
       this.showEnviarNotificacionField = false;
       this.showEnviarExpedienteField = false;
@@ -299,6 +246,8 @@ export class ReclamoComponent implements OnInit {
       numero_documento: [{ value: '', disabled: false },
         [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
       ],
+      fecha_ocurrencia: [''],
+      tipo_canal: [''],
       genero: ['', Validators.required],
       nombre: ['',
         [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
