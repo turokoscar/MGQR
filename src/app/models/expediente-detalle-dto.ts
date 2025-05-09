@@ -1,9 +1,26 @@
 export interface ExpedienteDetalleDto {
   nombre_completo: string;
+  tipo_documento_id: number;
   documento: string;
+  nombres: string;
+  apellido_paterno: string;
+  genero: string;
+  ubigeo_id: number;
+  direccion: string;
+  telefono: string;
+  celular: string;
+  email: string;
+  comunidad: string;
+  cargo: string;
+  evidencia: string;
   tipo_canal: string;
+  tipo_canal_id: number;
+  tipo_proyecto: string;
+  tipo_proyecto_id: number;
   tipo_reclamo: string;
+  tipo_reclamo_id: number;
   procedencia: string;
+  procedencia_id: number;
   expediente: string;
   fecha: string;
   contenido_consulta: string;
