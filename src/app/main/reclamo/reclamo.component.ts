@@ -173,17 +173,18 @@ export class ReclamoComponent implements OnInit {
     this.initFormsAndData(); // 1. Inicializa formularios y listas
 
     const data = history.state.expediente;
-
+    console.log("LLEGA AQUI OBS");
+    console.log(data);
     if (data) {
       // 2. Precarga los datos si vienen desde "Ver detalle"
       this.primeraParteForm.patchValue({
-        tipo_persona: data.tipo_expediente,
-        email_institucional: data.correo_electronico
+        tipo_persona: data.procedencia_id,
+        referencia: data.referencia,
       });
 
       this.segundaParteForm.patchValue({
         tipo_documento: data.tipo_documento_id,
-        numero_documento: data.numero_documento,
+        numero_documento: data.documento,
         genero: data.genero,
         nombre: data.nombres,
         apellido_paterno: data.apellido_paterno,
@@ -194,18 +195,31 @@ export class ReclamoComponent implements OnInit {
         direccion: data.direccion,
         numero_telefono: data.telefono,
         numero_celular: data.celular,
-        correo_electronico: data.correo_electronico,
+        correo_electronico: data.email,
         comunidad: data.comunidad,
         cargo: data.cargo,
         tipo_consulta: data.tipo_reclamo_id,
         tipo_proyecto: data.tipo_proyecto_id,
-        contenido_consulta: data.contenido_consulta,
-        referencia: data.referencia
+        contenido_consulta: data.contenido_consulta
       });
 
+      this.primeraParteForm.controls['tipo_persona'].disable();
+      this.primeraParteForm.controls['referencia'].disable();
+      this.segundaParteForm.controls['tipo_documento'].disable();
+      this.segundaParteForm.controls['numero_documento'].disable();
       this.segundaParteForm.controls['nombre'].disable();
       this.segundaParteForm.controls['apellido_paterno'].disable();
       this.segundaParteForm.controls['apellido_materno'].disable();
+      this.segundaParteForm.controls['genero'].disable();
+      this.segundaParteForm.controls['direccion'].disable();
+      this.segundaParteForm.controls['numero_telefono'].disable();
+      this.segundaParteForm.controls['numero_celular'].disable();
+      this.segundaParteForm.controls['correo_electronico'].disable();
+      this.segundaParteForm.controls['comunidad'].disable();
+      this.segundaParteForm.controls['cargo'].disable();
+      this.segundaParteForm.controls['tipo_consulta'].disable();
+      this.segundaParteForm.controls['tipo_proyecto'].disable();
+      this.segundaParteForm.controls['contenido_consulta'].disable();
 
       this.showEnviarNotificacionField = false;
       this.showEnviarExpedienteField = false;
