@@ -181,16 +181,29 @@ export class ReclamoComponent implements OnInit {
     this.showTipoProyectos();
     this.showRegiones();
     this.onActivaReactividad();
+    this.segundaParteForm.get('tipo_documento')?.valueChanges.subscribe((tipoDoc: number) => {
+      if (tipoDoc === 1) { // 1 = DNI
+        this.maxLengthDocumento = 8;
+        this.setDocumentoMaxLength(8);
+      } else if (tipoDoc === 2) { // 2 = Carnet de Extranjería (ajusta según tu ID real)
+        this.maxLengthDocumento = 15;
+        this.setDocumentoMaxLength(15);
+      } else {
+        this.maxLengthDocumento = 15;
+        this.setDocumentoMaxLength(15);
+      }
+    });
+
     this.segundaParteForm.get('departamento')?.valueChanges.subscribe((departamentoId: string) => {
-  if (departamentoId) {
-    this.segundaParteForm.get('provincia')?.enable();
-    this.showProvincias(departamentoId);
-    this.segundaParteForm.get('provincia')?.setValue(''); // Limpia selección previa
-    this.segundaParteForm.get('distrito')?.setValue('');
-    this.segundaParteForm.get('distrito')?.disable();
-    this.distritos = [];
-  }
-});
+      if (departamentoId) {
+        this.segundaParteForm.get('provincia')?.enable();
+        this.showProvincias(departamentoId);
+        this.segundaParteForm.get('provincia')?.setValue(''); // Limpia selección previa
+        this.segundaParteForm.get('distrito')?.setValue('');
+        this.segundaParteForm.get('distrito')?.disable();
+        this.distritos = [];
+      }
+    });
 
 this.segundaParteForm.get('provincia')?.valueChanges.subscribe((provinciaId: string) => {
   if (provinciaId) {
@@ -445,6 +458,7 @@ this.segundaParteForm.get('provincia')?.valueChanges.subscribe((provinciaId: str
   //14. Proceso el formulario
   onSubmitValidacion():void{
     this.loading = true;
+    this.loadingMessage = 'Espere un momento, se está procesando el formulario ...';
     const formData = {
       form1: this.primeraParteForm.value,
       form2: this.segundaParteForm.value
@@ -506,6 +520,7 @@ this.segundaParteForm.get('provincia')?.valueChanges.subscribe((provinciaId: str
  //14. Proceso el formulario
  onSubmit():void{
   this.loading = true;
+  this.loadingMessage = 'Espere un momento, se está procesando el formulario ...';
   const formData = {
     form1: this.primeraParteForm.value,
     form2: this.segundaParteForm.value
@@ -592,7 +607,11 @@ this.segundaParteForm.get('provincia')?.valueChanges.subscribe((provinciaId: str
 
             this.quitarImagen();
             this.openDialog(data.expediente);
-            this.router.navigate(['../home']);
+            if (this.esInterno) {
+              this.router.navigate(['/recepcion']);
+            } else {
+              this.router.navigate(['../home']);
+            }
           }
           this.loading = false;
         },

@@ -1,5 +1,6 @@
 export interface ExpedienteDetalleDto {
   nombre_completo: string;
+  idexpediente: string;
   tipo_documento_id: number;
   documento: string;
   nombres: string;

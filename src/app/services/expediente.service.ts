@@ -32,6 +32,12 @@ export class ExpedienteService {
   buscarDni(numdni: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/Reniec/api/reniec?numdni=${numdni}`, {});
   }
+  actualizarEstado(payload: { id: number; usuarioId: number; estado: number; motivo: string }): Observable<any> {
+    const url = `${this.apiUrl}/Expediente/ActualizarEstado`;
+    return this.http.post(url, payload);
+  }
+
+
   //4. Método para obtener los datos de un expediente
   showById(id: number): Observable<Expediente>{
     const url = `${this.fakeApi}/${id}`;

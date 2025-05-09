@@ -14,6 +14,8 @@ import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { ExportService } from 'src/app/services/export.service';
+import { AlertService } from 'src/app/services/alert.service';
+import {SweetAlertIcon} from "sweetalert2";
 
 
 @Component({
@@ -63,7 +65,8 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     private aRoute: ActivatedRoute,
     private _tipoReclamo: TipoReclamoService,
     private _tipoProcedencia: TipoProcedenciaReclamoService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private alertService: AlertService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
@@ -202,13 +205,19 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   aprobar(row: Expediente): void {
     this.esAprobacion = true;
     this.itemSeleccionado = row;
-    this.modalVisible = true;
+    console.log(row);
+    console.log(this.itemSeleccionado);
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
   }
 
   rechazar(row: Expediente): void {
     this.esAprobacion = false;
     this.itemSeleccionado = row;
-    this.modalVisible = true;
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
   }
   cerrarModal(): void {
     this.modalVisible = false;
@@ -223,18 +232,45 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   }
 
   confirmarAccion(): void {
-    if (this.esAprobacion) {
-      this.mostrarAlerta(
-        'Mensaje de Notificación',
-        'El Ítem ha sido admitido con éxito con el <strong>Expediente N° EXP240001</strong> y se notificó al titular.'
-      );
-    } else {
-      this.mostrarAlerta(
-        'Mensaje de Notificación',
-        'El Ítem ha sido Denegado con exito y se notificó al titular de la queja o reclamo.'
-      );
+  if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
+    this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
+    return;
+  }
+  const expedienteId = this.itemSeleccionado.idexpediente;
+  const usuarioId = 1; // O el ID real del usuario actual si está disponible
+  const estado = this.esAprobacion ? 2 : 3; // 2 = ATENDIDO, 3 = DENEGADO
+  if (!this.esAprobacion && !this.motivoRechazo.trim()) {
+    this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo para denegar.', 'warning');
+    return;
+  }
+  const payload = {
+    id: expedienteId,
+    usuarioId: usuarioId,
+    estado: estado,
+    motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
+  };
+
+   this.loading = true;
+   this._apiService.actualizarEstado(payload).subscribe({
+    next: () => {
+      const mensaje = this.esAprobacion
+        ? 'Se aprobó correctamente el expediente N°'+this.itemSeleccionado.expediente+'.'
+        : 'Se denegó correctamente el expediente.';
+      const icono = this.esAprobacion ? 'success' : 'warning';
+
+      this.openDialogGeneral('Mensaje de Información', mensaje, icono);
+
+      this.cerrarModal(); // cierra modal
+      this.cambiarPestania.emit(this.esAprobacion ? 'atendido' : 'denegado');
+    },
+    error: () => {
+      this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
     }
-    this.cerrarModal();
+  });
+}
+
+  openDialogGeneral(title: string, html: any, icon: string): void {
+    this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
   }
   aceptarAccion(): void {
     this.cerrarAlerta();

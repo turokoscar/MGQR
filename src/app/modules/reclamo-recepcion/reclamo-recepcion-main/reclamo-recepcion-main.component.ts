@@ -102,7 +102,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   }
 
 
-  activarPestania(pestania: 'atendido' | 'denegado') {
+  activarPestania222(pestania: 'atendido' | 'denegado') {
     this.pestaniaActiva = pestania;
 
     const filtrosConEstado = {
@@ -119,6 +119,28 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
       this.reclamoDenegado.cargarExpedientes(filtrosConEstado);
     }
   }
+
+  activarPestania(pestania: 'atendido' | 'denegado') {
+    this.pestaniaActiva = pestania; // 🔑 ACTUALIZAS ESTO PRIMERO
+
+    // Activar visualmente la pestaña
+    const tabIds = {
+      atendido: '#nav-profile-tab',
+      denegado: '#nav-contact-tab'
+    };
+
+    const tab = document.querySelector(tabIds[pestania]!) as HTMLElement;
+    if (tab) {
+      tab.click(); // cambia visualmente
+    }
+
+    // 🧠 Esperar al DOM para actualizar y luego filtrar
+    setTimeout(() => {
+      this.buscarConFiltros(); // ahora sí busca correctamente
+    }, 300);
+  }
+
+
 
 
   showTipoReclamo():void{
