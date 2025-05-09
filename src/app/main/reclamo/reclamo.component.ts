@@ -181,6 +181,25 @@ export class ReclamoComponent implements OnInit {
     this.showTipoProyectos();
     this.showRegiones();
     this.onActivaReactividad();
+    this.segundaParteForm.get('departamento')?.valueChanges.subscribe((departamentoId: string) => {
+  if (departamentoId) {
+    this.segundaParteForm.get('provincia')?.enable();
+    this.showProvincias(departamentoId);
+    this.segundaParteForm.get('provincia')?.setValue(''); // Limpia selección previa
+    this.segundaParteForm.get('distrito')?.setValue('');
+    this.segundaParteForm.get('distrito')?.disable();
+    this.distritos = [];
+  }
+});
+
+this.segundaParteForm.get('provincia')?.valueChanges.subscribe((provinciaId: string) => {
+  if (provinciaId) {
+    this.segundaParteForm.get('distrito')?.enable();
+    this.showDistritos(provinciaId);
+    this.segundaParteForm.get('distrito')?.setValue(''); // Limpia selección previa
+  }
+});
+
   }
   private setDocumentoMaxLength(maxLength: number): void {
     const control = this.segundaParteForm.get('numero_documento');
