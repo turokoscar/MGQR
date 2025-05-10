@@ -16,6 +16,7 @@ import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia
 import { ExportService } from 'src/app/services/export.service';
 import { AlertService } from 'src/app/services/alert.service';
 import {SweetAlertIcon} from "sweetalert2";
+import { environment } from 'src/environments/environment.development';
 
 
 @Component({
@@ -93,7 +94,9 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       }
     });
   }
-
+  getDownloadLink(nombreArchivo: string): string {
+    return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
+  }
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
     const numSelected = this.selection.selected.length;

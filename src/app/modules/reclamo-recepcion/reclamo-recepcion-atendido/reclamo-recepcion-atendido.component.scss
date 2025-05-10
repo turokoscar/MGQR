@@ -48,9 +48,15 @@
 
 ::ng-deep .mat-column-descripcion {
   width: 31rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  max-width: 31rem;
+  white-space: normal !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3rem;
+}
+::ng-deep .descripcion-celda {
+  padding: 8px;
+  vertical-align: top;
 }
 
 ::ng-deep .mat-column-usuario {

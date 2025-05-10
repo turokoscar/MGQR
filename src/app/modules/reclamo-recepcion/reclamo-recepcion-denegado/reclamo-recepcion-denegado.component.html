@@ -16,7 +16,21 @@
     </ng-container>
     <ng-container matColumnDef="numero">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Código </th>
-      <td mat-cell *matCellDef="let row"> {{row.expediente}} </td>
+      <td mat-cell *matCellDef="let row">
+        <ng-container *ngIf="row.evidencia; else sinEvidencia">
+          <a
+            [href]="getDownloadLink(row.evidencia)"
+            target="_blank"
+            style="text-decoration: underline; color: blue;"
+            title="Descargar evidencia"
+          >
+            {{ row.expediente }}
+          </a>
+        </ng-container>
+        <ng-template #sinEvidencia>
+          {{ row.expediente }}
+        </ng-template>
+      </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Procedencia </th>
@@ -36,7 +50,9 @@
     </ng-container>
     <ng-container matColumnDef="descripcion">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
-      <td mat-cell *matCellDef="let row"> {{row.contenido_consulta}} </td>
+      <td mat-cell *matCellDef="let row" class="descripcion-celda">
+        {{ row.contenido_consulta }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="usuario">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>

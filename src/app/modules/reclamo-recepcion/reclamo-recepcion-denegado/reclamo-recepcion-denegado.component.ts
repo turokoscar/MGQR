@@ -14,6 +14,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 import {ExpedienteDetalleDto} from "../../../models/expediente-detalle-dto";
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-reclamo-recepcion-denegado',
@@ -72,6 +73,9 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
         this._notificacion.showError("Error", this.errorMessage);
       }
     });
+  }
+  getDownloadLink(nombreArchivo: string): string {
+    return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
   }
   //4. Verificamos que todos los elementos esten seleccionados
 

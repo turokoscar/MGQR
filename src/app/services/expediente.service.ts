@@ -37,7 +37,6 @@ export class ExpedienteService {
     return this.http.post(url, payload);
   }
 
-
   //4. Método para obtener los datos de un expediente
   showById(id: number): Observable<Expediente>{
     const url = `${this.fakeApi}/${id}`;
