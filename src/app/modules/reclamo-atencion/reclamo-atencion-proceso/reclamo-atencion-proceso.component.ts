@@ -1,18 +1,19 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component,EventEmitter, OnInit,Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Expediente } from 'src/app/models/expediente';
+import { ExpedienteDetalleDto } from 'src/app/models/expediente-detalle-dto';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
-import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
-import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
-import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { AlertService } from 'src/app/services/alert.service';
+import {SweetAlertIcon} from "sweetalert2";
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-reclamo-atencion-proceso',
@@ -22,199 +23,169 @@ import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 export class ReclamoAtencionProcesoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['index','proyecto','numero', 'procedencia','tipo','canal', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
+  dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
+  modalVisible = false;
+  esAprobacion = true;
+  motivoRechazo = '';
+  itemSeleccionado: any = null;
+  respuestaReclamo: string = '';
+  comentarioReclamo: string = '';
+  derivarOtraArea: boolean | '' = '';
+
+  especialistaSeleccionado = '';
+  especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  archivoAdjunto: File | null = null;
   id!: number;
-  numeroSeleccion!: number;
-  textoFiltro:string = '';
   errorMessage: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  filterValues: { codigoExpediente: string; tipoReclamo: string; procedencia: string } = {
-    codigoExpediente: '',
-    tipoReclamo: '',
-    procedencia: ''
-  };
+
   //2. Inicializamos las variables en el constructor
   constructor(
     private _apiService: ExpedienteService,
     private _notificacion: NotificationService,
-    private _login: AuthService,
     private router: Router,
-    private aRoute: ActivatedRoute,
-    private _tipoReclamo: TipoReclamoService,
-    private _tipoProcedencia: TipoProcedenciaReclamoService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private alertService: AlertService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    this.showData();
-    this.showTipoReclamo();
-    this.showTipoProcedencia();
   }
-  //4. Verificamos que todos los elementos esten seleccionados
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    if (this.dataSource) {
-      const numRows = this.dataSource?.data.length;
-      return numSelected === numRows;
-    }
-    return false;
-  }
-  //5. Habilitamos los botones para editar y eliminar
-  habilitaBotones(numero:number){
-    this.numeroSeleccion = numero;
-  }
-  //6. Seleccionamos todos los registros
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      this.habilitaBotones(0);
-      return;
-    }
-    if(this.dataSource){
-      this.selection.select(...this.dataSource.data);
-      this.habilitaBotones(this.selection.selected.length);
-    }
-  }
-  //7. Seleccionamos una fila específica
-  seleccionar(row: Expediente){
-    this.selection.toggle(row);
-    this.habilitaBotones(this.selection.selected.length);
-  }
-  //8. Método que genera etiquetas dinámicas para los checkboxes en función de si se trata de la operación "Seleccionar todo" o de la selección individual de una fila específica. La etiqueta indica al usuario qué acción realizar (seleccionar o deseleccionar) y el identificador de la fila afectada.
-  checkboxLabel(row?: Expediente): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
-  }
-  //9. Obtengo todos los registros
-  showData():void{
+  @Output() cambiarPestania = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
+
+  cargarExpedientes(filtros: any): void {
     this.loading = true;
-    const estadoEnProceso = 1;
-    this._apiService.show(estadoEnProceso).subscribe({
+    this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.dataSource.filterPredicate = this.createFilter();
+        this.dataSourceExp.data = data;
+        this.dataSourceExp.paginator = this.paginator;
+        this.dataSourceExp.sort = this.sort;
         this.loading = false;
       },
       error: (e) => {
         this.loading = false;
-        this.errorMessage = "Se presentó un problema al realizar la operación"+ e;
+        this.errorMessage = "Se presentó un problema al listar los expedientes: " + e;
         this._notificacion.showError("Error", this.errorMessage);
       }
     });
   }
-  //10. Función para filtrar información de la lista de datos
-  filterData(event: Event, filterType: keyof typeof this.filterValues) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.filterValues[filterType] = filterValue;
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  getDownloadLink(nombreArchivo: string): string {
+    return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
   }
-  //11. Función para crear el filtro personalizado
-  createFilter(): (data: Expediente, filter: string) => boolean {
-    return (data: Expediente, filter: string): boolean => {
-      const searchTerms = JSON.parse(filter);
-      return (
-        (searchTerms.codigoExpediente === '' || (data.codigo_expediente?.toString().toLowerCase() || '').includes(searchTerms.codigoExpediente)) &&
-        (searchTerms.tipoReclamo === '' || (data.tipo_reclamo?.toLowerCase() || '').includes(searchTerms.tipoReclamo)) &&
-        (searchTerms.procedencia === '' || (data.tipo_expediente?.toLowerCase() || '').includes(searchTerms.procedencia))
-      );
+  verDetalle(row: any): void {
+    this.router.navigate(['/reclamo/create'], {
+      state: { expediente: row }
+    });
+  }
+  aprobar(row: Expediente): void {
+    this.esAprobacion = true;
+    this.itemSeleccionado = row;
+    console.log(row);
+    console.log(this.itemSeleccionado);
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
+  }
+  cerrarModal(): void {
+    this.modalVisible = false;
+    this.itemSeleccionado = null;
+    this.motivoRechazo = '';
+    this.archivoAdjunto = null;
+    this.especialistaSeleccionado = '';
+  }
+  confirmarAccion2(): void {
+    if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
+      this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
+      return;
+    }
+    const expedienteId = this.itemSeleccionado.idexpediente;
+    const usuarioId = 1; // O el ID real del usuario actual si está disponible
+    const estado = this.esAprobacion ? 2 : 3; // 2 = ATENDIDO, 3 = DENEGADO
+    if (!this.esAprobacion && !this.motivoRechazo.trim()) {
+      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo para denegar.', 'warning');
+      return;
+    }
+    const payload = {
+      id: expedienteId,
+      usuarioId: usuarioId,
+      estado: estado,
+      motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
     };
-  }
-  //12. Para cambiar el filtro de reclamo o procedencia
-  changeFilter(filterType: keyof typeof this.filterValues, value: string) {
-    this.filterValues[filterType] = value.trim().toLowerCase();
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  //13. Método para resetear los filtros
-  resetFilters() {
-    this.filterValues = {
-      codigoExpediente: '',
-      tipoReclamo: '',
-      procedencia: ''
-    };
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  //14. Obtengo la lista de Tipos de eventos
-  showTipoReclamo():void{
-    this._tipoReclamo.show().subscribe({
-      next: (data) => {
-        this.tipoReclamos = data;
+
+     this.loading = true;
+     this._apiService.actualizarEstado(payload).subscribe({
+      next: () => {
+        const mensaje = this.esAprobacion
+          ? 'Se aprobó correctamente el expediente N°'+this.itemSeleccionado.expediente+'.'
+          : 'Se denegó correctamente el expediente.';
+        const icono = this.esAprobacion ? 'success' : 'warning';
+
+        this.openDialogGeneral('Mensaje de Información', mensaje, icono);
+
+        this.cerrarModal(); // cierra modal
+        this.cambiarPestania.emit(this.esAprobacion ? 'atendidos' : 'reasignado');
       },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
+      error: () => {
+        this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
       }
     });
   }
-  //15. Obtengo los tipos de Procedencia de los reclamos
-  showTipoProcedencia():void{
-    this._tipoProcedencia.show().subscribe({
-      next: (data) => {
-        this.tipoProcedencia = data;
+  confirmarAccion(): void {
+    if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
+      this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
+      return;
+    }
+
+    if (this.esAprobacion && !this.respuestaReclamo.trim()) {
+      this.openDialogGeneral('Campo requerido', 'Debe ingresar una respuesta al reclamo, queja o consulta.', 'warning');
+      return;
+    }
+
+    const expedienteId = this.itemSeleccionado.idexpediente;
+    const usuarioId = 1; // o id real
+    const estado = this.derivarOtraArea ? 6 : 5;
+
+    /*const payload = {
+      id: expedienteId,
+      usuarioId,
+      estado,
+      respuesta: this.respuestaReclamo.trim(),
+      comentario: this.comentarioReclamo?.trim() || '',
+      evidencia: this.archivoAdjunto?.name || '',
+      especialista: this.derivarOtraArea ? this.especialistaSeleccionado : ''
+    };*/
+    const payload = {
+      id: expedienteId,
+      usuarioId: usuarioId,
+      estado: estado,
+      motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
+    };
+
+    this.loading = true;
+    this._apiService.actualizarEstado(payload).subscribe({
+      next: () => {
+        const mensaje = this.derivarOtraArea
+          ? 'El expediente ha sido derivado a otra área.'
+          : 'El expediente ha sido atendido correctamente.';
+        this.openDialogGeneral('Mensaje de Información', mensaje, 'success');
+        this.cerrarModal();
+        this.cambiarPestania.emit(this.derivarOtraArea ? 'reasignado' : 'atendidos');
       },
-      error: (e) => {
-        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-        this._notificacion.showError("Error: ", this.errorMessage);
+      error: () => {
+        this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado.', 'warning');
       }
     });
   }
-  //16. Mostramos un registro
-  view(): void{
-    this.loading = true;
-    if (this.selection.selected.length > 0) {
-      const registro = this.selection.selected[0];
-      if (registro && registro.id) {
-        this.router.navigate(['visualizacion', registro.id]);
-        this.loading = false;
-      }
-      else{
-        this.loading = false;
-        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
-      }
-    }
-    else{
-      this.loading = false;
-      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
-    }
+
+  onArchivoSeleccionado(event: any): void {
+    this.archivoAdjunto = event.target.files[0] || null;
   }
-  //17. Atendemos el registro
-  atender(): void{
-    this.loading = true;
-    if (this.selection.selected.length > 0) {
-      const registro = this.selection.selected[0];
-      if (registro && registro.id) {
-        this.router.navigate(['atencion', registro.id]);
-        this.loading = false;
-      }
-      else{
-        this.loading = false;
-        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
-      }
-    }
-    else{
-      this.loading = false;
-      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
-    }
-  }
-  //18. Exportamos la información requerida
-  export(format: string): void {
-    this.exportService.exportData(this.dataSource.data, format);
+  openDialogGeneral(title: string, html: any, icon: string): void {
+    this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
   }
 }

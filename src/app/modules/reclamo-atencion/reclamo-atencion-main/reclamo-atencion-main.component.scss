@@ -164,6 +164,16 @@ mat-form-field {
   }
 }
 
+.color-primary{
+  color: #3498db!important;
+}
+.icon-bold {
+  text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+}
+.color-danger{
+  color: #e74c3c!important;
+}
+
 // Estilos para los botones de acción
 .acciones-celda {
   padding: 0 8px !important;
@@ -215,3 +225,6 @@ mat-form-field {
     }
   }
 }
+
+
+

@@ -12,8 +12,11 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { AlertService } from 'src/app/services/alert.service';
+import {SweetAlertIcon} from "sweetalert2";
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-reclamo-atencion-pendiente',
@@ -23,12 +26,15 @@ import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 export class ReclamoAtencionPendienteComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['select','numero', 'procedencia', 'tipo', 'fecha',  'descripcion', 'usuario', 'ubigeo'];
+  columnas: string[] = ['index','proyecto','numero', 'procedencia','tipo','canal', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
+  esAtencion = true;
+  modalVisible = false;
+  itemSeleccionado: any = null;
   id!: number;
   numeroSeleccion!: number;
   textoFiltro:string = '';
@@ -49,7 +55,8 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     private aRoute: ActivatedRoute,
     private _tipoReclamo: TipoReclamoService,
     private _tipoProcedencia: TipoProcedenciaReclamoService,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private alertService: AlertService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
@@ -57,18 +64,16 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     this.showTipoReclamo();
     this.showTipoProcedencia();
   }
-  @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
+  @Output() cambiarPestania = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
 
   cargarExpedientes(filtros: any): void {
-    console.log("Hola", filtros);
-    console.log("Hola Finbal");
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
+        console.log(data);
         this.dataSourceExp.data = data;
         this.dataSourceExp.paginator = this.paginator;
         this.dataSourceExp.sort = this.sort;
-        this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
       },
       error: (e) => {
@@ -78,7 +83,9 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
       }
     });
   }
-
+  getDownloadLink(nombreArchivo: string): string {
+    return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
+  }
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -87,6 +94,66 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
       return numSelected === numRows;
     }
     return false;
+  }
+  verDetalle(row: any): void {
+    this.router.navigate(['/reclamo/create'], {
+      state: { expediente: row }
+    });
+  }
+  aprobar(row: Expediente): void {
+    this.esAtencion = true;
+    this.itemSeleccionado = row;
+    console.log(row);
+    console.log(this.itemSeleccionado);
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
+  }
+  openDialogGeneral(title: string, html: any, icon: string): void {
+    this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
+  }
+  confirmarAccion(): void {
+  if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
+    this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
+    return;
+  }
+  const expedienteId = this.itemSeleccionado.idexpediente;
+  const usuarioId = 1; // O el ID real del usuario actual si está disponible
+  const estado = 4; // 4 = proceso
+
+  const payload = {
+    id: expedienteId,
+    usuarioId: usuarioId,
+    estado: estado,
+    motivo: ""
+  };
+
+   this.loading = true;
+   this._apiService.actualizarEstado(payload).subscribe({
+    next: () => {
+      const mensaje = 'Se movió correctamente el expediente N°'+this.itemSeleccionado.expediente+' a la bandeja En Proceso.';
+      const icono = 'success';
+
+      this.openDialogGeneral('Mensaje de Información', mensaje, icono);
+
+      this.cerrarModal(); // cierra modal
+      this.cambiarPestania.emit('proceso');
+    },
+    error: () => {
+      this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
+    }
+  });
+}
+  rechazar(row: Expediente): void {
+   /* this.esAprobacion = false;
+    this.itemSeleccionado = row;
+    setTimeout(() => {
+      this.modalVisible = true;
+    });*/
+  }
+  cerrarModal(): void {
+    this.modalVisible = false;
+    this.itemSeleccionado = null;
   }
   //5. Habilitamos los botones para editar y eliminar
   habilitaBotones(numero:number){

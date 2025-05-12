@@ -16,30 +16,22 @@ import {ReclamoAtencionPendienteComponent} from "../reclamo-atencion-pendiente/r
 import {ReclamoAtencionProcesoComponent} from "../reclamo-atencion-proceso/reclamo-atencion-proceso.component";
 import {ReclamoAtencionReasignadoComponent} from "../reclamo-atencion-reasignado/reclamo-atencion-reasignado.component";
 import {ReclamoAtencionAtendidoComponent} from "../reclamo-atencion-atendido/reclamo-atencion-atendido.component";
-import { AfterViewInit } from '@angular/core';
-import {
-  ReclamoRecepcionPendienteComponent
-} from "../../reclamo-recepcion/reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component";
-import {
-  ReclamoRecepcionAtendidoComponent
-} from "../../reclamo-recepcion/reclamo-recepcion-atendido/reclamo-recepcion-atendido.component";
-import {
-  ReclamoRecepcionDenegadoComponent
-} from "../../reclamo-recepcion/reclamo-recepcion-denegado/reclamo-recepcion-denegado.component";
 import {TipoProyectoService} from "../../../services/tipo-proyecto.service";
 import {TipoProyecto} from "../../../models/tipo-proyecto";
+import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-reclamo-atencion-main',
   templateUrl: './reclamo-atencion-main.component.html',
   styleUrls: ['./reclamo-atencion-main.component.scss']
 })
-export class ReclamoAtencionMainComponent {
+export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   tipoReclamos: TipoReclamo[] = [];
   tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   dataSource = new MatTableDataSource<Expediente>();
+  pestaniaActiva: 'pendiente' | 'proceso' | 'atendidos' | 'reasignado' = 'pendiente';
   errorMessage: string = '';
   filtro = {
     tipoCanalId: 0,
@@ -79,15 +71,15 @@ export class ReclamoAtencionMainComponent {
   }
 
   limpiarFiltros(): void {
-    this.filtro = {
-      tipoCanalId: 0,
-      tipoReclamoId: 0,
-      tipoProyectoId: 0,
-      codigoExpediente: null,
-      estado: null
-    };
+      this.filtro = {
+        tipoCanalId: 0,
+        tipoReclamoId: 0,
+        tipoProyectoId: 0,
+        codigoExpediente: null,
+        estado: null
+      };
 
-    this.buscarConFiltros(); // Opcional: vuelve a cargar los expedientes sin filtros
+      this.buscarConFiltros(); // Opcional: vuelve a cargar los expedientes sin filtros
   }
 
   buscarConFiltros() {
@@ -95,27 +87,43 @@ export class ReclamoAtencionMainComponent {
       ...this.filtro,
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
-      estado: 1 // Estado pendiente
+      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
+      estado: this.pestaniaActiva === 'pendiente' ? 2 :
+              this.pestaniaActiva === 'proceso' ? 4 :
+              this.pestaniaActiva === 'atendidos' ? 5 :
+              this.pestaniaActiva === 'reasignado' ? 6 : null
     };
-    this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
+
+    if (this.pestaniaActiva === 'pendiente') {
+      this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
+    } else if (this.pestaniaActiva === 'proceso') {
+      this.reclamoProceso.cargarExpedientes(filtrosConEstado);
+    }else if (this.pestaniaActiva === 'atendidos') {
+      this.reclamoAtendido.cargarExpedientes(filtrosConEstado);
+    } else if (this.pestaniaActiva === 'reasignado') {
+      this.reclamoReasignado.cargarExpedientes(filtrosConEstado);
+    }
   }
 
-  activarPestania(pestania: 'atendido' | 'denegado') {
-    console.log('Cambio de pestaña a:', pestania);
+  activarPestaniaA(pestania: 'proceso' | 'atendidos' | 'reasignado') {
+    this.pestaniaActiva = pestania; // 🔑 ACTUALIZAS ESTO PRIMERO
 
-    // IDs de los botones de las pestañas
+    // Activar visualmente la pestaña
     const tabIds = {
-      atendido: '#nav-profile-tab',
-      denegado: '#nav-contact-tab'
+      proceso: '#nav-profile-tab',
+      atendidos: '#nav-contact-tab',
+      reasignado: '#nav-reasignado-tab'
     };
 
-    // Simular clic en el botón de la pestaña correspondiente
     const tab = document.querySelector(tabIds[pestania]!) as HTMLElement;
     if (tab) {
-      tab.click(); // Esto activa la pestaña como si el usuario hiciera clic
-    } else {
-      console.warn('No se encontró el botón de pestaña con ID:', tabIds[pestania]);
+      tab.click(); // cambia visualmente
     }
+
+    // 🧠 Esperar al DOM para actualizar y luego filtrar
+    setTimeout(() => {
+      this.buscarConFiltros(); // ahora sí busca correctamente
+    }, 300);
   }
 
   showTipoReclamo():void{

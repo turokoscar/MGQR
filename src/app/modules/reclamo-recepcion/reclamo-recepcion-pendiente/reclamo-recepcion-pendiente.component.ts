@@ -71,8 +71,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
-    //this.showData();
-    //this.cargarExpedientes();
   }
 
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
