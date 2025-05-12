@@ -32,4 +32,9 @@ export class UbigeoService {
     const url = `${this.apiDistrito}/${codigo}`;
     return this.http.get<Distrito[]>(url);
   }
+
+  getDistritoCompletoById(id: string): Observable<Distrito> {
+    return this.http.get<Distrito>(`${this.apiUrl}/General/GetDistritoCompleto/${id}`);
+  }
+
 }

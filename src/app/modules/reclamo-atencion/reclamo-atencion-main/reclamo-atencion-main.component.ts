@@ -13,10 +13,21 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {Expediente} from "../../../models/expediente";
 import {ReclamoAtencionPendienteComponent} from "../reclamo-atencion-pendiente/reclamo-atencion-pendiente.component";
+import {ReclamoAtencionProcesoComponent} from "../reclamo-atencion-proceso/reclamo-atencion-proceso.component";
+import {ReclamoAtencionReasignadoComponent} from "../reclamo-atencion-reasignado/reclamo-atencion-reasignado.component";
+import {ReclamoAtencionAtendidoComponent} from "../reclamo-atencion-atendido/reclamo-atencion-atendido.component";
 import { AfterViewInit } from '@angular/core';
 import {
   ReclamoRecepcionPendienteComponent
 } from "../../reclamo-recepcion/reclamo-recepcion-pendiente/reclamo-recepcion-pendiente.component";
+import {
+  ReclamoRecepcionAtendidoComponent
+} from "../../reclamo-recepcion/reclamo-recepcion-atendido/reclamo-recepcion-atendido.component";
+import {
+  ReclamoRecepcionDenegadoComponent
+} from "../../reclamo-recepcion/reclamo-recepcion-denegado/reclamo-recepcion-denegado.component";
+import {TipoProyectoService} from "../../../services/tipo-proyecto.service";
+import {TipoProyecto} from "../../../models/tipo-proyecto";
 
 @Component({
   selector: 'app-reclamo-atencion-main',
@@ -26,12 +37,14 @@ import {
 export class ReclamoAtencionMainComponent {
   loading: boolean = false;
   tipoReclamos: TipoReclamo[] = [];
+  tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   dataSource = new MatTableDataSource<Expediente>();
   errorMessage: string = '';
   filtro = {
-    tipoCanalId: null,
-    tipoReclamoId: null,
+    tipoCanalId: 0,
+    tipoReclamoId: 0,
+    tipoProyectoId: 0,
     codigoExpediente: null,
     estado: null
   };
@@ -39,6 +52,9 @@ export class ReclamoAtencionMainComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('reclamoPendiente') reclamoPendiente!: ReclamoAtencionPendienteComponent;
+  @ViewChild('reclamoProceso') reclamoProceso!: ReclamoAtencionProcesoComponent;
+  @ViewChild('reclamoReasignado') reclamoReasignado!: ReclamoAtencionReasignadoComponent;
+  @ViewChild('reclamoAtendido') reclamoAtendido!: ReclamoAtencionAtendidoComponent;
 
   constructor(
     private _apiService: ExpedienteService,
@@ -47,12 +63,14 @@ export class ReclamoAtencionMainComponent {
     private router: Router,
     private aRoute: ActivatedRoute,
     private _tipoReclamo: TipoReclamoService,
+    private _tipoProyecto: TipoProyectoService,
     private _tipoProcedencia: TipoProcedenciaReclamoService,
     private exportService: ExportService
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showTipoReclamo();
+    this.showTipoProyecto();
     this.showTipoProcedencia();
   }
   ngAfterViewInit(): void {
@@ -62,8 +80,9 @@ export class ReclamoAtencionMainComponent {
 
   limpiarFiltros(): void {
     this.filtro = {
-      tipoCanalId: null,
-      tipoReclamoId: null,
+      tipoCanalId: 0,
+      tipoReclamoId: 0,
+      tipoProyectoId: 0,
       codigoExpediente: null,
       estado: null
     };
@@ -103,6 +122,20 @@ export class ReclamoAtencionMainComponent {
     this._tipoReclamo.show().subscribe({
       next: (data) => {
         this.tipoReclamos = [
+          { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
+          ...data
+        ];
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  showTipoProyecto():void{
+    this._tipoProyecto.show().subscribe({
+      next: (data) => {
+        this.tipoProyectos = [
           { id: 0, descripcion: 'TODOS' }, // <-- Añadido manualmente
           ...data
         ];

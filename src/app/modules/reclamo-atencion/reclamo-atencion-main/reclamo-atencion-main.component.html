@@ -19,7 +19,7 @@
           <div class="card-body">
             <div class="row align-items-end">
               <!-- Filtro por Número de Expediente -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Filtro por Número de Expediente:</mat-label>
                   <input
@@ -31,7 +31,7 @@
               </div>
 
               <!-- Filtro por Procedencia -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Procedencia</mat-label>
                   <mat-select [(ngModel)]="filtro.tipoCanalId">
@@ -43,7 +43,7 @@
               </div>
 
               <!-- Filtro por Tipo de Reclamo -->
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Seleccione Tipo de Reclamo</mat-label>
                   <mat-select [(ngModel)]="filtro.tipoReclamoId">
@@ -54,8 +54,19 @@
                 </mat-form-field>
               </div>
 
+              <div class="col-md-2">
+                <mat-form-field appearance="fill" class="w-100">
+                  <mat-label>Seleccione Proyecto</mat-label>
+                  <mat-select [(ngModel)]="filtro.tipoProyectoId">
+                    <mat-option *ngFor="let item of tipoProyectos" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
               <!-- Botones -->
-              <div class="botones-acciones col-md-3 d-flex justify-content-end gap-2">
+              <div class="botones-acciones col-md-4 d-flex justify-content-end gap-2">
                 <button class="btn-buscar" (click)="buscarConFiltros()">
                   <i class="bi bi-search"></i> Buscar
                 </button>
