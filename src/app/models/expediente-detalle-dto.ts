@@ -28,4 +28,8 @@ export interface ExpedienteDetalleDto {
   area_destino: string;
   estado: string;
   dias_transcurridos: number;
+  respuesta: string;
+  comentario: string;
+  evidencia_seguimiento: string;
+  especialista_id: string;
 }

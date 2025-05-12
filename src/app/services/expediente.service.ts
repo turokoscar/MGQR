@@ -29,6 +29,10 @@ export class ExpedienteService {
   listarPorFiltros(filtros: any): Observable<ExpedienteDetalleDto[]> {
     return this.http.post<ExpedienteDetalleDto[]>(this.apiUrlExp, filtros);
   }
+  listarAtenderDetalle(expedienteId: number): Observable<ExpedienteDetalleDto> {
+  const url = `${this.apiUrl}/Expediente/ListarAtenderDetalle`;
+  return this.http.post<ExpedienteDetalleDto>(url, { expedienteId });
+}
   buscarDni(numdni: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/Reniec/api/reniec?numdni=${numdni}`, {});
   }
