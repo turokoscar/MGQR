@@ -35,10 +35,12 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   itemSeleccionado: any = null;
   respuestaReclamo: string = '';
   comentarioReclamo: string = '';
-  derivarOtraArea: boolean | '' = '';
+  derivarOtraArea: boolean | null = null;
+  nombreArchivoRespuesta: string = '';
 
   especialistaSeleccionado = '';
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  areas: string[] = ['Area 1', 'Area 2'];
   archivoAdjunto: File | null = null;
   id!: number;
   errorMessage: string = '';
@@ -98,85 +100,69 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
     this.archivoAdjunto = null;
     this.especialistaSeleccionado = '';
   }
-  confirmarAccion2(): void {
-    if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
-      this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
-      return;
-    }
-    const expedienteId = this.itemSeleccionado.idexpediente;
-    const usuarioId = 1; // O el ID real del usuario actual si está disponible
-    const estado = this.esAprobacion ? 2 : 3; // 2 = ATENDIDO, 3 = DENEGADO
-    if (!this.esAprobacion && !this.motivoRechazo.trim()) {
-      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo para denegar.', 'warning');
-      return;
-    }
-    const payload = {
-      id: expedienteId,
-      usuarioId: usuarioId,
-      estado: estado,
-      motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
-    };
 
-     this.loading = true;
-     this._apiService.actualizarEstado(payload).subscribe({
-      next: () => {
-        const mensaje = this.esAprobacion
-          ? 'Se aprobó correctamente el expediente N°'+this.itemSeleccionado.expediente+'.'
-          : 'Se denegó correctamente el expediente.';
-        const icono = this.esAprobacion ? 'success' : 'warning';
-
-        this.openDialogGeneral('Mensaje de Información', mensaje, icono);
-
-        this.cerrarModal(); // cierra modal
-        this.cambiarPestania.emit(this.esAprobacion ? 'atendidos' : 'reasignado');
-      },
-      error: () => {
-        this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
-      }
-    });
-  }
   confirmarAccion(): void {
     if (!this.itemSeleccionado || !this.itemSeleccionado.idexpediente) {
       this.openDialogGeneral('Error', 'El expediente seleccionado no tiene un ID válido.', 'warning');
       return;
     }
 
-    if (this.esAprobacion && !this.respuestaReclamo.trim()) {
+    if (!this.respuestaReclamo.trim()) {
       this.openDialogGeneral('Campo requerido', 'Debe ingresar una respuesta al reclamo, queja o consulta.', 'warning');
       return;
     }
 
     const expedienteId = this.itemSeleccionado.idexpediente;
-    const usuarioId = 1; // o id real
-    const estado = this.derivarOtraArea ? 6 : 5;
+    const usuarioId = 1;
+    const estado = this.derivarOtraArea ? 6 : 5; // 5: Atendido, 6: Reasignado
 
-    /*const payload = {
+    let nombreArchivo = '';
+    const archivosAdjuntos: File[] = [];
+
+    if (this.archivoAdjunto) {
+      const extension = this.archivoAdjunto.name.split('.').pop()?.toLowerCase() || '';
+      const timestamp = new Date().getTime();
+      const random = Math.random().toString(36).substring(2, 8);
+      nombreArchivo = `${timestamp}-${random}.${extension}`;
+      const archivoRenombrado = new File([this.archivoAdjunto], nombreArchivo, { type: this.archivoAdjunto.type });
+      archivosAdjuntos.push(archivoRenombrado);
+    }
+
+    const payload = {
       id: expedienteId,
       usuarioId,
       estado,
       respuesta: this.respuestaReclamo.trim(),
-      comentario: this.comentarioReclamo?.trim() || '',
-      evidencia: this.archivoAdjunto?.name || '',
+      comentario: this.comentarioReclamo.trim(),
+      evidencia: nombreArchivo,
       especialista: this.derivarOtraArea ? this.especialistaSeleccionado : ''
-    };*/
-    const payload = {
-      id: expedienteId,
-      usuarioId: usuarioId,
-      estado: estado,
-      motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
     };
 
     this.loading = true;
-    this._apiService.actualizarEstado(payload).subscribe({
+
+    this._apiService.actualizarAtender(payload).subscribe({
       next: () => {
+        if (archivosAdjuntos.length > 0) {
+          const formData = new FormData();
+          archivosAdjuntos.forEach(file => formData.append('files', file));
+
+          this._apiService.upload(formData).subscribe({
+            next: () => console.log('Archivo subido correctamente'),
+            error: err => console.error('Error al subir archivo', err)
+          });
+        }
+
         const mensaje = this.derivarOtraArea
           ? 'El expediente ha sido derivado a otra área.'
           : 'El expediente ha sido atendido correctamente.';
+
         this.openDialogGeneral('Mensaje de Información', mensaje, 'success');
         this.cerrarModal();
         this.cambiarPestania.emit(this.derivarOtraArea ? 'reasignado' : 'atendidos');
+        this.loading = false;
       },
       error: () => {
+        this.loading = false;
         this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado.', 'warning');
       }
     });

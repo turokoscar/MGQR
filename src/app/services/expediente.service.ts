@@ -36,6 +36,10 @@ export class ExpedienteService {
     const url = `${this.apiUrl}/Expediente/ActualizarEstado`;
     return this.http.post(url, payload);
   }
+  actualizarAtender(payload: { id: number; usuarioId: number; estado: number; respuesta: string; comentario: string; evidencia: string; especialista: string }): Observable<any> {
+    const url = `${this.apiUrl}/Expediente/ActualizarAtender`;
+    return this.http.post(url, payload);
+  }
 
   //4. Método para obtener los datos de un expediente
   showById(id: number): Observable<Expediente>{

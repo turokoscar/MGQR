@@ -637,29 +637,7 @@
       this.openDialogError("Errores","El codigo de validacion es incorrecto");
      }
   }
-    onlyNumberInput(event: KeyboardEvent): void {
-      const charCode = event.charCode;
-      if (charCode < 48 || charCode > 57) {
-        event.preventDefault(); // Solo permite del 0 al 9
-      }
-    }
-    //15. Mostramos un cuadro de dialogo
-    openDialog(codigo_expediente: any): void {
-      this.alertService.showInfoAlert(codigo_expediente);
-    }
 
-    openDialogError(title: string, html: any): void {
-      this.alertService.showAError(title,html);
-    }
-
-    openDialogGeneral(title: string, html: any, icon: string): void {
-      this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
-    }
-
-    //16. Establesco un valor por default para el boton guardar del formulario
-    isFormValid(): boolean {
-      return this.primeraParteForm.valid && this.segundaParteForm.valid;
-    }
     archivoSeleccionado(event: any): void {
       this.errorArchivo = ''; // limpia errores anteriores
 
@@ -708,5 +686,29 @@
       if (this.fileInput) {
         this.fileInput.nativeElement.value = '';
       }
+    }
+
+    onlyNumberInput(event: KeyboardEvent): void {
+      const charCode = event.charCode;
+      if (charCode < 48 || charCode > 57) {
+        event.preventDefault(); // Solo permite del 0 al 9
+      }
+    }
+    //15. Mostramos un cuadro de dialogo
+    openDialog(codigo_expediente: any): void {
+      this.alertService.showInfoAlert(codigo_expediente);
+    }
+
+    openDialogError(title: string, html: any): void {
+      this.alertService.showAError(title,html);
+    }
+
+    openDialogGeneral(title: string, html: any, icon: string): void {
+      this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
+    }
+
+    //16. Establesco un valor por default para el boton guardar del formulario
+    isFormValid(): boolean {
+      return this.primeraParteForm.valid && this.segundaParteForm.valid;
     }
   }

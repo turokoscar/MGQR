@@ -120,18 +120,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
       this.habilitaBotones(this.selection.selected.length);
     }
   }
-  //7. Seleccionamos una fila específica
-  seleccionar(row: Expediente){
-    this.selection.toggle(row);
-    this.habilitaBotones(this.selection.selected.length);
-  }
-  //8. Método que genera etiquetas dinámicas para los checkboxes en función de si se trata de la operación "Seleccionar todo" o de la selección individual de una fila específica. La etiqueta indica al usuario qué acción realizar (seleccionar o deseleccionar) y el identificador de la fila afectada.
-  checkboxLabel(row?: Expediente): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
-  }
 
   //11. Función para crear el filtro personalizado
   createFilter(): (data: ExpedienteDetalleDto, filter: string) => boolean {
@@ -145,54 +133,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     };
   }
 
-  //16. Llamamos al formulario para la recepción de un expediente
-  recepcionar():void{
-    this.loading = true;
-    if (this.selection.selected.length > 0) {
-      const registro = this.selection.selected[0];
-      if (registro && registro.id) {
-        this.router.navigate(['recepcion', registro.id]);
-        this.loading = false;
-      }
-      else{
-        this.loading = false;
-        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
-      }
-    }
-    else{
-      this.loading = false;
-      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
-    }
-  }
-  //17. Llamamos al formulario para denegar un expediente
-  denegar():void{
-    this.loading = true;
-    if (this.selection.selected.length > 0) {
-      const registro = this.selection.selected[0];
-      if (registro && registro.id) {
-        this.router.navigate(['denegacion', registro.id]);
-        this.loading = false;
-      }
-      else{
-        this.loading = false;
-        this._notificacion.showError("Atención:", "El registro no tiene un ID válido: "+registro);
-      }
-    }
-    else{
-      this.loading = false;
-      this._notificacion.showError("Atención:", "No se ha seleccionado ningún registro.");
-    }
-  }
-  //18. Exportamos la información requerida
-  export(format: string): void {
-    this.exportService.exportData(this.dataSource.data, format);
-  }
-
-  mostrarAlerta(titulo: string, mensaje: string) {
-    this.alertaTitulo = titulo;
-    this.alertaMensaje = mensaje;
-    this.alertaVisible = true;
-  }
   cerrarAlerta() {
     this.alertaVisible = false;
   }

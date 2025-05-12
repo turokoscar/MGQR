@@ -141,9 +141,9 @@
       <div class="form-group full-width">
         <label class="title-modal">¿Este expediente se derivará a otra área?</label>
         <select class="select" [(ngModel)]="derivarOtraArea">
-          <option value="" disabled selected>-- Seleccionar --</option>
-          <option [value]="false">No</option>
-          <option [value]="true">Sí</option>
+          <option [ngValue]="null">-- Seleccionar --</option>
+          <option [ngValue]="false">No</option>
+          <option [ngValue]="true">Sí</option>
         </select>
       </div>
 

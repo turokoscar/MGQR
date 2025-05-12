@@ -35,7 +35,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   filtro = {
     tipoCanalId: 0,
     tipoReclamoId: 0,
-    tipoProyectoId: 0,
+    tipoProyectoId: 1,
     codigoExpediente: null,
     estado: null
   };
