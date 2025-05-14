@@ -32,6 +32,15 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   id!: number;
   numeroSeleccion!: number;
+
+  modalVisible = false;
+  esAprobacion = true;
+  itemSeleccionado: any = null;
+  especialistaSeleccionado = '';
+  especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  motivoRechazo = '';
+  archivoAdjunto: File | null = null;
+
   textoFiltro:string = '';
   errorMessage: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -78,7 +87,21 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
   }
   //4. Verificamos que todos los elementos esten seleccionados
-
+  verRechazar(row: Expediente): void {
+    this.esAprobacion = false;
+    this.itemSeleccionado = row;
+    this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
+  }
+  cerrarModal(): void {
+    this.modalVisible = false;
+    this.itemSeleccionado = null;
+    this.motivoRechazo = '';
+    this.archivoAdjunto = null;
+    this.especialistaSeleccionado = '';
+  }
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     if (this.dataSource) {

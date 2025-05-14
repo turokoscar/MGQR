@@ -74,7 +74,7 @@
 
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true" (click)="activarPestania('pendiente')">
                   <i class="bi bi-file-earmark-text text-primary"></i>
                   Por admitir</button>
                 <button class="nav-link"
@@ -112,11 +112,11 @@
               </div>
               <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
-                <app-reclamo-recepcion-atendido #reclamoAtendido></app-reclamo-recepcion-atendido>
+                <app-reclamo-recepcion-atendido #reclamoAtendido (cambiarPestania)="activarPestania($event)"></app-reclamo-recepcion-atendido>
               </div>
               <div class="tab-pane fade" id="nav-denegado" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                 <br>
-                <app-reclamo-recepcion-denegado #reclamoDenegado></app-reclamo-recepcion-denegado>
+                <app-reclamo-recepcion-denegado #reclamoDenegado (cambiarPestania)="activarPestania($event)"></app-reclamo-recepcion-denegado>
               </div>
             </div>
           </div>

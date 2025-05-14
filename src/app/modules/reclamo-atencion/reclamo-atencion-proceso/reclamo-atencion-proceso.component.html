@@ -94,7 +94,7 @@
       <div class="form-grid">
         <div class="form-group">
           <label class="title-modal">Codigo</label>
-          <div class="input-field">{{ itemSeleccionado?.codigo_expediente || '240001' }}</div>
+          <div class="input-field">{{ itemSeleccionado?.expediente || '240001' }}</div>
         </div>
         <div class="form-group">
           <label class="title-modal">Fecha de registro</label>
@@ -119,7 +119,7 @@
           <div class="input-field description">{{ itemSeleccionado?.contenido_consulta }}</div>
         </div>
       </div>
-
+      <div class="section-title title-modal title-margin">Detalle de la Atención</div>
       <div class="separator"></div>
 
       <ng-container *ngIf="esAprobacion">

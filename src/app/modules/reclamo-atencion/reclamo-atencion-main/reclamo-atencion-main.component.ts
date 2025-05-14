@@ -43,10 +43,10 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('reclamoPendiente') reclamoPendiente!: ReclamoAtencionPendienteComponent;
+  @ViewChild('reclamoPendientes') reclamoPendientes!: ReclamoAtencionPendienteComponent;
   @ViewChild('reclamoProceso') reclamoProceso!: ReclamoAtencionProcesoComponent;
   @ViewChild('reclamoReasignado') reclamoReasignado!: ReclamoAtencionReasignadoComponent;
-  @ViewChild('reclamoAtendido') reclamoAtendido!: ReclamoAtencionAtendidoComponent;
+  @ViewChild('reclamoAtendidos') reclamoAtendidos!: ReclamoAtencionAtendidoComponent;
 
   constructor(
     private _apiService: ExpedienteService,
@@ -74,7 +74,7 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
       this.filtro = {
         tipoCanalId: 0,
         tipoReclamoId: 0,
-        tipoProyectoId: 0,
+        tipoProyectoId: 1,
         codigoExpediente: null,
         estado: null
       };
@@ -95,21 +95,22 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
     };
 
     if (this.pestaniaActiva === 'pendiente') {
-      this.reclamoPendiente.cargarExpedientes(filtrosConEstado);
+      this.reclamoPendientes.cargarExpedientes(filtrosConEstado);
     } else if (this.pestaniaActiva === 'proceso') {
       this.reclamoProceso.cargarExpedientes(filtrosConEstado);
     }else if (this.pestaniaActiva === 'atendidos') {
-      this.reclamoAtendido.cargarExpedientes(filtrosConEstado);
+      this.reclamoAtendidos.cargarExpedientes(filtrosConEstado);
     } else if (this.pestaniaActiva === 'reasignado') {
       this.reclamoReasignado.cargarExpedientes(filtrosConEstado);
     }
   }
 
-  activarPestaniaA(pestania: 'proceso' | 'atendidos' | 'reasignado') {
+  activarPestaniaA(pestania: 'pendiente' | 'proceso' | 'atendidos' | 'reasignado') {
     this.pestaniaActiva = pestania; // 🔑 ACTUALIZAS ESTO PRIMERO
 
     // Activar visualmente la pestaña
     const tabIds = {
+      pendiente: '#nav-home-tab',
       proceso: '#nav-profile-tab',
       atendidos: '#nav-contact-tab',
       reasignado: '#nav-reasignado-tab'

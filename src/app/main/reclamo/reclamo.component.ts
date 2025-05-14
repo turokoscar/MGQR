@@ -4,8 +4,6 @@
   import { Router } from '@angular/router';
   import { LowerCasePipe } from '@angular/common';
   import { environment } from 'src/environments/environment.development';
-  import { DialogComponent } from 'src/app/components/dialog/dialog.component';
-
 
   import { Distrito } from 'src/app/models/distrito';
   import { Provincia } from 'src/app/models/provincia';
@@ -170,12 +168,15 @@
       this.onActivaReactividad();
       this.segundaParteForm.get('tipo_documento')?.valueChanges.subscribe((tipoDoc: number) => {
         if (tipoDoc === 1) { // 1 = DNI
+          this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 8;
           this.setDocumentoMaxLength(8);
         } else if (tipoDoc === 2) { // 2 = Carnet de Extranjería (ajusta según tu ID real)
+          this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 15;
           this.setDocumentoMaxLength(15);
         } else {
+          this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 15;
           this.setDocumentoMaxLength(15);
         }
@@ -213,9 +214,10 @@
       }
     }
     onDniInputBlur(): void {
+      const tipoDocumento = this.segundaParteForm.get('tipo_documento')?.value;
       const dni = this.segundaParteForm.get('numero_documento')?.value;
 
-      if (dni && dni.length === 8) {
+      if (tipoDocumento === 1 && dni && dni.length === 8) {
         this.loadingMessage = 'Validando DNI en la RENIEC...';
         this.loading = true;
 
@@ -555,7 +557,7 @@
       "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
       "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
       "apellido_materno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_materno),
-      "tipo_canal": "1",
+      "tipo_canal": this.esInterno ? this.primeraParteForm.value.tipo_canal : "1",
       "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
       "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
       "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,

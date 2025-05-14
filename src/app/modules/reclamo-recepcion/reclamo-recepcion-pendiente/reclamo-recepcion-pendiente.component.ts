@@ -188,11 +188,14 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     id: expedienteId,
     usuarioId: usuarioId,
     estado: estado,
-    motivo: this.esAprobacion ? "" : this.motivoRechazo.trim()
+    acciones: this.esAprobacion ? "" : this.motivoRechazo.trim(),
+    respuesta: '',
+    comentario: '',
+    evidencia: '',
+    especialista: ''
   };
-
    this.loading = true;
-   this._apiService.actualizarEstado(payload).subscribe({
+   this._apiService.actualizarAtender(payload).subscribe({
     next: () => {
       const mensaje = this.esAprobacion
         ? 'Se aprobó correctamente el expediente N°'+this.itemSeleccionado.expediente+'.'

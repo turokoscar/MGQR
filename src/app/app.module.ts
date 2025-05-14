@@ -4,6 +4,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { CustomDateAdapter } from './custom-date-adapter';
+import { MY_DATE_FORMATS } from './date-formats';
 
 import { AppComponent } from './app.component';
 import { ReclamoComponent } from './main/reclamo/reclamo.component';
@@ -139,7 +142,11 @@ import { ReclamoAtencionReasignadoComponent } from './modules/reclamo-atencion/r
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

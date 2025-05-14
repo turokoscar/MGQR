@@ -188,7 +188,11 @@
 
 .title-modal {
   font-size: 1.2rem!important;
-  margin-bottom: 5px!important;
+  margin-bottom: 0px!important;
+}
+
+.title-margin {
+  margin-top: 1.1rem!important;
 }
 
 .modal-container {
@@ -279,7 +283,7 @@ label {
 .separator {
   height: 1px;
   background-color: #e0e0e0;
-  margin: 15px 0 10px 0;
+  margin: 0 0 0 0;
 }
 
 .notification-box {

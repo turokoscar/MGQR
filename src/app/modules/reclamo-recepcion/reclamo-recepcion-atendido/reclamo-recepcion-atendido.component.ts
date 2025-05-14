@@ -31,6 +31,15 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   tipoReclamos: TipoReclamo[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   id!: number;
+
+  modalVisible = false;
+  esAprobacion = true;
+  itemSeleccionado: any = null;
+  especialistaSeleccionado = '';
+  especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  motivoRechazo = '';
+  archivoAdjunto: File | null = null;
+
   numeroSeleccion!: number;
   textoFiltro:string = '';
   errorMessage: string = '';
@@ -71,6 +80,22 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
         this._notificacion.showError("Error", this.errorMessage);
       }
     });
+  }
+  verAprobar(row: Expediente): void {
+    this.esAprobacion = true;
+    this.itemSeleccionado = row;
+    console.log(row);
+    console.log(this.itemSeleccionado);
+    setTimeout(() => {
+      this.modalVisible = true;
+    });
+  }
+  cerrarModal(): void {
+    this.modalVisible = false;
+    this.itemSeleccionado = null;
+    this.motivoRechazo = '';
+    this.archivoAdjunto = null;
+    this.especialistaSeleccionado = '';
   }
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;

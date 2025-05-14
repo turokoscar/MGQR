@@ -35,7 +35,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   itemSeleccionado: any = null;
   respuestaReclamo: string = '';
   comentarioReclamo: string = '';
-  derivarOtraArea: boolean | null = null;
+  derivarOtraArea: boolean | false = false;
   nombreArchivoRespuesta: string = '';
 
   especialistaSeleccionado = '';
@@ -58,7 +58,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   //3. Inicializamos el componente
   ngOnInit(): void {
   }
-  @Output() cambiarPestania = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
+  @Output() cambiarPestaniaA = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
 
   cargarExpedientes(filtros: any): void {
     this.loading = true;
@@ -87,6 +87,11 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   aprobar(row: Expediente): void {
     this.esAprobacion = true;
     this.itemSeleccionado = row;
+    this.derivarOtraArea=false;
+    this.respuestaReclamo = '';
+    this.comentarioReclamo = '';
+    this.especialistaSeleccionado = '';
+    this.archivoAdjunto = null;
     console.log(row);
     console.log(this.itemSeleccionado);
     setTimeout(() => {
@@ -132,6 +137,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
       id: expedienteId,
       usuarioId,
       estado,
+      acciones: '',
       respuesta: this.respuestaReclamo.trim(),
       comentario: this.comentarioReclamo.trim(),
       evidencia: nombreArchivo,
@@ -158,7 +164,8 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
 
         this.openDialogGeneral('Mensaje de Información', mensaje, 'success');
         this.cerrarModal();
-        this.cambiarPestania.emit(this.derivarOtraArea ? 'reasignado' : 'atendidos');
+        console.log(this.derivarOtraArea ? 'reasignado' : 'atendidos');
+        this.cambiarPestaniaA.emit(this.derivarOtraArea ? 'reasignado' : 'atendidos');
         this.loading = false;
       },
       error: () => {

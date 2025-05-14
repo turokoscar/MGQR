@@ -82,34 +82,5 @@
   <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
 
-<div *ngIf="modalVisible" class="modal-overlay">
-  <div class="modal-container">
-    <div class="modal-header" [ngClass]="{ 'modal-header-info': esAtencion, 'modal-header-warning': !esAtencion }">
-      {{ esAtencion ? 'Mensaje de Informacion' : 'Mensaje de Advertencia' }}
-      <button class="close-button" (click)="cerrarModal()">×</button>
-    </div>
-
-    <div class="modal-body">
-      <ng-container *ngIf="esAtencion">
-        <div class="notification-box">
-          <div class="info-icon">?</div>
-          <div class="notification-text title-modal">
-            ¿Está seguro que desea atender el expediente?
-          </div>
-        </div>
-        <div class="separator"></div>
-        <div class="action-button-container">
-          <button class="action-button" (click)="cerrarModal()">
-             No
-          </button>
-          <button class="action-button" (click)="confirmarAccion()">
-             Sí
-          </button>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-</div><!-- HTML Mejorado -->
-
 
 

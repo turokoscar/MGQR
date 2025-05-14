@@ -1,5 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import Swal from 'sweetalert2';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -61,10 +62,12 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
   //3. Inicializamos el componente
   ngOnInit(): void {
   }
-  @Output() cambiarPestania = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
+  @Output() cambiarPestaniaA = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
 
   cargarExpedientes(filtros: any): void {
     this.loading = true;
+    console.log("entra aqui");
+    console.log(filtros);
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
         console.log(data);
@@ -83,15 +86,6 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
   }
-  //4. Verificamos que todos los elementos esten seleccionados
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    if (this.dataSource) {
-      const numRows = this.dataSource?.data.length;
-      return numSelected === numRows;
-    }
-    return false;
-  }
   verDetalle(row: any): void {
     this.router.navigate(['/reclamo/create'], {
       state: { expediente: row }
@@ -100,10 +94,20 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
   aprobar(row: Expediente): void {
     this.esAtencion = true;
     this.itemSeleccionado = row;
-    console.log(row);
-    console.log(this.itemSeleccionado);
-    setTimeout(() => {
-      this.modalVisible = true;
+
+    Swal.fire({
+      title: 'Mensaje de Información',
+      text: '¿Está seguro que desea atender el expediente?',
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonColor: '#7f6000',
+      cancelButtonColor: '#7f6000',
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.confirmarAccion();
+      }
     });
   }
   openDialogGeneral(title: string, html: any, icon: string): void {
@@ -128,13 +132,11 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
    this.loading = true;
    this._apiService.actualizarEstado(payload).subscribe({
     next: () => {
-      const mensaje = 'Se movió correctamente el expediente N°'+this.itemSeleccionado.expediente+' a la bandeja En Proceso.';
+      const mensaje = `Se movió correctamente el expediente N° <strong>${this.itemSeleccionado.expediente}</strong> a la bandeja <strong>En Proceso</strong>.`;
       const icono = 'success';
-
       this.openDialogGeneral('Mensaje de Información', mensaje, icono);
-
       this.cerrarModal(); // cierra modal
-      this.cambiarPestania.emit('proceso');
+      this.cambiarPestaniaA.emit('proceso');
     },
     error: () => {
       this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
@@ -146,20 +148,6 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     this.modalVisible = false;
     this.itemSeleccionado = null;
   }
-  //5. Habilitamos los botones para editar y eliminar
-  habilitaBotones(numero:number){
-    this.numeroSeleccion = numero;
-  }
-  //6. Seleccionamos todos los registros
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      this.habilitaBotones(0);
-      return;
-    }
-    if(this.dataSource){
-      this.selection.select(...this.dataSource.data);
-      this.habilitaBotones(this.selection.selected.length);
-    }
-  }
+
+
 }

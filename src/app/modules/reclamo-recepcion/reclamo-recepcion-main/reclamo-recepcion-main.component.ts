@@ -73,7 +73,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     this.filtro = {
       tipoCanalId: 0,
       tipoReclamoId: 0,
-      tipoProyectoId: 0,
+      tipoProyectoId: 1,
       codigoExpediente: null,
       estado: null
     };
@@ -101,30 +101,12 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-  activarPestania222(pestania: 'atendido' | 'denegado') {
-    this.pestaniaActiva = pestania;
-
-    const filtrosConEstado = {
-      ...this.filtro,
-      tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
-      tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
-      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
-      estado: pestania === 'atendido' ? 2 : (pestania === 'denegado' ? 3 : null)
-    };
-
-    if (pestania === 'atendido') {
-      this.reclamoAtendido.cargarExpedientes(filtrosConEstado);
-    } else if (pestania === 'denegado') {
-      this.reclamoDenegado.cargarExpedientes(filtrosConEstado);
-    }
-  }
-
-  activarPestania(pestania: 'atendido' | 'denegado') {
+  activarPestania(pestania: 'pendiente' | 'atendido' | 'denegado') {
     this.pestaniaActiva = pestania; // 🔑 ACTUALIZAS ESTO PRIMERO
 
     // Activar visualmente la pestaña
     const tabIds = {
+      pendiente: '#nav-home-tab',
       atendido: '#nav-profile-tab',
       denegado: '#nav-contact-tab'
     };

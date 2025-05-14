@@ -64,7 +64,7 @@ export class ReclamoAtencionAtendidoComponent implements OnInit {
   //3. Inicializamos el componente
   ngOnInit(): void {
   }
-  @Output() cambiarPestania = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
+  @Output() cambiarPestaniaA = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -102,24 +102,16 @@ export class ReclamoAtencionAtendidoComponent implements OnInit {
   verAtencion(row: Expediente): void {
     this.itemSeleccionado = row;
     this.loading = true;
-    this._apiService.listarAtenderDetalle(this.itemSeleccionado.idexpediente).subscribe({
-      next: (data: ExpedienteDetalleDto) => {
-        this.itemSeleccionado = data;
-        this.respuestaReclamo = data.respuesta || '';
-        this.comentarioReclamo = data.comentario || '';
-        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
-        this.derivarOtraArea = !!data.especialista_id;
+    this.itemSeleccionado = row;
+    this.respuestaReclamo = this.itemSeleccionado.respuesta || '';
+    this.comentarioReclamo = this.itemSeleccionado.comentario || '';
+    this.especialistaSeleccionado = this.itemSeleccionado.especialista_id?.toString() || '';
+    this.derivarOtraArea = !!this.itemSeleccionado.especialista_id;
 
-        this.esAprobacion = true;
-        this.modalVisible = true;
-        this.modalDeshabilitado = true;
-        this.loading = false;
-      },
-      error: (err) => {
-        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
-        this.loading = false;
-      }
-    });
+    this.esAprobacion = true;
+    this.modalVisible = true;
+    this.modalDeshabilitado = true;
+    this.loading = false;
   }
 
 

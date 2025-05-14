@@ -80,7 +80,7 @@
             </div>
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-por-atender" type="button" role="tab" aria-controls="nav-home" aria-selected="true" (click)="activarPestaniaA('pendiente')">
                   <i class="bi-file-earmark-text text-success"></i>
                   Por atender</button>
                 <button class="nav-link"
@@ -126,19 +126,19 @@
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="nav-por-atender" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                 <br>
-                <app-reclamo-atencion-pendiente #reclamoPendiente (cambiarPestania)="activarPestaniaA($event)"></app-reclamo-atencion-pendiente>
+                <app-reclamo-atencion-pendiente #reclamoPendientes (cambiarPestaniaA)="activarPestaniaA($event)"></app-reclamo-atencion-pendiente>
               </div>
               <div class="tab-pane fade" id="nav-en-proceso" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
                 <br>
-                <app-reclamo-atencion-proceso #reclamoProceso></app-reclamo-atencion-proceso>
+                <app-reclamo-atencion-proceso #reclamoProceso (cambiarPestaniaA)="activarPestaniaA($event)"></app-reclamo-atencion-proceso>
               </div>
               <div class="tab-pane fade" id="nav-atendido" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
                 <br>
-                <app-reclamo-atencion-atendido #reclamoAtendido></app-reclamo-atencion-atendido>
+                <app-reclamo-atencion-atendido #reclamoAtendidos (cambiarPestaniaA)="activarPestaniaA($event)"></app-reclamo-atencion-atendido>
               </div>
               <div class="tab-pane fade" id="nav-reasignado" role="tabpanel" aria-labelledby="nav-reasignado-tab" tabindex="0">
                 <br>
-                <app-reclamo-atencion-reasignado #reclamoReasignado></app-reclamo-atencion-reasignado>
+                <app-reclamo-atencion-reasignado #reclamoReasignado (cambiarPestaniaA)="activarPestaniaA($event)"></app-reclamo-atencion-reasignado>
               </div>
             </div>
           </div>
