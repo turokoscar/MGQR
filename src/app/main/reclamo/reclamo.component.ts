@@ -257,7 +257,10 @@
     private showPrimerForm():void{
       this.primeraParteForm = this.fb.group({
         tipo_persona: ['', Validators.required],
-        email_institucional: ['']
+        email_institucional: [''],
+        referencia: [''],
+        fecha_ocurrencia: [''],
+        tipo_canal: ['']
       })
     }
     //5. Estructuro la segunda parte del formulario
@@ -267,8 +270,6 @@
         numero_documento: [{ value: '', disabled: false },
           [Validators.pattern('^[0-9]*$'), Validators.maxLength(15)]
         ],
-        fecha_ocurrencia: [''],
-        tipo_canal: [''],
         genero: ['', Validators.required],
         nombre: ['',
           [Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$'), Validators.maxLength(100)]
@@ -302,8 +303,8 @@
 
         evidencia_consulta: [''],
         es_confidencial: [false],
-        codigo_validacion: ['', [Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]],
-        referencia: ['']
+        codigo_validacion: ['', [Validators.pattern('^[0-9]*$'), Validators.maxLength(4)]]
+
 
       });
     }
@@ -491,7 +492,7 @@
         "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
         "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
         "apellido_materno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_materno),
-        "tipo_canal": "1",
+        "tipo_canal": this.esInterno ? this.primeraParteForm.value.tipo_canal : "1",
         "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
         "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
         "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
@@ -505,7 +506,7 @@
         "email": ""+this.segundaParteForm.value.correo_electronico,
         "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
         "comunidad": ""+this.segundaParteForm.value.comunidad,
-        "referencia": ""+this.segundaParteForm.value.referencia,
+        "referencia": ""+this.primeraParteForm.value.referencia,
         "cargo": ""+this.segundaParteForm.value.cargo,
         "usuario_id": "1",
         "evidencia":this.nombreArchivoSeleccionado,
@@ -545,11 +546,19 @@
     if(!file){
       this.nombreArchivoSeleccionado="";
     }
+
+    console.log(this.primeraParteForm.value.tipo_canal );
+    console.log(this.esInterno);
     let param = {
       //("perTipDoc": ""+ 1,
 
 
+      "tipo_canal": this.esInterno ? this.primeraParteForm.value.tipo_canal : "1",
+      "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
+      "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
+      "es_confidencial": ""+(this.es_confidencial==true,1,0),
       "tipo_documento_id": ""+(this.segundaParteForm.value.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
+      "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
       // "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
       // "nombres": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
       // "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
@@ -557,31 +566,26 @@
       "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
       "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
       "apellido_materno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_materno),
-      "tipo_canal": this.esInterno ? this.primeraParteForm.value.tipo_canal : "1",
-      "tipo_expediente": ""+this.primeraParteForm.value.tipo_persona,
-      "tipo_reclamo_id": ""+this.segundaParteForm.value.tipo_consulta,
-      "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
 
-      "es_confidencial": ""+(this.es_confidencial==true,1,0),
       "genero": ""+this.segundaParteForm.value.genero,
-      "ubigeo_id": ""+this.segundaParteForm.value.distrito,
-      "direccion": ""+this.segundaParteForm.value.direccion,
       "telefono": ""+this.segundaParteForm.value.numero_telefono,
       "celular": ""+this.segundaParteForm.value.numero_celular,
       "email": ""+this.segundaParteForm.value.correo_electronico,
+      "ubigeo_id": ""+this.segundaParteForm.value.distrito,
+      "direccion": ""+this.segundaParteForm.value.direccion,
       "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
       "comunidad": ""+this.segundaParteForm.value.comunidad,
-      "referencia": ""+this.segundaParteForm.value.referencia,
       "cargo": ""+this.segundaParteForm.value.cargo,
       "usuario_id": "1",
-      "evidencia":this.nombreArchivoSeleccionado,
       "codigo_validacion":this.segundaParteForm.value.codigo_validacion,
+      "evidencia":this.nombreArchivoSeleccionado,
+      "referencia": ""+this.primeraParteForm.value.referencia,
      }
 
 
      let codigo=   param.codigo_validacion;
 
-
+    console.log(param);
 
      console.log(codigo+"  --  "+this.listValidacionCorreo.codigo_validacion);
      if(codigo==this.listValidacionCorreo.codigo_validacion){
