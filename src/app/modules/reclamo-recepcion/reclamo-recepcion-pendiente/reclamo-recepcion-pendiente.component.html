@@ -131,17 +131,18 @@
           <div class="input-field description">{{ itemSeleccionado?.contenido_consulta }}</div>
         </div>
       </div>
-
+      <div class="section-title title-modal detalle">Detalle de Admisión</div>
       <div class="separator"></div>
 
       <ng-container *ngIf="esAprobacion">
-        <div class="notification-box">
-          <div class="info-icon">?</div>
-          <div class="notification-text title-modal">
-            Si Admite el items se generara el N° de Expediente y se notificada via correo que al Titular de la queja o reclamo
+        <ng-container *ngIf="!hayReferencia">
+          <div class="notification-box">
+            <div class="info-icon">?</div>
+            <div class="notification-text title-modal">
+              Si Admite el items se generara el N° de Expediente y se notificada via correo que al Titular de la queja o reclamo
+            </div>
           </div>
-        </div>
-
+        </ng-container>
         <!--<div class="section-title title-modal">Especialista al que se le asigna el reclamo, queja o consulta</div>
         <div class="select-container">
           <select [(ngModel)]="especialistaSeleccionado" class="select">

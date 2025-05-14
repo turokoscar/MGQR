@@ -39,6 +39,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
   motivoRechazo = '';
   archivoAdjunto: File | null = null;
+  hayReferencia = false;
 
   numeroSeleccion!: number;
   textoFiltro:string = '';
@@ -84,8 +85,28 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   verAprobar(row: Expediente): void {
     this.esAprobacion = true;
     this.itemSeleccionado = row;
+    if (this.itemSeleccionado.referencia==='' || this.itemSeleccionado.referencia === null) {
+      this.hayReferencia=false;
+    }else{
+      this.hayReferencia=true;
+    }
     console.log(row);
     console.log(this.itemSeleccionado);
+    this._apiService.listarAtenderDetalle(this.itemSeleccionado.idexpediente).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
+        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
+        this.esAprobacion = true;
+        this.modalVisible = true;
+        this.loading = false;
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
     setTimeout(() => {
       this.modalVisible = true;
     });

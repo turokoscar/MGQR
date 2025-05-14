@@ -128,9 +128,23 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     }else{
       this.hayReferencia=true;
     }
+    this._apiService.listarAtenderDetalle(this.itemSeleccionado.idexpediente).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        this.itemSeleccionado = data;
+        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
+        this.esAprobacion = true;
+        this.modalVisible = true;
+        this.loading = false;
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
     setTimeout(() => {
       this.modalVisible = true;
     });
+
   }
 
   rechazar(row: Expediente): void {
@@ -168,10 +182,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
     return;
   }
-  if (this.hayReferencia && !this.motivoRechazo.trim()) {
-      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
-      return;
-  }
     let nombreArchivo = '';
     const archivosAdjuntos: File[] = [];
 
@@ -188,12 +198,14 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     id: expedienteId,
     usuarioId: usuarioId,
     estado: estado,
-    acciones: this.esAprobacion ? "" : this.motivoRechazo.trim(),
+    acciones: this.motivoRechazo.trim(),
     respuesta: '',
     comentario: '',
     evidencia: nombreArchivo,
     especialista: ''
   };
+
+    console.log(payload);
    this.loading = true;
    this._apiService.actualizarAtender(payload).subscribe({
     next: () => {

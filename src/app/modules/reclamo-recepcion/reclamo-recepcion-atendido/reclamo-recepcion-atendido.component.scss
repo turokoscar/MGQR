@@ -279,7 +279,10 @@ label {
 .separator {
   height: 1px;
   background-color: #e0e0e0;
-  margin: 15px 0 10px 0;
+  margin: 0 0 8px 0;
+}
+.detalle {
+  margin-top: 1rem;
 }
 
 .notification-box {
@@ -333,6 +336,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+  font-size: 1.2rem!important;
 }
 
 .file-selector {

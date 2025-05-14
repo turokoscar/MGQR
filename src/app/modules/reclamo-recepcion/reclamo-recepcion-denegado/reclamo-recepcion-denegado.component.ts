@@ -32,6 +32,7 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   id!: number;
   numeroSeleccion!: number;
+  hayReferencia = false;
 
   modalVisible = false;
   esAprobacion = true;
@@ -90,7 +91,26 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   verRechazar(row: Expediente): void {
     this.esAprobacion = false;
     this.itemSeleccionado = row;
-    this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
+     if (this.itemSeleccionado.referencia==='' || this.itemSeleccionado.referencia === null) {
+      this.hayReferencia=false;
+    }else{
+      this.hayReferencia=true;
+    }
+    this._apiService.listarAtenderDetalle(this.itemSeleccionado.idexpediente).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
+        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
+        this.esAprobacion = false;
+        this.modalVisible = true;
+        this.loading = false;
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
     setTimeout(() => {
       this.modalVisible = true;
     });

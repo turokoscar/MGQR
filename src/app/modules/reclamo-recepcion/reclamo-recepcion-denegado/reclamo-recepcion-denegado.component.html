@@ -120,23 +120,20 @@
         </div>
       </div>
 
+      <div class="section-title title-modal detalle">Detalle de Admisión</div>
       <div class="separator"></div>
 
       <ng-container *ngIf="esAprobacion">
-        <div class="notification-box">
-          <div class="info-icon">?</div>
-          <div class="notification-text title-modal">
-            Si Admite el items se generara el N° de Expediente y se notificada via correo que al Titular de la queja o reclamo
-          </div>
+        <ng-container *ngIf="hayReferencia">
+        <div class="form-group full-width">
+          <label class="title-modal">Debscripción del motivo:</label>
+          <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
         </div>
-
-        <!--<div class="section-title title-modal">Especialista al que se le asigna el reclamo, queja o consulta</div>
-        <div class="select-container">
-          <select [(ngModel)]="especialistaSeleccionado" class="select">
-            <option value="" disabled selected>&#45;&#45;Seleccione&#45;&#45;</option>
-            <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
-          </select>
-        </div>-->
+        <div class="file-selector">
+          <div class="file-label title-modal">Archivo Adjunto</div>
+          <!--<input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />-->
+        </div>
+         </ng-container>
       </ng-container>
 
       <ng-container *ngIf="!esAprobacion">
@@ -144,11 +141,23 @@
           <label class="title-modal">Descripción del motivo de rechazo:</label>
           <textarea class="text-area description" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
         </div>
+        <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
+          <div class="file-label title-modal">
+          <a
+            [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
+            target="_blank"
+            style="text-decoration: underline; color: blue;"
+            title="Descargar evidencia"
+            class="title-modal"
+          >
+            Descargar Adjunto
+          </a>
+            </div>
+        </ng-container>
+        <ng-template #sinEvidencia>
+          Sin Adjunto
+        </ng-template>
 
-        <!--<div class="file-selector">
-          <div class="file-label title-modal">Seleccione archivo</div>
-          <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
-        </div>-->
       </ng-container>
     </div>
   </div>
