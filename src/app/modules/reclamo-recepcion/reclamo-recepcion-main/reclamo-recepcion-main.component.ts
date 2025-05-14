@@ -32,6 +32,11 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Expediente>();
   pestaniaActiva: 'pendiente' | 'atendido' | 'denegado' = 'pendiente';
   errorMessage: string = '';
+
+  tipo_filtro_id:number=0;
+  
+  
+
   filtro = {
     tipoCanalId: 0,
     tipoReclamoId: 0,
@@ -73,7 +78,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     this.filtro = {
       tipoCanalId: 0,
       tipoReclamoId: 0,
-      tipoProyectoId: 1,
+      tipoProyectoId:1,
       codigoExpediente: null,
       estado: null
     };
@@ -82,11 +87,32 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
 }
 
   buscarConFiltros() {
+
+    var rol_id=localStorage.getItem('rol');
+
+    if(rol_id=="1"){
+      this.tipo_filtro_id=1;
+    }
+    else if(rol_id=="2"){
+      this.tipo_filtro_id=2;
+    }
+    else if(rol_id=="4"){
+      this.tipo_filtro_id=0;
+    }
+    else if(rol_id=="5"){
+      this.tipo_filtro_id=0;
+    }
+    else if(rol_id=="6"){
+      this.tipo_filtro_id=0;
+    }
+  
     const filtrosConEstado = {
       ...this.filtro,
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
-      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
+      tipoProyectoId:  this.filtro.tipoProyectoId === 0 ? null :  this.tipo_filtro_id,
+      //tipoProyectoId:  this.tipo_filtro_id,
+      
       estado: this.pestaniaActiva === 'pendiente' ? 1 :
               this.pestaniaActiva === 'atendido' ? 2 :
               this.pestaniaActiva === 'denegado' ? 3 : null
