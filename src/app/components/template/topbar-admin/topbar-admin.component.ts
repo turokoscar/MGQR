@@ -10,9 +10,9 @@ export class TopbarAdminComponent {
   constructor(private router: Router) { }
   menuUsuarioActivo: boolean = false;
   usuario = {
-    nombre: 'Pepito Ramos Chumpitaz',
-    dni: '12345678',
-    correo: 'pepito@example.com'
+    nombre: localStorage.getItem('nombre_completo')?.toString(),
+    dni: localStorage.getItem('dni')?.toString(),
+    correo: localStorage.getItem('correo')?.toString()
   };
   toggleUserMenu() {
     this.menuUsuarioActivo = !this.menuUsuarioActivo;
