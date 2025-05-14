@@ -44,6 +44,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
 
   modalVisible = false;
   esAprobacion = true;
+  hayReferencia = false;
   itemSeleccionado: any = null;
   especialistaSeleccionado = '';
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
@@ -79,6 +80,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
+        console.log(data);
         this.dataSourceExp.data = data;
         this.dataSourceExp.paginator = this.paginator;
         this.dataSourceExp.sort = this.sort;
@@ -94,31 +96,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   }
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
-  }
-  //4. Verificamos que todos los elementos esten seleccionados
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    if (this.dataSource) {
-      const numRows = this.dataSource?.data.length;
-      return numSelected === numRows;
-    }
-    return false;
-  }
-  //5. Habilitamos los botones para editar y eliminar
-  habilitaBotones(numero:number){
-    this.numeroSeleccion = numero;
-  }
-  //6. Seleccionamos todos los registros
-  masterToggle() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      this.habilitaBotones(0);
-      return;
-    }
-    if(this.dataSource){
-      this.selection.select(...this.dataSource.data);
-      this.habilitaBotones(this.selection.selected.length);
-    }
   }
 
   //11. Función para crear el filtro personalizado
@@ -146,8 +123,11 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   aprobar(row: Expediente): void {
     this.esAprobacion = true;
     this.itemSeleccionado = row;
-    console.log(row);
-    console.log(this.itemSeleccionado);
+    if (this.itemSeleccionado.referencia==='' || this.itemSeleccionado.referencia === null) {
+      this.hayReferencia=false;
+    }else{
+      this.hayReferencia=true;
+    }
     setTimeout(() => {
       this.modalVisible = true;
     });
@@ -184,6 +164,26 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo para denegar.', 'warning');
     return;
   }
+  if (this.hayReferencia && !this.motivoRechazo.trim()) {
+    this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
+    return;
+  }
+  if (this.hayReferencia && !this.motivoRechazo.trim()) {
+      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
+      return;
+  }
+    let nombreArchivo = '';
+    const archivosAdjuntos: File[] = [];
+
+    if (this.archivoAdjunto) {
+      const extension = this.archivoAdjunto.name.split('.').pop()?.toLowerCase() || '';
+      const timestamp = new Date().getTime();
+      const random = Math.random().toString(36).substring(2, 8);
+      nombreArchivo = `${timestamp}-${random}.${extension}`;
+      const archivoRenombrado = new File([this.archivoAdjunto], nombreArchivo, { type: this.archivoAdjunto.type });
+      archivosAdjuntos.push(archivoRenombrado);
+    }
+
   const payload = {
     id: expedienteId,
     usuarioId: usuarioId,
@@ -191,7 +191,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     acciones: this.esAprobacion ? "" : this.motivoRechazo.trim(),
     respuesta: '',
     comentario: '',
-    evidencia: '',
+    evidencia: nombreArchivo,
     especialista: ''
   };
    this.loading = true;

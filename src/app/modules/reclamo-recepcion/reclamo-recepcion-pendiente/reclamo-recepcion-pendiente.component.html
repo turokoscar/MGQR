@@ -149,7 +149,16 @@
             <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
           </select>
         </div>-->
-
+        <ng-container *ngIf="hayReferencia">
+        <div class="form-group full-width">
+          <label class="title-modal">Debe ingresar el motivo:</label>
+          <textarea class="text-area" [(ngModel)]="motivoRechazo"></textarea>
+        </div>
+        <div class="file-selector">
+          <div class="file-label title-modal">Seleccione archivo</div>
+          <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
+        </div>
+         </ng-container>
         <div class="action-button-container">
           <button class="action-button" (click)="confirmarAccion()">
             <span class="icon">💾</span> Admitir
