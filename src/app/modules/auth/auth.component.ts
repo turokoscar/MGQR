@@ -37,11 +37,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-
+      var tipo_proyecto_id=0;
       if (email === '12345678' && password === '12345678') {
         
         localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',"1");
+        localStorage.setItem('tipo_proyecto_id',JSON.stringify(1));
         localStorage.setItem('nombre_completo',"Leoncio Julio Ugarte");
         localStorage.setItem('dni',"12345678");
         localStorage.setItem('correo',"lugarte@serforbps.gob.pe");
@@ -54,14 +54,30 @@ export class AuthComponent implements OnInit, OnDestroy {
       }
 
 
+      if (email === '22222222' && password === '22222222') {
+        
+        localStorage.setItem('Acceso',"ok");
+        localStorage.setItem('tipo_proyecto_id',JSON.stringify(2));
+        localStorage.setItem('nombre_completo',"Guillermo Riva Reyes");
+        localStorage.setItem('dni',"22222222");
+        localStorage.setItem('correo',"griva@serforbps.gob.pe");
+        localStorage.setItem('rol',"2");
+        localStorage.setItem('cargo',"Jefe de Proyecto Bosques");
+        this.router.navigate(['/admin']);
+
+      } else {
+        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
+      }
+
+
       if (email === '44444444' && password === '44444444') {
 
         localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',"0");
+        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
         localStorage.setItem('nombre_completo',"Meibel Arevalo Jimenez");
         localStorage.setItem('dni',"44444444");
         localStorage.setItem('correo',"marevalo@serforbps.gob.pe");
-        localStorage.setItem('rol',"2");
+        localStorage.setItem('rol',"4");
         localStorage.setItem('cargo',"Gestión de riesgos");
 
         this.router.navigate(['/admin']);
@@ -72,12 +88,12 @@ export class AuthComponent implements OnInit, OnDestroy {
 
       if (email === '55555555' && password === '55555555') {
         localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',"0");
+        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
         localStorage.setItem('nombre_completo',"Daniel Martín Rivera Chumbiray");
         localStorage.setItem('dni',"55555555");
         localStorage.setItem('correo',"coordinadorkfw@serfor.gob.pe");
         localStorage.setItem('cargo',"Coordinador Ejecutivo de BPS");
-        localStorage.setItem('rol',"3");
+        localStorage.setItem('rol',"5");
 
         
         this.router.navigate(['/admin']);
@@ -88,13 +104,13 @@ export class AuthComponent implements OnInit, OnDestroy {
 
       if (email === '44328678' && password === '44328678') {
         localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',"0");
+        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
         localStorage.setItem('nombre_completo',"Ricky Joel Blas Reyes");
         localStorage.setItem('cargo',"Administrador");
         localStorage.setItem('dni',"44328678");
         localStorage.setItem('correo',"rblas0527@gmail.com");
         
-        localStorage.setItem('rol',"5");
+        localStorage.setItem('rol',"6");
 
         
         this.router.navigate(['/admin']);

@@ -183,6 +183,19 @@
       </div>
   </div>
   <div *ngIf="this.rol=='2'">
+    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="collapse-inner">
+        
+        <a class="collapse-item" routerLink="/recepcion">
+          <i class="bi bi-file-earmark-text"></i> Admitir
+        </a>
+        <a class="collapse-item" routerLink="/atencion">
+          <i class="bi bi-calendar-plus"></i> Atender
+        </a>
+      </div>
+    </div>
+</div>
+  <div *ngIf="this.rol=='4'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
           <a class="collapse-item" routerLink="/recepcion">
@@ -191,7 +204,7 @@
         </div>
       </div>
   </div> 
-  <div *ngIf="this.rol=='3'">
+  <div *ngIf="this.rol=='5'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
 
@@ -201,7 +214,7 @@
         </div>
       </div>
   </div> 
-  <div *ngIf="this.rol=='5'">
+  <div *ngIf="this.rol=='6'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
           <a class="collapse-item" routerLink="/reclamo/create">
