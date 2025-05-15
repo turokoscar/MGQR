@@ -80,12 +80,25 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
-        console.log(data);
-        this.dataSourceExp.data = data;
+
+        var rol_id=localStorage.getItem('rol'); // Solo y 4
+
+        if(rol_id=="4" || rol_id=="5"){
+          const filtrados = data.filter(item => item.referencia && item.referencia.trim() !== '');
+          this.dataSourceExp.data = filtrados;
+          console.log("1-->"+data);
+
+        }
+        else{
+          this.dataSourceExp.data = data;
+      
+        }
         this.dataSourceExp.paginator = this.paginator;
         this.dataSourceExp.sort = this.sort;
         this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
+        console.log(data);
+        
       },
       error: (e) => {
         this.loading = false;
@@ -128,23 +141,9 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     }else{
       this.hayReferencia=true;
     }
-    this._apiService.listarAtenderDetalle(this.itemSeleccionado.idexpediente).subscribe({
-      next: (data: ExpedienteDetalleDto) => {
-        this.itemSeleccionado = data;
-        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
-        this.esAprobacion = true;
-        this.modalVisible = true;
-        this.loading = false;
-      },
-      error: (err) => {
-        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
-        this.loading = false;
-      }
-    });
     setTimeout(() => {
       this.modalVisible = true;
     });
-
   }
 
   rechazar(row: Expediente): void {
@@ -182,6 +181,10 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
     return;
   }
+  if (this.hayReferencia && !this.motivoRechazo.trim()) {
+      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
+      return;
+  }
     let nombreArchivo = '';
     const archivosAdjuntos: File[] = [];
 
@@ -198,14 +201,12 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     id: expedienteId,
     usuarioId: usuarioId,
     estado: estado,
-    acciones: this.motivoRechazo.trim(),
+    acciones: this.esAprobacion ? "" : this.motivoRechazo.trim(),
     respuesta: '',
     comentario: '',
     evidencia: nombreArchivo,
     especialista: ''
   };
-
-    console.log(payload);
    this.loading = true;
    this._apiService.actualizarAtender(payload).subscribe({
     next: () => {
