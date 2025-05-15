@@ -171,10 +171,25 @@
           this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 8;
           this.setDocumentoMaxLength(8);
+
+          this.segundaParteForm.get('nombre')?.setValue('');
+          this.segundaParteForm.get('apellido_paterno')?.setValue('');
+          this.segundaParteForm.get('apellido_materno')?.setValue('');
+
+          this.segundaParteForm.controls['nombre'].disable();
+          this.segundaParteForm.controls['apellido_paterno'].disable();
+          this.segundaParteForm.controls['apellido_materno'].disable();
+
         } else if (tipoDoc === 2) { // 2 = Carnet de Extranjería (ajusta según tu ID real)
           this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 15;
           this.setDocumentoMaxLength(15);
+          this.segundaParteForm.get('nombre')?.setValue('');
+          this.segundaParteForm.get('apellido_paterno')?.setValue('');
+          this.segundaParteForm.get('apellido_materno')?.setValue('');
+          this.segundaParteForm.controls['nombre'].enable();
+          this.segundaParteForm.controls['apellido_paterno'].enable();
+          this.segundaParteForm.controls['apellido_materno'].enable();
         } else {
           this.segundaParteForm.get('numero_documento')?.setValue('');
           this.maxLengthDocumento = 15;

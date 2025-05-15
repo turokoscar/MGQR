@@ -91,14 +91,14 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
         }
         else{
           this.dataSourceExp.data = data;
-      
+
         }
         this.dataSourceExp.paginator = this.paginator;
         this.dataSourceExp.sort = this.sort;
         this.dataSourceExp.filterPredicate = this.createFilter();
         this.loading = false;
         console.log(data);
-        
+
       },
       error: (e) => {
         this.loading = false;
@@ -201,7 +201,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     id: expedienteId,
     usuarioId: usuarioId,
     estado: estado,
-    acciones: this.esAprobacion ? "" : this.motivoRechazo.trim(),
+    acciones: this.motivoRechazo.trim(),
     respuesta: '',
     comentario: '',
     evidencia: nombreArchivo,
@@ -209,21 +209,54 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   };
    this.loading = true;
    this._apiService.actualizarAtender(payload).subscribe({
-    next: () => {
+  next: () => {
+    // Si hay archivo para subir
+    if (archivosAdjuntos.length > 0) {
+      const formData = new FormData();
+      archivosAdjuntos.forEach((archivo) => {
+        formData.append('files', archivo);
+      });
+
+      this._apiService.upload(formData).subscribe({
+        next: (response) => {
+          console.log('Archivo subido exitosamente:', response);
+
+          const mensaje = this.esAprobacion
+            ? 'Se aprobó correctamente el expediente N°' + this.itemSeleccionado.expediente + '.'
+            : 'Se denegó correctamente el expediente.';
+          const icono = this.esAprobacion ? 'success' : 'warning';
+
+          this.openDialogGeneral('Mensaje de Información', mensaje, icono);
+          this.cerrarModal();
+          this.cambiarPestania.emit(this.esAprobacion ? 'atendido' : 'denegado');
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al subir archivo:', err);
+          this.openDialogGeneral('Advertencia', 'El expediente se actualizó, pero hubo un problema al subir el archivo.', 'warning');
+          this.cerrarModal();
+          this.cambiarPestania.emit(this.esAprobacion ? 'atendido' : 'denegado');
+          this.loading = false;
+        }
+      });
+    } else {
       const mensaje = this.esAprobacion
-        ? 'Se aprobó correctamente el expediente N°'+this.itemSeleccionado.expediente+'.'
+        ? 'Se aprobó correctamente el expediente N°' + this.itemSeleccionado.expediente + '.'
         : 'Se denegó correctamente el expediente.';
       const icono = this.esAprobacion ? 'success' : 'warning';
 
       this.openDialogGeneral('Mensaje de Información', mensaje, icono);
-
-      this.cerrarModal(); // cierra modal
+      this.cerrarModal();
       this.cambiarPestania.emit(this.esAprobacion ? 'atendido' : 'denegado');
-    },
-    error: () => {
-      this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
+      this.loading = false;
     }
-  });
+  },
+  error: () => {
+    this.loading = false;
+    this.openDialogGeneral('Error', 'Ocurrió un problema al actualizar el estado del expediente', 'warning');
+  }
+});
+
 }
 
   openDialogGeneral(title: string, html: any, icon: string): void {

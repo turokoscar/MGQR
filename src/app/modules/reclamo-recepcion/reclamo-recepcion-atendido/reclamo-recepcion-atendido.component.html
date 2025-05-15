@@ -134,11 +134,11 @@
           <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
         </div>
         <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
-          <div class="file-label title-modal">
+          <div class="file-label title-modal lblAdjunto">
           <a
             [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
             target="_blank"
-            style="text-decoration: underline; color: blue;"
+            style="text-decoration: none; color: blue;"
             title="Descargar evidencia"
             class="title-modal"
           >
@@ -147,7 +147,7 @@
             </div>
         </ng-container>
         <ng-template #sinEvidencia>
-          Sin Adjunto
+          <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
         </ng-template>
          </ng-container>
       </ng-container>

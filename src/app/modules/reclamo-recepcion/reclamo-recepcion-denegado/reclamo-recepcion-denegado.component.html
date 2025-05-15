@@ -126,13 +126,25 @@
       <ng-container *ngIf="esAprobacion">
         <ng-container *ngIf="hayReferencia">
         <div class="form-group full-width">
-          <label class="title-modal">Debscripción del motivo:</label>
+          <label class="title-modal">Descripción del motivo:</label>
           <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
         </div>
-        <div class="file-selector">
-          <div class="file-label title-modal">Archivo Adjunto</div>
-          <!--<input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />-->
-        </div>
+         <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
+            <div class="file-label title-modal lblAdjunto">
+            <a
+              [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
+              target="_blank"
+              style="text-decoration: none; color: blue;"
+              title="Descargar evidencia"
+              class="title-modal"
+            >
+              Descargar Adjunto
+            </a>
+              </div>
+          </ng-container>
+          <ng-template #sinEvidencia>
+            <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
+          </ng-template>
          </ng-container>
       </ng-container>
 
@@ -142,11 +154,11 @@
           <textarea class="text-area description" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
         </div>
         <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
-          <div class="file-label title-modal">
+          <div class="file-label title-modal lblAdjunto">
           <a
             [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
             target="_blank"
-            style="text-decoration: underline; color: blue;"
+            style="text-decoration: none; color: blue;"
             title="Descargar evidencia"
             class="title-modal"
           >
