@@ -119,18 +119,23 @@ export class ReclamoAtencionPendienteComponent implements OnInit {
     return;
   }
   const expedienteId = this.itemSeleccionado.idexpediente;
-  const usuarioId = 1; // O el ID real del usuario actual si está disponible
-  const estado = 4; // 4 = proceso
+    var user_id=localStorage.getItem('id') ?? '1';
+    const usuarioId = +user_id;
+  const estado = 5; // 5 = proceso
 
-  const payload = {
-    id: expedienteId,
-    usuarioId: usuarioId,
-    estado: estado,
-    motivo: ""
-  };
+    const payload = {
+      id: expedienteId,
+      usuarioId: usuarioId,
+      estado: estado,
+      acciones: 'Cambio a estado: EN PROCESO',
+      respuesta: '',
+      comentario: '',
+      evidencia: '',
+      especialista: usuarioId
+    };
 
    this.loading = true;
-   this._apiService.actualizarEstado(payload).subscribe({
+   this._apiService.actualizarAtender(payload).subscribe({
     next: () => {
       const mensaje = `Se movió correctamente el expediente N° <strong>${this.itemSeleccionado.expediente}</strong> a la bandeja <strong>En Proceso</strong>.`;
       const icono = 'success';

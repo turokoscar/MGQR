@@ -1,133 +1,3 @@
-<!--
-<ul class="navbar-nav bg-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/admin">
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="bi bi-person-rolodex"></i>
-    </div>
-    <div class="sidebar-brand-text mx-3">MGQR</div>
-  </a>
-  <hr class="sidebar-divider my-0">
-  <li class="nav-item">
-      <a class="nav-link" routerLink="/admin">
-        <i class="bi bi-house-gear-fill"></i>
-        <span>Inicio</span>
-      </a>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-        aria-expanded="true" aria-controls="collapseTwo">
-        <i class="bi bi-inboxes"></i>
-        <span>Quejas, reclamo consulta</span>
-    </a>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" routerLink="/reclamo/create">
-              <i class="bi bi-plus-circle"></i>
-              Registrar</a>
-            <a class="collapse-item" routerLink="/recepcion">
-              <i class="bi bi-file-earmark-text"></i>
-              Admitir</a>
-            <a class="collapse-item" href="/atencion">
-              <i class="bi bi-calendar-plus"></i>
-              Atender</a>
-        </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
-        aria-expanded="true" aria-controls="collapseTwo">
-        <i class="bi bi-graph-down"></i>
-        <span>Reportes</span>
-    </a>
-    <div id="collapseReport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-graph-down"></i>
-              Resumen</a>
-        </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGestion"
-        aria-expanded="true" aria-controls="collapseTwo">
-        <i class="bi bi-person-gear"></i>
-        <span>Gestion</span>
-    </a>
-    <div id="collapseGestion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-duffle"></i>
-              Areas
-            </a>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-person-vcard"></i>
-              Cargos
-            </a>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-newspaper"></i>
-              Personal
-            </a>
-        </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseConfig"
-        aria-expanded="true" aria-controls="collapseConfig">
-        <i class="bi bi-gear"></i>
-        <span>Configuración</span>
-    </a>
-    <div id="collapseConfig" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-folder2"></i>
-              Módulos
-            </a>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-gear"></i>
-              Procesos
-            </a>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-list-ul"></i>
-              Roles
-            </a>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-people-fill"></i>
-              Usuarios
-            </a>
-        </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider">
-  <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilitario"
-        aria-expanded="true" aria-controls="collapseUtilitario">
-        <i class="bi bi-tools"></i>
-        <span>Utilitarios</span>
-    </a>
-    <div id="collapseUtilitario" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Acciones:</h6>
-            <a class="collapse-item" href="#">
-              <i class="bi bi-question-circle-fill"></i>
-              Soporte</a>
-        </div>
-    </div>
-  </li>
-  <hr class="sidebar-divider d-none d-md-block">
-  <div class="text-center d-none d-md-inline">
-      <button class="rounded-circle border-0" id="sidebarToggle"></button>
-  </div>
-</ul>
--->
-
 <ul class="sidebar-nav" id="accordionSidebar">
 
   <!-- Logo SERFOR arriba -->
@@ -172,7 +42,7 @@
   <div *ngIf="this.rol=='1'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
-          
+
           <a class="collapse-item" routerLink="/recepcion">
             <i class="bi bi-file-earmark-text"></i> Admitir
           </a>
@@ -185,7 +55,20 @@
   <div *ngIf="this.rol=='2'">
     <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
       <div class="collapse-inner">
-        
+
+        <a class="collapse-item" routerLink="/recepcion">
+          <i class="bi bi-file-earmark-text"></i> Admitir
+        </a>
+        <a class="collapse-item" routerLink="/atencion">
+          <i class="bi bi-calendar-plus"></i> Atender
+        </a>
+      </div>
+    </div>
+</div>
+    <div *ngIf="this.rol=='3'">
+    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+      <div class="collapse-inner">
+
         <a class="collapse-item" routerLink="/recepcion">
           <i class="bi bi-file-earmark-text"></i> Admitir
         </a>
@@ -203,7 +86,7 @@
           </a>
         </div>
       </div>
-  </div> 
+  </div>
   <div *ngIf="this.rol=='5'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
@@ -213,7 +96,7 @@
           </a>
         </div>
       </div>
-  </div> 
+  </div>
   <div *ngIf="this.rol=='6'">
       <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="collapse-inner">
@@ -228,8 +111,8 @@
           </a>
         </div>
       </div>
-  </div> 
-    
+  </div>
+
   </li>
 
 <!--  <li class="nav-item">

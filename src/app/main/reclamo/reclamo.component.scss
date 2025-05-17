@@ -20,6 +20,25 @@
   background-color: #005536;
 }
 
+.file-label {
+  background-color: #e0e0e0;
+  padding: 8px 15px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+}
+
+.lblAdjunto {
+  margin-top: 10px!important;
+}
+
+.file-input {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-left: none;
+  padding: 7px 10px;
+  border-radius: 0 4px 4px 0;
+}
+
 ::ng-deep .mat-mdc-select.mat-mdc-select-disabled {
   color: rgba(0, 0, 0, 0.87) !important;
   --mat-select-disabled-trigger-text-color: rgba(0, 0, 0, 0.87) !important;

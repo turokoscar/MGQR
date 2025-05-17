@@ -30,19 +30,21 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
   tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
   dataSource = new MatTableDataSource<Expediente>();
+  deshabilitarProyecto: boolean = false;
   pestaniaActiva: 'pendiente' | 'atendido' | 'denegado' = 'pendiente';
   errorMessage: string = '';
+  usuario_id: string = '';
 
-  tipo_filtro_id:number=0;
-  
-  
+
 
   filtro = {
     tipoCanalId: 0,
     tipoReclamoId: 0,
     tipoProyectoId: 1,
     codigoExpediente: null,
-    estado: null
+    estado: null,
+    usuarioId: '0',
+    modulo: 1
   };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -62,11 +64,20 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     private _tipoProcedencia: TipoProcedenciaReclamoService,
     private exportService: ExportService
   ){}
+  usuario = {
+    nombre: localStorage.getItem('nombre_completo')?.toString(),
+    dni: localStorage.getItem('dni')?.toString(),
+    id: localStorage.getItem('id')?.toString(),
+    rol: localStorage.getItem('rol')?.toString() ?? 1,
+    correo: localStorage.getItem('correo')?.toString()
+  };
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showTipoReclamo();
     this.showTipoProyecto();
     this.showTipoProcedencia();
+    this.validaUsuario();
+    console.log("este usuario",this.usuario_id);
   }
 
   ngAfterViewInit(): void {
@@ -78,9 +89,11 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     this.filtro = {
       tipoCanalId: 0,
       tipoReclamoId: 0,
-      tipoProyectoId:1,
+      tipoProyectoId: this.filtro.tipoProyectoId,
       codigoExpediente: null,
-      estado: null
+      estado: null,
+      usuarioId: this.usuario_id,
+      modulo: 1
     };
 
     this.buscarConFiltros(); // Opcional: vuelve a cargar los expedientes sin filtros
@@ -88,7 +101,7 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
 
   buscarConFiltros() {
 
-    var rol_id=localStorage.getItem('rol');
+    /*var rol_id=localStorage.getItem('rol');
 
     if(rol_id=="1"){
       this.tipo_filtro_id=1;
@@ -104,15 +117,15 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
     }
     else if(rol_id=="6"){
       this.tipo_filtro_id=0;
-    }
-  
+    }*/
+
     const filtrosConEstado = {
       ...this.filtro,
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
-      tipoProyectoId:  this.filtro.tipoProyectoId === 0 ? null :  this.tipo_filtro_id,
-      //tipoProyectoId:  this.tipo_filtro_id,
-      
+      usuarioId: this.usuario_id === '0' ? null : this.usuario_id,
+      tipoProyectoId:  this.filtro.tipoProyectoId === 0 ? null :  this.filtro.tipoProyectoId,
+
       estado: this.pestaniaActiva === 'pendiente' ? 1 :
               this.pestaniaActiva === 'atendido' ? 2 :
               this.pestaniaActiva === 'denegado' ? 3 : null
@@ -193,6 +206,17 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
         this._notificacion.showError("Error: ", this.errorMessage);
       }
     });
+  }
+  validaUsuario():void{
+    if(this.usuario.rol==="4" || this.usuario.rol==="5" || this.usuario.rol==="6"){
+      this.usuario_id="0";
+      this.filtro.tipoProyectoId=0;
+      this.deshabilitarProyecto = false;
+    }else{
+      this.usuario_id=String(this.usuario.id);
+      this.filtro.tipoProyectoId= +this.usuario.rol;
+      this.deshabilitarProyecto = true;
+    }
   }
 
 }

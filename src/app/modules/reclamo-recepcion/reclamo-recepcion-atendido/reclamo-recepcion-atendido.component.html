@@ -34,6 +34,15 @@
         <ng-template #sinEvidencia>
           {{ row.expediente }}
         </ng-template>
+        <br>
+        <ng-container *ngIf="row.referencia; else sinReferencia">
+          <button mat-button class="btn-referencia" matTooltip="Ver Detalle" (click)="getReferencia(row.referencia)">
+            <b>Referencia:</b> {{ row.referencia }}
+          </button>
+        </ng-container>
+        <ng-template #sinReferencia>
+          <span style="font-size: 11px;font-style: italic;color: #7a7a7a">Sin Referencia</span>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="canal">
@@ -129,26 +138,26 @@
 
       <ng-container *ngIf="esAprobacion">
         <ng-container *ngIf="hayReferencia">
-        <div class="form-group full-width">
-          <label class="title-modal">Descripción del motivo:</label>
-          <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
-        </div>
-        <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
-          <div class="file-label title-modal lblAdjunto">
-          <a
-            [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
-            target="_blank"
-            style="text-decoration: none; color: blue;"
-            title="Descargar evidencia"
-            class="title-modal"
-          >
-            Descargar Adjunto
-          </a>
+            <div class="form-group full-width">
+              <label class="title-modal">Descripción del motivo:</label>
+              <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
             </div>
-        </ng-container>
-        <ng-template #sinEvidencia>
-          <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
-        </ng-template>
+            <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
+              <div class="file-label title-modal lblAdjunto">
+              <a
+                [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
+                target="_blank"
+                style="text-decoration: none; color: blue;"
+                title="Descargar evidencia"
+                class="title-modal"
+              >
+                Descargar Adjunto
+              </a>
+                </div>
+            </ng-container>
+            <ng-template #sinEvidencia>
+              <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
+            </ng-template>
          </ng-container>
       </ng-container>
 

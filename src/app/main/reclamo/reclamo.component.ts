@@ -29,6 +29,7 @@
   import { ToastrService } from 'ngx-toastr';
   import { AlertService } from 'src/app/services/alert.service';
   import {SweetAlertIcon} from "sweetalert2";
+  import {Usuario} from "../../models/usuario/usuarioRol";
 
   @Component({
     selector: 'app-reclamo',
@@ -48,6 +49,7 @@
     allowedExtensions = environment.file_allow_exts;
     errorArchivo: string = '';
     acceptFileTypes: string = '';
+    rutaEvidencia: string = '';
 
     loading: boolean = false;
     isReadOnly: boolean = false;
@@ -81,6 +83,8 @@
     formDataFiles = new FormData();
    //  urlPrevisualizacion: string | ArrayBuffer | null = '';
 
+    usuarioSeleccionado = 0;
+    usuarios: Usuario[] = [];
 
     expediente_id: any=0;
     numero_expediente: any="";
@@ -117,16 +121,19 @@
       this.initFormsAndData();
 
       const data = history.state.expediente;
-      console.log(data);
+      console.log("aqui la data que lega de detalle", data);
       if (data) {
+        this.rutaEvidencia=data.evidencia;
+        this.primeraParteForm.disable();
+        this.segundaParteForm.disable();
         this.esSoloLectura = true;
         this.precargarUbigeoDesdeDistrito(data.ubigeo_id);
-        // 2. Precarga los datos si vienen desde "Ver detalle"
         this.primeraParteForm.patchValue({
           tipo_persona: data.procedencia_id,
+          fecha_ocurrencia: this.convertirFecha(data.fecha),
+          tipo_canal: String(data.tipo_canal_id),
           referencia: data.referencia,
         });
-        this.esInterno=false;
         this.segundaParteForm.patchValue({
           tipo_documento: data.tipo_documento_id,
           numero_documento: data.documento,
@@ -147,14 +154,8 @@
           contenido_consulta: data.contenido_consulta,
           distrito: data.ubigeo_id
         });
-        this.segundaParteForm.disable();
-        this.primeraParteForm.disable();
-        this.primeraParteForm.controls['referencia'].disable();
-        this.primeraParteForm.controls['tipo_persona'].disable();
         this.showEnviarNotificacionField = false;
         this.showEnviarExpedienteField = false;
-        this.segundaParteForm.controls['provincia'].disable();
-        this.segundaParteForm.controls['distrito'].disable();
       }
     }
     initFormsAndData(): void {
@@ -227,6 +228,9 @@
         ]);
         control.updateValueAndValidity();
       }
+    }
+    getDownloadLink(nombreArchivo: string): string {
+      return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
     }
     onDniInputBlur(): void {
       const tipoDocumento = this.segundaParteForm.get('tipo_documento')?.value;
@@ -430,6 +434,13 @@
         }
       });
     }
+    private convertirFecha(fechaString: string): Date | null {
+      // Ejemplo: "16/05/2025 a las 11:22 am"
+      const partes = fechaString.split(' a las ')[0]; // "16/05/2025"
+      const [dia, mes, anio] = partes.split('/');
+      const isoString = `${anio}-${mes}-${dia}`;
+      return new Date(isoString); // new Date("2025-05-16")
+    }
 
     //11. Genero un evento onchange para mostrar u ocultar el input de email
     onTipoPersonaChange(event: any) {
@@ -562,6 +573,23 @@
       this.nombreArchivoSeleccionado="";
     }
 
+     const filtro = {
+       usuarioId: '0',
+       rol: this.segundaParteForm.value.tipo_proyecto
+     };
+     this._expediente.showUsuariosRol(filtro).subscribe({
+       next: (data) => {
+         this.usuarios = data;
+         this.usuarioSeleccionado=(this.usuarios[0].usuario_id);
+         console.log("usuarios llenados",this.usuarios);
+       },
+       error: (e) => {
+         this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+         this._notificacion.showError("Error: ", this.errorMessage);
+         this.usuarioSeleccionado=1;
+       }
+     });
+
     console.log(this.primeraParteForm.value.tipo_canal );
     console.log(this.esInterno);
     let param = {
@@ -574,9 +602,6 @@
       "es_confidencial": ""+(this.es_confidencial==true,1,0),
       "tipo_documento_id": ""+(this.segundaParteForm.value.es_confidencial==true)? 1:this.segundaParteForm.value.tipo_documento,
       "tipo_proyecto_id": ""+this.segundaParteForm.value.tipo_proyecto,
-      // "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true)? '0':this.segundaParteForm.value.numero_documento,
-      // "nombres": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.nombre,
-      // "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true)?'':this.segundaParteForm.value.apellido_paterno,
       "numero_documento": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.numero_documento),
       "nombres": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.nombre),
       "apellido_paterno": ""+(this.segundaParteForm.value.es_confidencial==true,'',this.segundaParteForm.value.apellido_paterno),
@@ -591,7 +616,7 @@
       "contenido_consulta": ""+this.segundaParteForm.value.contenido_consulta,
       "comunidad": ""+this.segundaParteForm.value.comunidad,
       "cargo": ""+this.segundaParteForm.value.cargo,
-      "usuario_id": "1",
+      "usuario_id": this.usuarioSeleccionado,
       "codigo_validacion":this.segundaParteForm.value.codigo_validacion,
       "evidencia":this.nombreArchivoSeleccionado,
       "referencia": ""+this.primeraParteForm.value.referencia,

@@ -32,6 +32,8 @@ export interface ExpedienteDetalleDto {
   acciones_realizadas: string;
   respuesta: string;
   comentario: string;
+  fecha_reasignacion: string;
   evidencia_seguimiento: string;
-  especialista_id: string;
+  usuario_origen: string;
+  usuario_actual: string;
 }

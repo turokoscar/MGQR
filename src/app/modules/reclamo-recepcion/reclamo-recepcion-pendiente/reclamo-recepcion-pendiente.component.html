@@ -34,6 +34,15 @@
         <ng-template #sinEvidencia>
           {{ row.expediente }}
         </ng-template>
+        <br>
+        <ng-container *ngIf="row.referencia; else sinReferencia">
+          <button mat-button class="btn-referencia" matTooltip="Ver Detalle" (click)="getReferencia(row.referencia)">
+            <b>Referencia:</b> {{ row.referencia }}
+          </button>
+        </ng-container>
+        <ng-template #sinReferencia>
+          <span style="font-size: 11px;font-style: italic;color: #7a7a7a">Sin Referencia</span>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
@@ -151,6 +160,13 @@
           </select>
         </div>-->
         <ng-container *ngIf="hayReferencia">
+          <div class="form-group full-width">
+            <label class="title-modal">Usuario Asignado:</label>
+              <select [(ngModel)]="usuarioSeleccionado" class="select">
+                <option value="" disabled selected>&#45;&#45;Seleccione&#45;&#45;</option>
+                <option *ngFor="let e of usuarios" [value]="e.usuario_id">{{ e.usuario_rol }}</option>
+              </select>
+          </div>
         <div class="form-group full-width">
           <label class="title-modal">Debe ingresar el motivo:</label>
           <textarea class="text-area" [(ngModel)]="motivoRechazo"></textarea>

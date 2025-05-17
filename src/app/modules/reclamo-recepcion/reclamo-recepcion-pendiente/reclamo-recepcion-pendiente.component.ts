@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ExpedienteService } from 'src/app/services/expediente.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
+import { Usuario } from 'src/app/models/usuario/usuarioRol';
 import { TipoReclamoService } from 'src/app/services/tipo-reclamo.service';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoProcedenciaReclamoService } from 'src/app/services/tipo-procedencia-reclamo.service';
@@ -46,10 +47,16 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   esAprobacion = true;
   hayReferencia = false;
   itemSeleccionado: any = null;
-  especialistaSeleccionado = '';
+  usuarioSeleccionado = 0;
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  usuarios: Usuario[] = [];
   motivoRechazo = '';
   archivoAdjunto: File | null = null;
+
+  filtro = {
+    usuarioId: '0',
+    rol: '0',
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -72,6 +79,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
+    this.showUsuarios();
   }
 
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
@@ -81,18 +89,17 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
 
-        var rol_id=localStorage.getItem('rol'); // Solo y 4
-
-        if(rol_id=="4" || rol_id=="5"){
+        /*var rol_id=localStorage.getItem('rol');*/ // Solo y 4
+        /*if(rol_id=="4" || rol_id=="5"){
           const filtrados = data.filter(item => item.referencia && item.referencia.trim() !== '');
           this.dataSourceExp.data = filtrados;
           console.log("1-->"+data);
 
         }
-        else{
-          this.dataSourceExp.data = data;
+        else{*/
+        this.dataSourceExp.data = data;
 
-        }
+        /*}*/
         this.dataSourceExp.paginator = this.paginator;
         this.dataSourceExp.sort = this.sort;
         this.dataSourceExp.filterPredicate = this.createFilter();
@@ -109,6 +116,21 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   }
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
+  }
+  getReferencia(referencia: string): void {
+    this._apiService.listarReferenciaDetalle(referencia).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.router.navigate(['/reclamo/create'], {
+          state: { expediente: this.itemSeleccionado }
+        });
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
   }
 
   //11. Función para crear el filtro personalizado
@@ -158,7 +180,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     this.itemSeleccionado = null;
     this.motivoRechazo = '';
     this.archivoAdjunto = null;
-    this.especialistaSeleccionado = '';
   }
 
   onArchivoSeleccionado(event: any): void {
@@ -171,7 +192,8 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     return;
   }
   const expedienteId = this.itemSeleccionado.idexpediente;
-  const usuarioId = 1; // O el ID real del usuario actual si está disponible
+    var user_id=localStorage.getItem('id') ?? '1';
+    const usuarioId = +user_id;
   const estado = this.esAprobacion ? 2 : 3; // 2 = ATENDIDO, 3 = DENEGADO
   if (!this.esAprobacion && !this.motivoRechazo.trim()) {
     this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo para denegar.', 'warning');
@@ -180,10 +202,6 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   if (this.hayReferencia && !this.motivoRechazo.trim()) {
     this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
     return;
-  }
-  if (this.hayReferencia && !this.motivoRechazo.trim()) {
-      this.openDialogGeneral('Motivo requerido', 'Debe ingresar un motivo.', 'warning');
-      return;
   }
     let nombreArchivo = '';
     const archivosAdjuntos: File[] = [];
@@ -205,7 +223,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     respuesta: '',
     comentario: '',
     evidencia: nombreArchivo,
-    especialista: ''
+    especialista: this.hayReferencia ? this.usuarioSeleccionado : usuarioId
   };
    this.loading = true;
    this._apiService.actualizarAtender(payload).subscribe({
@@ -258,6 +276,24 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
 });
 
 }
+  showUsuarios():void{
+    //var rol_id=localStorage.getItem('rol') ?? '0';
+    this.filtro = {
+      usuarioId: '0',
+      rol: '5'
+    };
+    this._apiService.showUsuariosRol(this.filtro).subscribe({
+      next: (data) => {
+        this.usuarios = data;
+        this.usuarioSeleccionado=(this.usuarios[0].usuario_id);
+        console.log("usuarios llenados",this.usuarios);
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
 
   openDialogGeneral(title: string, html: any, icon: string): void {
     this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);

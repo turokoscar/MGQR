@@ -97,7 +97,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
         console.log(data);
         this.itemSeleccionado = data;
         this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
-        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
+        //this.especialistaSeleccionado = data.especialista_id?.toString() || '';
         this.esAprobacion = true;
         this.modalVisible = true;
         this.loading = false;
@@ -120,6 +120,21 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
   }
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
+  }
+  getReferencia(referencia: string): void {
+    this._apiService.listarReferenciaDetalle(referencia).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.router.navigate(['/reclamo/create'], {
+          state: { expediente: this.itemSeleccionado }
+        });
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
   }
   //4. Verificamos que todos los elementos esten seleccionados
   isAllSelected() {
@@ -180,8 +195,9 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     };
   }
   verDetalle(row: Expediente): void {
-    console.log('Ver detalle de:', row);
-    // Implementa aquí la lógica para ver detalles
+    this.router.navigate(['/reclamo/create'], {
+      state: { expediente: row }
+    });
   }
   //12. Para cambiar el filtro de reclamo o procedencia
   changeFilter(filterType: keyof typeof this.filterValues, value: string) {

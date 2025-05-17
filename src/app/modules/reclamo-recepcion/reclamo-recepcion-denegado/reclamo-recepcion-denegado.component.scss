@@ -20,9 +20,9 @@
 }
 
 ::ng-deep .mat-column-numero {
-  width: 11rem;
-  max-width: 11rem;
-  min-width: 11rem;
+  width: 12rem!important;
+  max-width: 12rem!important;
+  min-width: 12rem!important;
   text-align: center;
 }
 
@@ -62,7 +62,7 @@
 }
 
 ::ng-deep .mat-column-plazo {
-  width: 4rem;
+  width: 3rem;
   text-align: center!important;
 }
 
@@ -359,6 +359,34 @@ select {
   border-left: none;
   padding: 7px 10px;
   border-radius: 0 4px 4px 0;
+}
+
+.btn-referencia {
+  background-color: #e74c3c;
+  color: white !important;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-style: italic;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  white-space: normal;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.2;
+  word-break: break-word;
+  margin-top: 7px!important;
+  margin-bottom: 8px!important;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+
+  b {
+    font-weight: bold;
+  }
 }
 
 .action-button-container {

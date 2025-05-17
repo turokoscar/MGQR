@@ -27,9 +27,11 @@ import { AfterViewInit } from '@angular/core';
 })
 export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
+  usuario_id: string = '';
   tipoReclamos: TipoReclamo[] = [];
   tipoProyectos: TipoProyecto[] = [];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
+  deshabilitarProyecto: boolean = false;
   dataSource = new MatTableDataSource<Expediente>();
   pestaniaActiva: 'pendiente' | 'proceso' | 'atendidos' | 'reasignado' = 'pendiente';
   errorMessage: string = '';
@@ -38,7 +40,9 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
     tipoReclamoId: 0,
     tipoProyectoId: 1,
     codigoExpediente: null,
-    estado: null
+    estado: null,
+    usuarioId: '0',
+    modulo: 2
   };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -59,11 +63,20 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
     private _tipoProcedencia: TipoProcedenciaReclamoService,
     private exportService: ExportService
   ){}
+  usuario = {
+    nombre: localStorage.getItem('nombre_completo')?.toString(),
+    dni: localStorage.getItem('dni')?.toString(),
+    id: localStorage.getItem('id')?.toString(),
+    rol: localStorage.getItem('rol')?.toString()  ?? 1,
+    correo: localStorage.getItem('correo')?.toString()
+  };
   //3. Inicializamos el componente
   ngOnInit(): void {
     this.showTipoReclamo();
     this.showTipoProyecto();
     this.showTipoProcedencia();
+    this.validaUsuario();
+    console.log("este usuario",this.usuario_id);
   }
   ngAfterViewInit(): void {
     // Aquí ya está disponible el ViewChild
@@ -74,24 +87,28 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
       this.filtro = {
         tipoCanalId: 0,
         tipoReclamoId: 0,
-        tipoProyectoId: 1,
+        tipoProyectoId: this.filtro.tipoProyectoId,
         codigoExpediente: null,
-        estado: null
+        estado: null,
+        usuarioId: this.usuario_id,
+        modulo: 2
       };
 
       this.buscarConFiltros(); // Opcional: vuelve a cargar los expedientes sin filtros
   }
 
   buscarConFiltros() {
+
     const filtrosConEstado = {
       ...this.filtro,
       tipoReclamoId: this.filtro.tipoReclamoId === 0 ? null : this.filtro.tipoReclamoId,
       tipoCanalId: this.filtro.tipoCanalId === 0 ? null : this.filtro.tipoCanalId,
-      tipoProyectoId: this.filtro.tipoProyectoId === 0 ? null : this.filtro.tipoProyectoId,
-      estado: this.pestaniaActiva === 'pendiente' ? 2 :
-              this.pestaniaActiva === 'proceso' ? 4 :
-              this.pestaniaActiva === 'atendidos' ? 5 :
-              this.pestaniaActiva === 'reasignado' ? 6 : null
+      tipoProyectoId:  this.filtro.tipoProyectoId === 0 ? null :  this.filtro.tipoProyectoId,
+      usuarioId: this.usuario_id === '0' ? null : this.usuario_id,
+      estado: this.pestaniaActiva === 'pendiente' ? 4 :
+              this.pestaniaActiva === 'proceso' ? 5 :
+              this.pestaniaActiva === 'atendidos' ? 6 :
+              this.pestaniaActiva === 'reasignado' ? 7 : null
     };
 
     if (this.pestaniaActiva === 'pendiente') {
@@ -169,6 +186,17 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
         this._notificacion.showError("Error: ", this.errorMessage);
       }
     });
+  }
+  validaUsuario():void{
+    if(this.usuario.rol==="4" || this.usuario.rol==="5" || this.usuario.rol==="6"){
+      this.usuario_id="0";
+      this.filtro.tipoProyectoId=0;
+      this.deshabilitarProyecto = false;
+    }else{
+      this.usuario_id=String(this.usuario.id);
+      this.filtro.tipoProyectoId= +this.usuario.rol;
+      this.deshabilitarProyecto = true;
+    }
   }
 
 }

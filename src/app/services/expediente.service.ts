@@ -6,6 +6,7 @@ import { ExpedienteDetalleDto } from '../models/expediente-detalle-dto';
 import { ExpedienteResponse } from '../models/expediente-response';
 import { ExpedienteConsultaResponse } from '../models/expediente-consulta-response';
 import { Expediente } from '../models/expediente';
+import { Usuario } from '../models/usuario/usuarioRol';
 import { ExpedienteManagement } from '../models/expediente/expediente-management';
 import { ExpedienteValidacionResponse } from '../models/expediente-validacion-response';
 
@@ -26,13 +27,21 @@ export class ExpedienteService {
   show(estado: number): Observable<Expediente[]>{
     return this.http.get<Expediente[]>(this.apiUrlExp);
   }
+  showUsuariosRol(filtros: any): Observable<Usuario[]>{
+    const url = `${this.apiUrl}/Expediente/ListarUsuarioRol`;
+    return this.http.post<Usuario[]>(url, filtros);
+  }
   listarPorFiltros(filtros: any): Observable<ExpedienteDetalleDto[]> {
     return this.http.post<ExpedienteDetalleDto[]>(this.apiUrlExp, filtros);
   }
   listarAtenderDetalle(expedienteId: number): Observable<ExpedienteDetalleDto> {
-  const url = `${this.apiUrl}/Expediente/ListarAtenderDetalle`;
-  return this.http.post<ExpedienteDetalleDto>(url, { expedienteId });
-}
+    const url = `${this.apiUrl}/Expediente/ListarAtenderDetalle`;
+    return this.http.post<ExpedienteDetalleDto>(url, { expedienteId });
+  }
+  listarReferenciaDetalle(expedienteId: string): Observable<ExpedienteDetalleDto> {
+    const url = `${this.apiUrl}/Expediente/ListarReferenciaDetalle`;
+    return this.http.post<ExpedienteDetalleDto>(url, { expedienteId });
+  }
   buscarDni(numdni: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/Reniec/api/reniec?numdni=${numdni}`, {});
   }
@@ -40,7 +49,7 @@ export class ExpedienteService {
     const url = `${this.apiUrl}/Expediente/ActualizarEstado`;
     return this.http.post(url, payload);
   }
-  actualizarAtender(payload: { id: number; usuarioId: number; estado: number; acciones: string; respuesta: string; comentario: string; evidencia: string; especialista: string }): Observable<any> {
+  actualizarAtender(payload: { id: number; usuarioId: number; estado: number; acciones: string; respuesta: string; comentario: string; evidencia: string; especialista: number }): Observable<any> {
     const url = `${this.apiUrl}/Expediente/ActualizarAtender`;
     return this.http.post(url, payload);
   }

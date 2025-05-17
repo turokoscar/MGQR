@@ -20,34 +20,40 @@
   font-size: 1.2rem!important;
 }
 
-::ng-deep .mat-column-numero {
-  width: 11rem;
-  max-width: 11rem;
-  min-width: 11rem;
+::ng-deep .mat-column-index {
+  /*width: 4%!important;
+  max-width: 4%!important;
+  min-width: 4%!important;*/
   text-align: center;
 }
-
+::ng-deep .mat-column-proyecto {
+ /* width: 8%!important;*/
+  text-align: center;
+}
+::ng-deep .mat-column-numero {
+ /* width: 8%!important;*/
+  text-align: center;
+}
 ::ng-deep .mat-column-procedencia {
-  width: 15rem;
+ /* width: 8%!important;*/
 }
 
 ::ng-deep .mat-column-tipo {
-  width: 5rem;
+ /* width: 8%!important;*/
   text-align: center!important;
 }
 
 ::ng-deep .mat-column-canal {
-  width: 10rem;
+  /*width: 10%!important;*/
   text-align: center!important;
 }
 
 ::ng-deep .mat-column-fecha {
-  width: 10rem;
+  /*width: 10%!important;*/
 }
 
 ::ng-deep .mat-column-descripcion {
-  width: 31rem;
-  max-width: 31rem;
+  width: 15%!important;
   white-space: normal !important;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -55,16 +61,23 @@
 }
 ::ng-deep .descripcion-celda {
   padding: 8px;
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 ::ng-deep .mat-column-usuario {
-  width: 15rem;
+  /*width: 8%!important;*/
 }
 
 ::ng-deep .mat-column-plazo {
-  width: 4rem;
+  /*width: 8%!important;*/
   text-align: center!important;
+}
+
+::ng-deep .mat-column-usuarioi {
+  width: 15%!important;
+  text-align: left!important;
+  font-size: 11px;
+  font-style: italic;
 }
 
 .botones-acciones {
@@ -336,6 +349,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+  font-size: 16px;
 }
 
 .file-selector {

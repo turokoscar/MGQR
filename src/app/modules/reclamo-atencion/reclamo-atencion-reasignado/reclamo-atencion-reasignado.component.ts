@@ -24,7 +24,7 @@ import { environment } from 'src/environments/environment.development';
 export class ReclamoAtencionReasignadoComponent implements OnInit {
   //1. Generamos las variables iniciales
   loading: boolean = false;
-  columnas: string[] = ['index','proyecto','numero', 'procedencia','tipo','canal', 'fecha',  'descripcion', 'usuario', 'plazo', 'acciones'];
+  columnas: string[] = ['index','proyecto','numero', 'procedencia','tipo','canal', 'fecha',  'descripcion', 'usuario', 'plazo','usuarioi', 'acciones'];
   dataSource = new MatTableDataSource<Expediente>();
   dataSourceExp = new MatTableDataSource<ExpedienteDetalleDto>();
   selection = new SelectionModel<Expediente>(true, []);
@@ -34,7 +34,7 @@ export class ReclamoAtencionReasignadoComponent implements OnInit {
   itemSeleccionado: any = null;
   respuestaReclamo: string = '';
   comentarioReclamo: string = '';
-  derivarOtraArea: boolean | null = null;
+  derivarOtraArea: boolean | true = true;
   especialistaSeleccionado = '';
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
   tipoProcedencia: TipoProcedenciaReclamo[] = [];
@@ -105,7 +105,7 @@ export class ReclamoAtencionReasignadoComponent implements OnInit {
     this.respuestaReclamo = this.itemSeleccionado.respuesta || '';
     this.comentarioReclamo = this.itemSeleccionado.comentario || '';
     this.especialistaSeleccionado = this.itemSeleccionado.especialista_id?.toString() || '';
-    this.derivarOtraArea = !!this.itemSeleccionado.especialista_id;
+    this.derivarOtraArea = true;
 
     this.esAprobacion = true;
     this.modalVisible = true;

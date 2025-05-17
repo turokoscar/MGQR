@@ -66,17 +66,6 @@
                 </mat-form-field>
               </div>
             </div>
-
-            <!-- <div style="display: flex; justify-content: flex-end; gap: 10px;">
-              <button mat-raised-button color="primary" routerLink="/home">
-                <i class="bi bi-arrow-left"></i>
-                Atras
-              </button>
-              <button mat-raised-button matStepperNext color="primary">
-                <i class="bi bi-arrow-right"></i>
-                Continuar
-              </button>
-            </div> -->
           </div>
         </div>
         <br>
@@ -348,7 +337,8 @@
               </div>
             </div>
             <div class="row">
-              <div class="col">
+
+              <div class="col" *ngIf="!esSoloLectura">
                 <div align="left">
                   <mat-label style="font-size: 15px;color: rgb(129, 80, 80);"> Peso máximo: {{ maxFileSizeMB }}MB en total, solo se aceptan formatos {{ allowedExtensions.join(', ') }}.</mat-label>
                 </div>
@@ -363,21 +353,34 @@
                   {{ errorArchivo }}
                 </div>
               </div>
+              <div class="col" *ngIf="esSoloLectura">
+                <ng-container *ngIf="rutaEvidencia; else sinEvidencia">
+                  <div class="file-label title-modal lblAdjunto">
+                    <a
+                      [href]="getDownloadLink(rutaEvidencia)"
+                      target="_blank"
+                      style="text-decoration: none; color: blue;"
+                      title="Descargar evidencia"
+                      class="title-modal"
+                    >
+                      Descargar Adjunto
+                    </a>
+                  </div>
+                </ng-container>
+                <ng-template #sinEvidencia>
+                  <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
+                </ng-template>
+              </div>
+
             </div>
             <br>
-
             <br>
             <div class="row">
               <div class="col">
-
                 <mat-form-field appearance="fill" class="w-100" *ngIf="showEnviarExpedienteField">
                   <mat-label>Ingrese código de Validación</mat-label>
                   <input matInput formControlName="codigo_validacion" placeholder="Ingrese código de Validación" maxlength="100">
-
                 </mat-form-field>
-
-
-
               </div>
               <div class="col">
                 <div style="display: flex; justify-content: flex-end; gap: 10px;">
@@ -385,23 +388,14 @@
                     <i class="bi bi-arrow-left"></i>
                     Atras
                   </button>
-                  <!-- <button mat-raised-button  color="primary">
-                    <i class="bi bi-arrow-left"></i>
-                    Retornar
-                  </button> -->
                   <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmitValidacion()" color="primary" *ngIf="showEnviarNotificacionField">
                     <mat-icon>send</mat-icon>
                     Validar Correo
                   </button>
-
                   <button mat-raised-button [disabled]="!isFormValid() || loading" (click)="onSubmit()" color="primary"  *ngIf="showEnviarExpedienteField">
                     <mat-icon>send</mat-icon>
                     Enviar
                   </button>
-
-
-
-
                   <button *ngIf="!esSoloLectura" mat-raised-button  color="primary">
                     <mat-icon>exit_to_app</mat-icon>
                     Ir al inicio
@@ -409,21 +403,10 @@
                 </div>
               </div>
             </div>
-
-
-
-
-
-
           </div>
         </div>
-
-
       </form>
-
-
     </section>
-
   </div>
 </div>
 

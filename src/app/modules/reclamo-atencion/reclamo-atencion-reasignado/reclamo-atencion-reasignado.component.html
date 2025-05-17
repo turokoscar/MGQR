@@ -63,6 +63,10 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Plazo (dia) </th>
       <td mat-cell *matCellDef="let row"> {{row.dias_transcurridos}} </td>
     </ng-container>
+     <ng-container matColumnDef="usuarioi">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario Reasignado</th>
+      <td mat-cell *matCellDef="let row"> <b>*Anterior:</b> {{row.usuario_origen}} <br> <b>*Actual:</b> {{row.usuario_actual}} <br> <b>*Fecha:</b> {{row.fecha_reasignacion}}</td>
+    </ng-container>
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Acciones </th>
       <td mat-cell *matCellDef="let row" class="acciones-celda">
@@ -70,7 +74,7 @@
           <button mat-icon-button class="btn-accion btn-ver" matTooltip="Ver detalle" (click)="verDetalle(row)">
             <i class="bi bi-eye"></i>
           </button>
-          <button mat-icon-button class="btn-accion btn-aprobar" matTooltip="Aprobar" (click)="verAtencion(row)">
+          <button mat-icon-button class="btn-accion btn-aprobar" matTooltip="Ver Reasignacion" (click)="verAtencion(row)">
             <i class="bi-file-earmark-text"></i>
           </button>
         </div>
@@ -142,18 +146,13 @@
       <div class="form-group full-width">
         <label class="title-modal">¿Este expediente se derivará a otra área?</label>
         <select class="select" [(ngModel)]="derivarOtraArea" [disabled]="modalDeshabilitado">
-          <option [ngValue]="null">-- Seleccionar --</option>
-          <option [ngValue]="false">No</option>
           <option [ngValue]="true">Sí</option>
         </select>
       </div>
 
-      <div class="form-group full-width" *ngIf="derivarOtraArea">
+      <div class="form-group full-width">
         <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
-        <select class="select" [(ngModel)]="especialistaSeleccionado" [disabled]="modalDeshabilitado">
-          <option value="" disabled selected>-- Seleccione --</option>
-          <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
-        </select>
+        <div class="input-field">{{ itemSeleccionado?.usuario_actual }}</div>
       </div>
     </ng-container>
     </div>

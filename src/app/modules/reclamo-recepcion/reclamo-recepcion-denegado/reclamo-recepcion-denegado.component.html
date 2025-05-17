@@ -30,6 +30,15 @@
         <ng-template #sinEvidencia>
           {{ row.expediente }}
         </ng-template>
+        <br>
+        <ng-container *ngIf="row.referencia; else sinReferencia">
+          <button mat-button class="btn-referencia" matTooltip="Ver Detalle" (click)="getReferencia(row.referencia)">
+            <b>Referencia:</b> {{ row.referencia }}
+          </button>
+        </ng-container>
+        <ng-template #sinReferencia>
+          <span style="font-size: 11px;font-style: italic;color: #7a7a7a">Sin Referencia</span>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
@@ -167,7 +176,7 @@
             </div>
         </ng-container>
         <ng-template #sinEvidencia>
-          Sin Adjunto
+          <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
         </ng-template>
 
       </ng-container>

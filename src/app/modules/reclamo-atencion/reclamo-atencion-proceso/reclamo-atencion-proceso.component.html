@@ -149,9 +149,9 @@
 
       <div class="form-group full-width" *ngIf="derivarOtraArea">
         <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
-        <select class="select" [(ngModel)]="especialistaSeleccionado">
-          <option value="" disabled selected>-- Seleccione --</option>
-          <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
+        <select [(ngModel)]="usuarioSeleccionado" class="select">
+          <option [ngValue]="0">-- Seleccione --</option>
+          <option *ngFor="let e of usuarios" [value]="e.usuario_id">{{ e.usuario_rol }}</option>
         </select>
       </div>
 

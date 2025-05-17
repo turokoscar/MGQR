@@ -87,6 +87,21 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
   getDownloadLink(nombreArchivo: string): string {
     return `${environment.apiUrl}/Expediente/DescargarEvidencia/${encodeURIComponent(nombreArchivo)}`;
   }
+  getReferencia(referencia: string): void {
+    this._apiService.listarReferenciaDetalle(referencia).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.router.navigate(['/reclamo/create'], {
+          state: { expediente: this.itemSeleccionado }
+        });
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
+  }
   //4. Verificamos que todos los elementos esten seleccionados
   verRechazar(row: Expediente): void {
     this.esAprobacion = false;
@@ -101,7 +116,7 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
         console.log(data);
         this.itemSeleccionado = data;
         this.motivoRechazo=this.itemSeleccionado.acciones_realizadas;
-        this.especialistaSeleccionado = data.especialista_id?.toString() || '';
+        //this.especialistaSeleccionado = data.especialista_id?.toString() || '';
         this.esAprobacion = false;
         this.modalVisible = true;
         this.loading = false;
@@ -152,8 +167,9 @@ export class ReclamoRecepcionDenegadoComponent implements OnInit {
     this.habilitaBotones(this.selection.selected.length);
   }
   verDetalle(row: Expediente): void {
-    console.log('Ver detalle de:', row);
-    // Implementa aquí la lógica para ver detalles
+    this.router.navigate(['/reclamo/create'], {
+      state: { expediente: row }
+    });
   }
   //8. Método que genera etiquetas dinámicas para los checkboxes en función de si se trata de la operación "Seleccionar todo" o de la selección individual de una fila específica. La etiqueta indica al usuario qué acción realizar (seleccionar o deseleccionar) y el identificador de la fila afectada.
   checkboxLabel(row?: Expediente): string {

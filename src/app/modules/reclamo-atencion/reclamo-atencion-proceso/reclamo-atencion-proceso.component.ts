@@ -9,6 +9,7 @@ import { ExpedienteDetalleDto } from 'src/app/models/expediente-detalle-dto';
 import { TipoProcedenciaReclamo } from 'src/app/models/tipo-procedencia-reclamo';
 import { TipoReclamo } from 'src/app/models/tipo-reclamo';
 import { ExpedienteService } from 'src/app/services/expediente.service';
+import { Usuario } from 'src/app/models/usuario/usuarioRol';
 import { ExportService } from 'src/app/services/export.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { AlertService } from 'src/app/services/alert.service';
@@ -37,9 +38,12 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   comentarioReclamo: string = '';
   derivarOtraArea: boolean | false = false;
   nombreArchivoRespuesta: string = '';
-
-  especialistaSeleccionado = '';
-  especialistas: string[] = ['Especialista 1', 'Especialista 2'];
+  usuarioSeleccionado = 0;
+  usuarios: Usuario[] = [];
+  filtro = {
+    usuarioId: '0',
+    rol: '0',
+  };
   areas: string[] = ['Area 1', 'Area 2'];
   archivoAdjunto: File | null = null;
   id!: number;
@@ -57,6 +61,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   ){}
   //3. Inicializamos el componente
   ngOnInit(): void {
+    this.showUsuarios();
   }
   @Output() cambiarPestaniaA = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
 
@@ -90,7 +95,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
     this.derivarOtraArea=false;
     this.respuestaReclamo = '';
     this.comentarioReclamo = '';
-    this.especialistaSeleccionado = '';
+    this.usuarioSeleccionado = 0;
     this.archivoAdjunto = null;
     console.log(row);
     console.log(this.itemSeleccionado);
@@ -103,7 +108,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
     this.itemSeleccionado = null;
     this.motivoRechazo = '';
     this.archivoAdjunto = null;
-    this.especialistaSeleccionado = '';
+    this.usuarioSeleccionado = 0;
   }
 
   confirmarAccion(): void {
@@ -118,8 +123,9 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
     }
 
     const expedienteId = this.itemSeleccionado.idexpediente;
-    const usuarioId = 1;
-    const estado = this.derivarOtraArea ? 6 : 5; // 5: Atendido, 6: Reasignado
+    var user_id=localStorage.getItem('id') ?? '1';
+    const usuarioId = +user_id;
+    const estado = this.derivarOtraArea ? 7 : 6; // 6: Atendido, 7: Reasignado
 
     let nombreArchivo = '';
     const archivosAdjuntos: File[] = [];
@@ -141,7 +147,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
       respuesta: this.respuestaReclamo.trim(),
       comentario: this.comentarioReclamo.trim(),
       evidencia: nombreArchivo,
-      especialista: this.derivarOtraArea ? this.especialistaSeleccionado : ''
+      especialista: this.derivarOtraArea ? this.usuarioSeleccionado : usuarioId
     };
 
     this.loading = true;
@@ -180,5 +186,22 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   }
   openDialogGeneral(title: string, html: any, icon: string): void {
     this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
+  }
+  showUsuarios():void{
+    //var rol_id=localStorage.getItem('rol') ?? '0';
+    this.filtro = {
+      usuarioId: '0',
+      rol: '0'
+    };
+    this._apiService.showUsuariosRol(this.filtro).subscribe({
+      next: (data) => {
+        this.usuarios = data.filter(u => u.usuario_id !== +(localStorage.getItem('id')?.toString() ?? 1));
+        this.usuarioSeleccionado=0;
+      },
+      error: (e) => {
+        this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
+        this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
   }
 }

@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:5043',
-  fakeApi: 'http://localhost:3000',
+  fakeApi: 'http://localhost:5043',
 
   app_name_full: 'Sistema de Mecanismo de gestion de quejas y reclamos',
   app_name_sigla: 'MGQR',
