@@ -195,6 +195,7 @@ export class ReclamoRecepcionAtendidoComponent implements OnInit {
     };
   }
   verDetalle(row: Expediente): void {
+    console.log(row);
     this.router.navigate(['/reclamo/create'], {
       state: { expediente: row }
     });

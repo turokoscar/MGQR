@@ -30,6 +30,15 @@
         <ng-template #sinEvidencia>
           {{ row.expediente }}
         </ng-template>
+        <br>
+        <ng-container *ngIf="row.referencia; else sinReferencia">
+          <button mat-button class="btn-referencia" matTooltip="Ver Detalle" (click)="getReferencia(row.referencia)">
+            <b>Referencia:</b> {{ row.referencia }}
+          </button>
+        </ng-container>
+        <ng-template #sinReferencia>
+          <span style="font-size: 11px;font-style: italic;color: #7a7a7a">Sin Referencia</span>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
@@ -122,10 +131,28 @@
           <label class="title-modal">Descripción del reclamo, queja o consulta</label>
           <div class="input-field description">{{ itemSeleccionado?.contenido_consulta }}</div>
         </div>
+        <div class="form-group full-width">
+          <ng-container *ngIf="itemSeleccionado.evidencia; else sinEvidencia">
+            <div class="file-label title-modal lblAdjunto">
+              <a
+                [href]="getDownloadLink(itemSeleccionado.evidencia)"
+                target="_blank"
+                style="text-decoration: none; color: blue;"
+                title="Descargar adjunto"
+                class="title-modal"
+              >
+                Descargar Adjunto
+              </a>
+            </div>
+          </ng-container>
+          <ng-template #sinEvidencia>
+            <div class="file-label title-modal lblAdjunto">Sin Adjunto</div>
+          </ng-template>
+        </div>
       </div>
 
-      <div class="section-title title-modal detalle">Detalle de Atención</div>
       <div class="separator"></div>
+      <div class="section-title title-modal detalle">Detalle de Atención</div>
 
       <ng-container *ngIf="esAprobacion">
       <div class="form-group full-width">

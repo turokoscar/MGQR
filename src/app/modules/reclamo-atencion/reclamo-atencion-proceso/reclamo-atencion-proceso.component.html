@@ -30,6 +30,15 @@
         <ng-template #sinEvidencia>
           {{ row.expediente }}
         </ng-template>
+        <br>
+        <ng-container *ngIf="row.referencia; else sinReferencia">
+          <button mat-button class="btn-referencia" matTooltip="Ver Detalle" (click)="getReferencia(row.referencia)">
+            <b>Referencia:</b> {{ row.referencia }}
+          </button>
+        </ng-container>
+        <ng-template #sinReferencia>
+          <span style="font-size: 11px;font-style: italic;color: #7a7a7a">Sin Referencia</span>
+        </ng-template>
       </td>
     </ng-container>
     <ng-container matColumnDef="procedencia">
@@ -107,7 +116,7 @@
 
         <div class="form-group">
           <label class="title-modal">N° Documento</label>
-          <div class="input-field">{{ itemSeleccionado?.numero_documento || '43993164' }}</div>
+          <div class="input-field">{{ itemSeleccionado?.documento || '43993164' }}</div>
         </div>
         <div class="form-group two-columns">
           <label class="title-modal">Nombres y apellidos</label>
@@ -119,11 +128,28 @@
           <div class="input-field description">{{ itemSeleccionado?.contenido_consulta }}</div>
         </div>
       </div>
-      <div class="section-title title-modal title-margin">Detalle de la Atención</div>
       <div class="separator"></div>
+      <div class="section-title title-modal title-margin">Detalle de la Atención</div>
 
       <ng-container *ngIf="esAprobacion">
-      <div class="form-group full-width">
+        <div class="form-group full-width">
+          <label class="title-modal">¿Este expediente se derivará a otra área?</label>
+          <select class="select" [(ngModel)]="derivarOtraArea">
+            <option [ngValue]="null">-- Seleccionar --</option>
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width" *ngIf="derivarOtraArea">
+          <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
+          <select [(ngModel)]="usuarioSeleccionado" class="select">
+            <option [ngValue]="0">-- Seleccione --</option>
+            <option *ngFor="let e of usuarios" [value]="e.usuario_id">{{ e.usuario_rol }}</option>
+          </select>
+        </div>
+
+      <div class="form-group full-width" *ngIf="!derivarOtraArea">
         <label class="title-modal">Respuesta al reclamo, queja o consulta</label>
         <textarea class="text-area" [(ngModel)]="respuestaReclamo" required></textarea>
       </div>
@@ -133,26 +159,9 @@
         <textarea class="text-area" [(ngModel)]="comentarioReclamo"></textarea>
       </div>
 
-      <div class="file-selector">
+      <div class="file-selector" *ngIf="!derivarOtraArea">
         <div class="file-label title-modal">Evidencia que sustente la respuesta</div>
         <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
-      </div>
-
-      <div class="form-group full-width">
-        <label class="title-modal">¿Este expediente se derivará a otra área?</label>
-        <select class="select" [(ngModel)]="derivarOtraArea">
-          <option [ngValue]="null">-- Seleccionar --</option>
-          <option [ngValue]="false">No</option>
-          <option [ngValue]="true">Sí</option>
-        </select>
-      </div>
-
-      <div class="form-group full-width" *ngIf="derivarOtraArea">
-        <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
-        <select [(ngModel)]="usuarioSeleccionado" class="select">
-          <option [ngValue]="0">-- Seleccione --</option>
-          <option *ngFor="let e of usuarios" [value]="e.usuario_id">{{ e.usuario_rol }}</option>
-        </select>
       </div>
 
       <div class="action-button-container">

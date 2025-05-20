@@ -119,6 +119,9 @@
     ngOnInit(): void {
       this.esInterno = this.router.url.includes('/reclamo/create');
       this.initFormsAndData();
+      this.primeraParteForm.get('referencia')?.valueChanges.subscribe(() => {
+        this.cargarUsuarioPorRol();
+      });
 
       const data = history.state.expediente;
       console.log("aqui la data que lega de detalle", data);
@@ -159,6 +162,7 @@
       }
     }
     initFormsAndData(): void {
+
       this.showPrimerForm();
       this.showSegundoForm();
       this.showTipoAtencion();
@@ -557,8 +561,43 @@
           }
         });
   }
+    cargarUsuarioPorRol(): void {
+      const referencia = this.primeraParteForm.value.referencia;
+      const tipoProyecto = this.segundaParteForm.value.tipo_proyecto;
 
-   //14. Proceso el formulario
+      let rol: number;
+
+      if (referencia && referencia.trim() !== '') {
+        rol = 4;
+      } else {
+        // Validación adicional para tipo_proyecto
+        if (tipoProyecto === 4) {
+          rol = 1;
+        } else {
+          rol = tipoProyecto;
+        }
+      }
+
+      const filtro = {
+        usuarioId: '0',
+        rol: rol
+      };
+
+      this._expediente.showUsuariosRol(filtro).subscribe({
+        next: (data) => {
+          this.usuarios = data;
+          this.usuarioSeleccionado = data?.[0]?.usuario_id || 1;
+          console.log("Usuarios cargados:", this.usuarios);
+        },
+        error: (e) => {
+          this.errorMessage = "Error al obtener usuarios: " + e;
+          this._notificacion.showError("Error: ", this.errorMessage);
+          this.usuarioSeleccionado = 1;
+        }
+      });
+    }
+
+    //14. Proceso el formulario
    onSubmit():void{
     this.loading = true;
     this.loadingMessage = 'Espere un momento, se está procesando el formulario ...';
@@ -572,23 +611,6 @@
     if(!file){
       this.nombreArchivoSeleccionado="";
     }
-
-     const filtro = {
-       usuarioId: '0',
-       rol: this.segundaParteForm.value.tipo_proyecto
-     };
-     this._expediente.showUsuariosRol(filtro).subscribe({
-       next: (data) => {
-         this.usuarios = data;
-         this.usuarioSeleccionado=(this.usuarios[0].usuario_id);
-         console.log("usuarios llenados",this.usuarios);
-       },
-       error: (e) => {
-         this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
-         this._notificacion.showError("Error: ", this.errorMessage);
-         this.usuarioSeleccionado=1;
-       }
-     });
 
     console.log(this.primeraParteForm.value.tipo_canal );
     console.log(this.esInterno);

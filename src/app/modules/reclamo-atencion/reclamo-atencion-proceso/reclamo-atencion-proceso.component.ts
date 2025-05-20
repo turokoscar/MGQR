@@ -187,6 +187,21 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   openDialogGeneral(title: string, html: any, icon: string): void {
     this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
   }
+  getReferencia(referencia: string): void {
+    this._apiService.listarReferenciaDetalle(referencia).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.router.navigate(['/reclamo/create'], {
+          state: { expediente: this.itemSeleccionado }
+        });
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
+  }
   showUsuarios():void{
     //var rol_id=localStorage.getItem('rol') ?? '0';
     this.filtro = {

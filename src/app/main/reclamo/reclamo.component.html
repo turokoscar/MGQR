@@ -313,7 +313,7 @@
               <div class="col">
                 <mat-form-field appearance="fill" class="w-100">
                   <mat-label>Proyecto</mat-label>
-                  <mat-select formControlName="tipo_proyecto">
+                  <mat-select formControlName="tipo_proyecto" (selectionChange)="cargarUsuarioPorRol()">
                     <mat-option *ngFor="let item of tipoProyectos" [value]="item.id">
                       {{item.descripcion}}
                     </mat-option>

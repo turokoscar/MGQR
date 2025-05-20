@@ -98,6 +98,21 @@ export class ReclamoAtencionReasignadoComponent implements OnInit {
       state: { expediente: row }
     });
   }
+  getReferencia(referencia: string): void {
+    this._apiService.listarReferenciaDetalle(referencia).subscribe({
+      next: (data: ExpedienteDetalleDto) => {
+        console.log(data);
+        this.itemSeleccionado = data;
+        this.router.navigate(['/reclamo/create'], {
+          state: { expediente: this.itemSeleccionado }
+        });
+      },
+      error: (err) => {
+        this._notificacion.showError('Error', 'No se pudo obtener el detalle del expediente.');
+        this.loading = false;
+      }
+    });
+  }
   verAtencion(row: Expediente): void {
     this.itemSeleccionado = row;
     this.loading = true;

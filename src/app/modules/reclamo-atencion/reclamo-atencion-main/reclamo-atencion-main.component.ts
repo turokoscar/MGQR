@@ -188,8 +188,12 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
     });
   }
   validaUsuario():void{
-    if(this.usuario.rol==="4" || this.usuario.rol==="5" || this.usuario.rol==="6"){
+    if(this.usuario.rol==="6"){
       this.usuario_id="0";
+      this.filtro.tipoProyectoId=0;
+      this.deshabilitarProyecto = false;
+    }else if(this.usuario.rol==="4" || this.usuario.rol==="5"){
+      this.usuario_id=String(this.usuario.id);
       this.filtro.tipoProyectoId=0;
       this.deshabilitarProyecto = false;
     }else{
