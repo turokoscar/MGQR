@@ -53,11 +53,12 @@ export class AuthComponent implements OnInit, OnDestroy {
           localStorage.setItem('token', response.token);
           localStorage.setItem('dni', this.loginForm.value.email); // el DNI es el login
           localStorage.setItem('correo', response.usuario);
-          localStorage.setItem('rol', response.rol);
-          localStorage.setItem('rolId', response.rolId.toString());
+          localStorage.setItem('cargo', response.rol);
+          localStorage.setItem('rol', response.rolId.toString());
           localStorage.setItem('id', response.usuarioId.toString());
           localStorage.setItem('nombre_completo', `${response.nombre} ${response.apellidoPaterno} ${response.apellidoMaterno}`);
           localStorage.setItem('Acceso', 'ok');
+
 
           this.router.navigate(['/admin']);
         },
