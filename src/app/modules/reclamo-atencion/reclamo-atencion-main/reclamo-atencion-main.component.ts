@@ -203,4 +203,16 @@ export class ReclamoAtencionMainComponent implements OnInit, AfterViewInit {
     }
   }
 
+  descargarExcel(): void {
+    if (this.pestaniaActiva === 'pendiente') {
+      this.reclamoPendientes.exportarExcel();
+    } else if (this.pestaniaActiva === 'proceso') {
+      this.reclamoProceso.exportarExcel();
+    } else if (this.pestaniaActiva === 'atendidos') {
+      this.reclamoAtendidos.exportarExcel();
+    } else if (this.pestaniaActiva === 'reasignado') {
+      this.reclamoReasignado.exportarExcel();
+    }
+  }
+
 }

@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { AlertService } from 'src/app/services/alert.service';
+import {SweetAlertIcon} from "sweetalert2";
 
 @Component({
   selector: 'app-auth',
@@ -18,7 +20,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     private router: Router,
     private _authService: AuthService,
     private _notificacion: NotificationService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private alertService: AlertService
   ) {}
   //3. Inicializo el componente
   ngOnInit(): void {
@@ -33,113 +36,39 @@ export class AuthComponent implements OnInit, OnDestroy {
       rememberMe: [false]
     });
   }
-  //5. Proceso el formulario de inicio de sesión
-  onSubmit() {
+
+  openDialogGeneral(title: string, html: any, icon: string): void {
+    this.alertService.showAlertGeneral(title,html,icon as SweetAlertIcon);
+  }
+
+  onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      var tipo_proyecto_id=0;
-      if (email === '12345678' && password === '12345678') {
 
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(1));
-        localStorage.setItem('nombre_completo',"Leoncio Julio Ugarte");
-        localStorage.setItem('dni',"12345678");
-        localStorage.setItem('id',"1104");
-        localStorage.setItem('correo',"lugarte@serforbps.gob.pe");
-        localStorage.setItem('rol',"1");
-        localStorage.setItem('cargo',"Jefe de Proyecto Plantaciones");
-        this.router.navigate(['/admin']);
+      this._authService.login(email, password).subscribe({
+        next: (response) => {
+          const { token, usuario, rol, usuarioId } = response;
 
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
+          // Almacenar el token y los datos del usuario
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('dni', this.loginForm.value.email); // el DNI es el login
+          localStorage.setItem('correo', response.usuario);
+          localStorage.setItem('rol', response.rol);
+          localStorage.setItem('rolId', response.rolId.toString());
+          localStorage.setItem('id', response.usuarioId.toString());
+          localStorage.setItem('nombre_completo', `${response.nombre} ${response.apellidoPaterno} ${response.apellidoMaterno}`);
+          localStorage.setItem('Acceso', 'ok');
 
-
-      if (email === '22222222' && password === '22222222') {
-
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(2));
-        localStorage.setItem('nombre_completo',"Guillermo Riva Reyes");
-        localStorage.setItem('dni',"22222222");
-        localStorage.setItem('id',"1105");
-        localStorage.setItem('correo',"griva@serforbps.gob.pe");
-        localStorage.setItem('rol',"2");
-        localStorage.setItem('cargo',"Jefe de Proyecto Bosques");
-        this.router.navigate(['/admin']);
-
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
-
-      if (email === '33333333' && password === '33333333') {
-
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(2));
-        localStorage.setItem('nombre_completo',"Leonidas Suel Caller");
-        localStorage.setItem('dni',"33333333");
-        localStorage.setItem('id',"1106");
-        localStorage.setItem('correo',"lsuel@serforbps.gob.pe");
-        localStorage.setItem('rol',"3");
-        localStorage.setItem('cargo',"Jefe de Proyecto Ordenamiento");
-        this.router.navigate(['/admin']);
-
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
-
-
-      if (email === '44444444' && password === '44444444') {
-
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
-        localStorage.setItem('nombre_completo',"Meibel Arevalo Jimenez");
-        localStorage.setItem('dni',"44444444");
-        localStorage.setItem('id',"1107");
-        localStorage.setItem('correo',"marevalo@serforbps.gob.pe");
-        localStorage.setItem('rol',"4");
-        localStorage.setItem('cargo',"Gestión de riesgos");
-
-        this.router.navigate(['/admin']);
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
-
-
-      if (email === '55555555' && password === '55555555') {
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
-        localStorage.setItem('nombre_completo',"Daniel Martín Rivera Chumbiray");
-        localStorage.setItem('dni',"55555555");
-        localStorage.setItem('id',"1109");
-        localStorage.setItem('correo',"coordinadorkfw@serfor.gob.pe");
-        localStorage.setItem('cargo',"Coordinador Ejecutivo de BPS");
-        localStorage.setItem('rol',"5");
-
-
-        this.router.navigate(['/admin']);
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
-
-
-      if (email === '44328678' && password === '44328678') {
-        localStorage.setItem('Acceso',"ok");
-        localStorage.setItem('tipo_proyecto_id',JSON.stringify(0));
-        localStorage.setItem('nombre_completo',"Ricky Joel Blas Reyes");
-        localStorage.setItem('cargo',"Administrador");
-        localStorage.setItem('dni',"44328678");
-        localStorage.setItem('id',"1108");
-        localStorage.setItem('correo',"rblas0527@gmail.com");
-
-        localStorage.setItem('rol',"6");
-
-
-        this.router.navigate(['/admin']);
-      } else {
-        this._notificacion.showWarning("Error", "Las credenciales enviadas son incorrectas.");
-      }
+          this.router.navigate(['/admin']);
+        },
+        error: (error) => {
+          this._notificacion.showWarning('Error', error?.error?.mensaje || 'Credenciales incorrectas');
+          this.openDialogGeneral('Error', 'Credenciales incorrectas.', 'warning');
+        }
+      });
     }
   }
+
   //6. Eliminamos el fondo en el resto de componentes
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'bg-gradient-primary');

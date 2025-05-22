@@ -34,6 +34,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   esAprobacion = true;
   motivoRechazo = '';
   itemSeleccionado: any = null;
+  filtrosActivos: any = null;
   respuestaReclamo: string = '';
   comentarioReclamo: string = '';
   derivarOtraArea: boolean | false = false;
@@ -66,6 +67,7 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
   @Output() cambiarPestaniaA = new EventEmitter<'proceso' | 'atendidos' | 'reasignado'>();
 
   cargarExpedientes(filtros: any): void {
+    this.filtrosActivos = filtros;
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
@@ -216,6 +218,36 @@ export class ReclamoAtencionProcesoComponent implements OnInit {
       error: (e) => {
         this.errorMessage = "Se presentó un problema al realizar la operación: "+ e;
         this._notificacion.showError("Error: ", this.errorMessage);
+      }
+    });
+  }
+  exportarExcel(): void {
+    if (!this.filtrosActivos) {
+      this._notificacion.showWarning('Aviso', 'No hay filtros definidos para exportar.');
+      return;
+    }
+    const estado = this.filtrosActivos?.estado;
+    let nombre = 'Reporte_GENERAL.xlsx';
+    if (estado === 4) nombre = 'Reporte_PENDIENTES_ATENDER.xlsx';
+    else if (estado === 5) nombre = 'Reporte_EN_PROCESO_ATENDER.xlsx';
+    else if (estado === 6) nombre = 'Reporte_ATENDIDOS.xlsx';
+    else if (estado === 7) nombre = 'Reporte_REASIGNADOS.xlsx';
+
+    this._apiService.exportarExcelPorFiltros(this.filtrosActivos).subscribe({
+      next: (data: Blob) => {
+        const blob = new Blob([data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombre;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al exportar:', err);
+        this._notificacion.showError('Error', 'No se pudo exportar el reporte.');
       }
     });
   }

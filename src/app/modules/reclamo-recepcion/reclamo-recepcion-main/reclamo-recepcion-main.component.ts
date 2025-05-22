@@ -222,5 +222,15 @@ export class ReclamoRecepcionMainComponent implements OnInit, AfterViewInit {
       this.deshabilitarProyecto = true;
     }
   }
+  descargarExcel(): void {
+    if (this.pestaniaActiva === 'pendiente') {
+      this.reclamoPendiente.exportarExcel();
+    } else if (this.pestaniaActiva === 'atendido') {
+      this.reclamoAtendido.exportarExcel();
+    } else if (this.pestaniaActiva === 'denegado') {
+      this.reclamoDenegado.exportarExcel();
+    }
+  }
+
 
 }

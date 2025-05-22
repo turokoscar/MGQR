@@ -59,6 +59,10 @@ export class ExpedienteService {
     const url = `${this.fakeApi}/${id}`;
     return this.http.get<Expediente>(url);
   }
+  exportarExcelPorFiltros(filtros: any): Observable<Blob> {
+    const url = `${this.apiUrl}/Expediente/ExportarExcelPorFiltros`;
+    return this.http.post(url, filtros, { responseType: 'blob' });
+  }
   //5. Metodo para obtener todos los registros
   guardar(parametro: any): Observable<ExpedienteResponse> {
     const url = this.apiUrl+'/Expediente/Guardar';

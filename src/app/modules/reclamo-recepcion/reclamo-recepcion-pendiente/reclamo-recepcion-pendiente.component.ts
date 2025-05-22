@@ -48,6 +48,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   hayReferencia = false;
   itemSeleccionado: any = null;
   usuarioSeleccionado = 0;
+  filtrosActivos: any = null;
   especialistas: string[] = ['Especialista 1', 'Especialista 2'];
   usuarios: Usuario[] = [];
   motivoRechazo = '';
@@ -85,6 +86,7 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
   @Output() cambiarPestania = new EventEmitter<'atendido' | 'denegado'>();
 
   cargarExpedientes(filtros: any): void {
+    this.filtrosActivos = filtros;
     this.loading = true;
     this._apiService.listarPorFiltros(filtros).subscribe({
       next: (data) => {
@@ -307,4 +309,39 @@ export class ReclamoRecepcionPendienteComponent implements OnInit {
     }
     this.cerrarModal();
   }
+
+  exportarExcel(): void {
+    if (!this.filtrosActivos) {
+      this._notificacion.showWarning('Aviso', 'No hay filtros definidos para exportar.');
+      return;
+    }
+    const estado = this.filtrosActivos?.estado;
+    let nombre = 'Reporte_GENERAL.xlsx';
+    if (estado === 1) nombre = 'Reporte_PENDIENTES_ADMITIR.xlsx';
+    else if (estado === 2) nombre = 'Reporte_ADMITIDOS.xlsx';
+    else if (estado === 3) nombre = 'Reporte_DENEGADOS.xlsx';
+
+    this._apiService.exportarExcelPorFiltros(this.filtrosActivos).subscribe({
+      next: (data: Blob) => {
+        const blob = new Blob([data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombre;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al exportar:', err);
+        this._notificacion.showError('Error', 'No se pudo exportar el reporte.');
+      }
+    });
+  }
+
+
+
+
+
 }
