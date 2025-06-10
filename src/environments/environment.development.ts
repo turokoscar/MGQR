@@ -10,4 +10,6 @@ export const environment = {
   file_max_length_kb: 5000, //<!-- 5 MB -->
   file_allow_exts: ["pdf", "zip", "rar", "jpg", "jpeg", "png", "xls", "xlsx"],
 
+  
+
 };
