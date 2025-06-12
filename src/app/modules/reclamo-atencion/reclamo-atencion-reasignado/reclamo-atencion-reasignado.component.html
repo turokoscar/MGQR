@@ -156,6 +156,17 @@
       <div class="section-title title-modal detalle">Detalle de Atención</div>
 
       <ng-container *ngIf="esAprobacion">
+        <div class="form-group full-width">
+          <label class="title-modal">¿Este expediente se derivará a otra área?</label>
+          <select class="select" [(ngModel)]="derivarOtraArea" [disabled]="modalDeshabilitado">
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
+          <div class="input-field">{{ itemSeleccionado?.usuario_actual }}</div>
+        </div>
       <div class="form-group full-width">
         <label class="title-modal">Respuesta al reclamo, queja o consulta</label>
         <textarea class="text-area" [(ngModel)]="respuestaReclamo" [disabled]="modalDeshabilitado"></textarea>
@@ -165,23 +176,10 @@
         <label class="title-modal">Comentario</label>
         <textarea class="text-area" [(ngModel)]="comentarioReclamo" [disabled]="modalDeshabilitado"></textarea>
       </div>
-
       <!--<div class="file-selector">
         <div class="file-label title-modal">Evidencia que sustente la respuesta</div>
         <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
       </div>-->
-
-      <div class="form-group full-width">
-        <label class="title-modal">¿Este expediente se derivará a otra área?</label>
-        <select class="select" [(ngModel)]="derivarOtraArea" [disabled]="modalDeshabilitado">
-          <option [ngValue]="true">Sí</option>
-        </select>
-      </div>
-
-      <div class="form-group full-width">
-        <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
-        <div class="input-field">{{ itemSeleccionado?.usuario_actual }}</div>
-      </div>
     </ng-container>
     </div>
   </div>

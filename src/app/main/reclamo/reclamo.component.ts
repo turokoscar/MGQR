@@ -90,7 +90,7 @@
     numero_expediente: any="";
     esInterno: boolean = false;
     esSoloLectura: boolean = false;
-
+    public esVistaDetalle: boolean = false;
     result_expediente:string="";
     result_dias:string="";
     result_contenido_consulta:string="";
@@ -126,6 +126,7 @@
       const data = history.state.expediente;
       console.log("aqui la data que lega de detalle", data);
       if (data) {
+        this.esVistaDetalle = !!data;
         this.rutaEvidencia=data.evidencia;
         this.primeraParteForm.disable();
         this.segundaParteForm.disable();

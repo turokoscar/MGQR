@@ -1,5 +1,5 @@
 <app-loading-app [isLoading]="loading" [mensaje]="loadingMessage"></app-loading-app>
-<div class="card">
+<div [ngClass]="esVistaDetalle ? 'card card-detalle' : 'card card-normal'">
   <div class="card-header bg-primary">
     <h4 class="text-white text-center"><b>MECANISMO DE GESTIÓN DE QUEJAS Y RECLAMOS (MGQR) DEL PROGRAMA BOSQUES PRODUCTIVOS SOSTENIBLES</b></h4>
   </div>

@@ -151,37 +151,37 @@
       <div class="separator"></div>
 
       <ng-container *ngIf="esAprobacion">
-      <div class="form-group full-width">
-        <label class="title-modal">Respuesta al reclamo, queja o consulta</label>
-        <textarea class="text-area" [(ngModel)]="respuestaReclamo" [disabled]="modalDeshabilitado"></textarea>
-      </div>
+        <div class="form-group full-width">
+          <label class="title-modal">¿Este expediente se derivará a otra área?</label>
+          <select class="select" [(ngModel)]="derivarOtraArea" [disabled]="modalDeshabilitado">
+            <option [ngValue]="null">-- Seleccionar --</option>
+            <option [ngValue]="false">No</option>
+            <option [ngValue]="true">Sí</option>
+          </select>
+        </div>
+        <div class="form-group full-width" *ngIf="derivarOtraArea">
+          <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
+          <select class="select" [(ngModel)]="especialistaSeleccionado" [disabled]="modalDeshabilitado">
+            <option value="" disabled selected>-- Seleccione --</option>
+            <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
+          </select>
+        </div>
+        <div class="form-group full-width">
+          <label class="title-modal">Respuesta al reclamo, queja o consulta</label>
+          <textarea class="text-area" [(ngModel)]="respuestaReclamo" [disabled]="modalDeshabilitado"></textarea>
+        </div>
 
-      <div class="form-group full-width">
-        <label class="title-modal">Comentario</label>
-        <textarea class="text-area" [(ngModel)]="comentarioReclamo" [disabled]="modalDeshabilitado"></textarea>
-      </div>
+        <div class="form-group full-width">
+          <label class="title-modal">Comentario</label>
+          <textarea class="text-area" [(ngModel)]="comentarioReclamo" [disabled]="modalDeshabilitado"></textarea>
+        </div>
 
-      <!--<div class="file-selector">
-        <div class="file-label title-modal">Evidencia que sustente la respuesta</div>
-        <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
-      </div>-->
+        <!--<div class="file-selector">
+          <div class="file-label title-modal">Evidencia que sustente la respuesta</div>
+          <input type="file" (change)="onArchivoSeleccionado($event)" class="file-input" />
+        </div>-->
 
-      <div class="form-group full-width">
-        <label class="title-modal">¿Este expediente se derivará a otra área?</label>
-        <select class="select" [(ngModel)]="derivarOtraArea" [disabled]="modalDeshabilitado">
-          <option [ngValue]="null">-- Seleccionar --</option>
-          <option [ngValue]="false">No</option>
-          <option [ngValue]="true">Sí</option>
-        </select>
-      </div>
 
-      <div class="form-group full-width" *ngIf="derivarOtraArea">
-        <label class="title-modal">Especialista al que se le asigna el reclamo, queja o consulta</label>
-        <select class="select" [(ngModel)]="especialistaSeleccionado" [disabled]="modalDeshabilitado">
-          <option value="" disabled selected>-- Seleccione --</option>
-          <option *ngFor="let e of especialistas" [value]="e">{{ e }}</option>
-        </select>
-      </div>
     </ng-container>
     </div>
   </div>

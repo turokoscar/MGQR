@@ -21,51 +21,61 @@
 }
 
 ::ng-deep .mat-column-numero {
-  width: 11rem;
-  max-width: 11rem;
-  min-width: 11rem;
+  width: 5%!important;
+  max-width: 5%!important;
+  min-width: 5%!important;
   text-align: center;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-procedencia {
-  width: 15rem;
+  width: 8%!important;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-tipo {
-  width: 5rem;
+  width: 5%!important;
   text-align: center!important;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-canal {
-  width: 10rem;
+  width: 8%!important;
   text-align: center!important;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-fecha {
-  width: 10rem;
+  width: 8%!important;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-descripcion {
-  width: 31rem;
-  max-width: 31rem;
+  width: 40%!important;
+  max-width: 40%!important;
   white-space: normal !important;
   word-wrap: break-word;
   overflow-wrap: break-word;
   line-height: 1.3rem;
+  font-size: 1rem!important;
 }
 ::ng-deep .descripcion-celda {
   padding: 8px;
   vertical-align: top;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-usuario {
-  width: 15rem;
+  width: 8%!important;
+  font-size: 1rem!important;
 }
 
 ::ng-deep .mat-column-plazo {
-  width: 4rem;
+  width: 2%!important;
   text-align: center!important;
+  font-size: 1rem!important;
 }
+
 
 .btn-referencia {
   background-color: #e74c3c;

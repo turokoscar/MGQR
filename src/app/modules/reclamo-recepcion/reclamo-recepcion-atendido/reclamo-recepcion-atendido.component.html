@@ -132,7 +132,7 @@
           <div class="input-field description">{{ itemSeleccionado?.contenido_consulta }}</div>
         </div>
         <div class="form-group full-width">
-          <ng-container *ngIf="itemSeleccionado.evidencia; else sinEvidencia">
+          <ng-container *ngIf="itemSeleccionado.evidencia?.trim(); else sinEvidencia">
             <div class="file-label title-modal lblAdjunto">
               <a
                 [href]="getDownloadLink(itemSeleccionado.evidencia)"
@@ -159,7 +159,7 @@
               <label class="title-modal">Descripción del motivo:</label>
               <textarea class="text-area" [(ngModel)]="motivoRechazo" disabled>{{ itemSeleccionado?.acciones_realizadas }}</textarea>
             </div>
-            <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento; else sinEvidencia">
+            <ng-container *ngIf="itemSeleccionado.evidencia_seguimiento?.trim(); else sinEvidencia">
               <div class="file-label title-modal lblAdjunto">
               <a
                 [href]="getDownloadLink(itemSeleccionado.evidencia_seguimiento)"
